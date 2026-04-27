@@ -10,6 +10,7 @@ import { useAircraft, useServices, useMaintenanceItems } from "@/lib/queries";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { trackUsage, COSTS } from "@/lib/usage-tracking";
 
 export const Route = createFileRoute("/assistant")({
   component: () => <AuthGuard><AssistantPage /></AuthGuard>,
@@ -61,6 +62,12 @@ function AssistantPage() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setMessages([...next, { role: "assistant", content: data.reply || "" }]);
+      trackUsage({
+        event_type: "ai_call",
+        category: "ai",
+        estimated_cost_usd: COSTS.AI_FLASH_CALL,
+        metadata: { source: "ai-chat", msg_count: next.length },
+      });
     } catch (e: any) {
       toast.error(e.message || "Falha ao consultar o assistente");
       setMessages([...next, { role: "assistant", content: "⚠️ Não consegui responder agora. Tente novamente em instantes." }]);
