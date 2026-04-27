@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, HardDrive, Database, Sparkles, TrendingUp } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
-import { PageHeader } from "@/components/AppShell";
+import { AppShell, PageHeader } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
@@ -120,7 +120,7 @@ function UsagePage() {
     : [];
 
   return (
-    <>
+    <AppShell>
       <PageHeader
         title="Custos e Uso"
         description="Acompanhe storage, banco de dados e chamadas de IA dos últimos 30 dias."
@@ -238,7 +238,7 @@ function UsagePage() {
       <p className="mt-6 text-xs text-muted-foreground">
         💡 Os custos são estimativas baseadas nas tabelas públicas de preço do Lovable Cloud e do AI Gateway. Valores reais podem variar — consulte <strong>Settings → Workspace → Usage</strong> para a fatura oficial.
       </p>
-    </>
+    </AppShell>
   );
 }
 
