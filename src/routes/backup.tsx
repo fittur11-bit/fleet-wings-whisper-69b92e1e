@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Archive, Download, Trash2, Loader2, AlertTriangle, HardDrive } from "lucide-react";
 import JSZip from "jszip";
 import { AuthGuard } from "@/components/AuthGuard";
-import { PageHeader } from "@/components/AppShell";
+import { AppShell, PageHeader } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -191,7 +191,7 @@ function BackupPage() {
   const busy = scanning || exporting || deleting;
 
   return (
-    <>
+    <AppShell>
       <PageHeader
         title="Backup & Limpeza"
         description="Exporte todas as mídias em um ZIP e libere espaço no armazenamento da nuvem."
@@ -304,6 +304,6 @@ function BackupPage() {
           <p>3. <strong>Limpar storage</strong> — apaga os arquivos da nuvem (somente após exportar). Libera espaço imediatamente.</p>
         </CardContent>
       </Card>
-    </>
+    </AppShell>
   );
 }
