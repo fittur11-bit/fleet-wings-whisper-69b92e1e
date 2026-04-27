@@ -1,10 +1,14 @@
 import { useState, type ReactNode } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowLeft } from "lucide-react";
+import { useRouter, useRouterState, Link } from "@tanstack/react-router";
 import { AppSidebar } from "./AppSidebar";
 import { Button } from "@/components/ui/button";
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const router = useRouter();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const canGoBack = pathname !== "/dashboard" && pathname !== "/";
 
   return (
     <div className="flex min-h-screen w-full">
@@ -32,7 +36,20 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
-          <span className="font-display font-semibold tracking-tight">FleetControl</span>
+          {canGoBack && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.history.back()}
+              className="gap-1 px-2"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Voltar
+            </Button>
+          )}
+          <Link to="/dashboard" className="ml-auto font-display font-semibold tracking-tight">
+            FleetControl
+          </Link>
         </header>
 
         <main className="px-4 py-6 lg:px-8 lg:py-8">{children}</main>
