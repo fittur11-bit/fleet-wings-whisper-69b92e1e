@@ -14,7 +14,359 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      aircraft: {
+        Row: {
+          created_at: string
+          cva_data: Json | null
+          cva_expiration: string | null
+          gallery: Json | null
+          id: string
+          inspection_data: Json | null
+          last_inspection_date: string | null
+          manufacturer: string | null
+          model: string | null
+          notes: string | null
+          owner: string | null
+          photo_url: string | null
+          prefix: string
+          serial_number: string | null
+          status: string
+          total_hours: number | null
+          updated_at: string
+          user_id: string
+          year: number | null
+        }
+        Insert: {
+          created_at?: string
+          cva_data?: Json | null
+          cva_expiration?: string | null
+          gallery?: Json | null
+          id?: string
+          inspection_data?: Json | null
+          last_inspection_date?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          notes?: string | null
+          owner?: string | null
+          photo_url?: string | null
+          prefix: string
+          serial_number?: string | null
+          status?: string
+          total_hours?: number | null
+          updated_at?: string
+          user_id: string
+          year?: number | null
+        }
+        Update: {
+          created_at?: string
+          cva_data?: Json | null
+          cva_expiration?: string | null
+          gallery?: Json | null
+          id?: string
+          inspection_data?: Json | null
+          last_inspection_date?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          notes?: string | null
+          owner?: string | null
+          photo_url?: string | null
+          prefix?: string
+          serial_number?: string | null
+          status?: string
+          total_hours?: number | null
+          updated_at?: string
+          user_id?: string
+          year?: number | null
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          aircraft_id: string | null
+          created_at: string
+          doc_type: string
+          file_url: string | null
+          id: string
+          model: string | null
+          notes: string | null
+          revision_date: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+          version: string | null
+        }
+        Insert: {
+          aircraft_id?: string | null
+          created_at?: string
+          doc_type: string
+          file_url?: string | null
+          id?: string
+          model?: string | null
+          notes?: string | null
+          revision_date?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+          version?: string | null
+        }
+        Update: {
+          aircraft_id?: string | null
+          created_at?: string
+          doc_type?: string
+          file_url?: string | null
+          id?: string
+          model?: string | null
+          notes?: string | null
+          revision_date?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      maintenance_items: {
+        Row: {
+          aircraft_id: string | null
+          aircraft_prefix: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          due_hours: number | null
+          id: string
+          interval_hours: number | null
+          interval_months: number | null
+          item_type: string
+          last_done_date: string | null
+          last_done_hours: number | null
+          notes: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_hours?: number | null
+          id?: string
+          interval_hours?: number | null
+          interval_months?: number | null
+          item_type: string
+          last_done_date?: string | null
+          last_done_hours?: number | null
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          due_hours?: number | null
+          id?: string
+          interval_hours?: number | null
+          interval_months?: number | null
+          item_type?: string
+          last_done_date?: string | null
+          last_done_hours?: number | null
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_items_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parts: {
+        Row: {
+          aircraft_id: string | null
+          condition: string | null
+          created_at: string
+          hours_at_install: number | null
+          id: string
+          install_date: string | null
+          name: string
+          notes: string | null
+          origin: string | null
+          part_number: string | null
+          photos: Json | null
+          removal_date: string | null
+          serial_number: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aircraft_id?: string | null
+          condition?: string | null
+          created_at?: string
+          hours_at_install?: number | null
+          id?: string
+          install_date?: string | null
+          name: string
+          notes?: string | null
+          origin?: string | null
+          part_number?: string | null
+          photos?: Json | null
+          removal_date?: string | null
+          serial_number?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aircraft_id?: string | null
+          condition?: string | null
+          created_at?: string
+          hours_at_install?: number | null
+          id?: string
+          install_date?: string | null
+          name?: string
+          notes?: string | null
+          origin?: string | null
+          part_number?: string | null
+          photos?: Json | null
+          removal_date?: string | null
+          serial_number?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parts_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          aircraft_id: string | null
+          aircraft_prefix: string | null
+          checklist: Json | null
+          cost: number | null
+          created_at: string
+          description: string | null
+          hours_at_service: number | null
+          id: string
+          location: string | null
+          notes: string | null
+          performed_at: string | null
+          photos: Json | null
+          report_url: string | null
+          service_type: string
+          service_types: Json | null
+          status: string
+          technician: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          checklist?: Json | null
+          cost?: number | null
+          created_at?: string
+          description?: string | null
+          hours_at_service?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          performed_at?: string | null
+          photos?: Json | null
+          report_url?: string | null
+          service_type: string
+          service_types?: Json | null
+          status?: string
+          technician?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          checklist?: Json | null
+          cost?: number | null
+          created_at?: string
+          description?: string | null
+          hours_at_service?: number | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          performed_at?: string | null
+          photos?: Json | null
+          report_url?: string | null
+          service_type?: string
+          service_types?: Json | null
+          status?: string
+          technician?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
