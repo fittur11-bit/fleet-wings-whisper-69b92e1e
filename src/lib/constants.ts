@@ -91,3 +91,11 @@ export const SERVICE_CHECKLISTS: Record<string, string[]> = {
   "ad_compliance": ["Verificação aplicabilidade", "Cumprimento de instruções", "Registro em livro"],
   "sb_compliance": ["Avaliação SB", "Aplicação", "Registro técnico"],
 };
+export const SECURITY_QUESTIONS = [
+  "Qual o nome do seu primeiro animal de estimação?",
+  "Em que cidade você nasceu?",
+  "Qual o nome de solteira da sua mãe?",
+  "Qual a marca do seu primeiro carro?",
+  "Qual o nome da sua escola primária?",
+  "Qual seu prato favorito?",
+] as const;
