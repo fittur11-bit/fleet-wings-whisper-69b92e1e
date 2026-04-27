@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UsageRouteImport } from './routes/usage'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RabRouteImport } from './routes/rab'
 import { Route as PartsRouteImport } from './routes/parts'
@@ -19,6 +20,11 @@ import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as AircraftRouteImport } from './routes/aircraft'
 import { Route as IndexRouteImport } from './routes/index'
 
+const UsageRoute = UsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/usage': typeof UsageRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/usage': typeof UsageRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/usage': typeof UsageRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/usage'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/usage'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/usage'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,10 +157,18 @@ export interface RootRouteChildren {
   PartsRoute: typeof PartsRoute
   RabRoute: typeof RabRoute
   ServicesRoute: typeof ServicesRoute
+  UsageRoute: typeof UsageRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/usage': {
+      id: '/usage'
+      path: '/usage'
+      fullPath: '/usage'
+      preLoaderRoute: typeof UsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartsRoute: PartsRoute,
   RabRoute: RabRoute,
   ServicesRoute: ServicesRoute,
+  UsageRoute: UsageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

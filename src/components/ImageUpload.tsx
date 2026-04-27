@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { trackUsage, COSTS, bytesToGB } from "@/lib/usage-tracking";
 
 interface Props {
   bucket: string;
@@ -29,6 +30,13 @@ export function ImageUpload({ bucket, value, onChange, multiple = false, classNa
         if (error) throw error;
         const { data } = supabase.storage.from(bucket).getPublicUrl(path);
         uploaded.push(data.publicUrl);
+        trackUsage({
+          event_type: "upload",
+          category: "storage",
+          bytes: file.size,
+          estimated_cost_usd: bytesToGB(file.size) * COSTS.STORAGE_GB_MONTH,
+          metadata: { bucket, name: file.name, type: file.type },
+        });
       }
       if (multiple) onChange([...urls, ...uploaded]);
       else onChange(uploaded[0]);
