@@ -91,36 +91,56 @@ function RabPage() {
     }
   };
 
+  // Remove chaves com valor vazio/null/undefined para não sobrescrever dados existentes
+  const cleanExtracted = (e: Extracted): Partial<Extracted> => {
+    const out: Record<string, any> = {};
+    Object.entries(e).forEach(([k, v]) => {
+      if (v === null || v === undefined) return;
+      if (typeof v === "string" && v.trim() === "") return;
+      out[k] = typeof v === "string" ? v.trim() : v;
+    });
+    return out;
+  };
+
+  const normalizePrefix = (p?: string | null) =>
+    (p || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+
   const fillNew = () => {
     if (!extracted) return;
-    setFormInitial({
-      prefix: extracted.prefix || "",
-      manufacturer: extracted.manufacturer || "",
-      model: extracted.model || "",
-      serial_number: extracted.serial_number || "",
-      year: extracted.year || "",
-      owner: extracted.owner || "",
-      cva_expiration: extracted.cva_expiration || "",
-      notes: extracted.notes || "",
-    });
+    const clean = cleanExtracted(extracted);
+    if (!clean.prefix) {
+      return toast.error("Prefixo não identificado. Necessário para cadastrar.");
+    }
+    // Bloqueia duplicidade: se já existe aeronave com este prefixo, redireciona para atualizar
+    const dup = aircraft.find(
+      (a: any) => normalizePrefix(a.prefix) === normalizePrefix(clean.prefix as string),
+    );
+    if (dup) {
+      toast.info("Prefixo já cadastrado — abrindo atualização.");
+      setFormInitial({ ...dup, ...clean });
+      setFormOpen(true);
+      return;
+    }
+    setFormInitial(clean);
     setFormOpen(true);
   };
 
   const fillExisting = () => {
-    if (!extracted?.prefix) return toast.error("Sem prefixo extraído");
-    const target = aircraft.find((a: any) => a.prefix?.toUpperCase().replace(/[^A-Z0-9]/g, "") === extracted.prefix?.toUpperCase().replace(/[^A-Z0-9]/g, ""));
-    if (!target) return toast.error("Aeronave com este prefixo não está cadastrada");
-    setFormInitial({
-      ...target,
-      manufacturer: extracted.manufacturer || target.manufacturer,
-      model: extracted.model || target.model,
-      serial_number: extracted.serial_number || target.serial_number,
-      year: extracted.year || target.year,
-      owner: extracted.owner || target.owner,
-      cva_expiration: extracted.cva_expiration || target.cva_expiration,
-      notes: [target.notes, extracted.notes].filter(Boolean).join("\n"),
-    });
+    const clean = cleanExtracted(extracted || {});
+    if (!clean.prefix) return toast.error("Sem prefixo extraído — obrigatório para identificar a aeronave");
+    const target = aircraft.find(
+      (a: any) => normalizePrefix(a.prefix) === normalizePrefix(clean.prefix as string),
+    );
+    if (!target) return toast.error(`Nenhuma aeronave cadastrada com o prefixo ${clean.prefix}`);
+    // Mescla: dados extraídos vazios NÃO sobrescrevem; notas são concatenadas
+    const { notes: extractedNotes, prefix: _p, ...rest } = clean;
+    const merged: any = { ...target, ...rest, prefix: target.prefix };
+    if (extractedNotes) {
+      merged.notes = [target.notes, extractedNotes].filter(Boolean).join("\n");
+    }
+    setFormInitial(merged);
     setFormOpen(true);
+    toast.success(`Mesclado com ${target.prefix}`);
   };
 
   return (
