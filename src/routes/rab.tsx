@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, ExternalLink, Plane, Globe } from "lucide-react";
+import { Search, ExternalLink, Plane, Globe, Sparkles, Upload, Loader2, FileText, Wand2 } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,36 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAircraft } from "@/lib/queries";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { AircraftForm } from "@/components/AircraftForm";
 
 export const Route = createFileRoute("/rab")({
   component: () => <AuthGuard><RabPage /></AuthGuard>,
 });
 
+type Extracted = {
+  prefix?: string | null;
+  manufacturer?: string | null;
+  model?: string | null;
+  serial_number?: string | null;
+  year?: number | null;
+  owner?: string | null;
+  cva_expiration?: string | null;
+  notes?: string | null;
+};
+
 function RabPage() {
   const [prefix, setPrefix] = useState("");
   const { data: aircraft = [] } = useAircraft();
+  const [importUrl, setImportUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [extracted, setExtracted] = useState<Extracted | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [formInitial, setFormInitial] = useState<any>(null);
 
   const cleaned = prefix.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
   const anacUrl = cleaned
@@ -31,11 +53,81 @@ function RabPage() {
     window.open(anacUrl, "_blank", "noopener,noreferrer");
   };
 
+  const callExtract = async (payload: { url?: string; fileUrl?: string; fileType?: string }) => {
+    setLoading(true);
+    setExtracted(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("rab-extract", { body: payload });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setExtracted(data?.data || {});
+      toast.success("Dados extraídos com sucesso");
+    } catch (e: any) {
+      toast.error("Falha na extração: " + (e?.message || "erro"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const extractFromUrl = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const u = importUrl.trim();
+    if (!u) return;
+    await callExtract({ url: u });
+  };
+
+  const extractFromFile = async (file: File) => {
+    setLoading(true);
+    try {
+      const ext = file.name.split(".").pop() || "bin";
+      const path = `rab-import/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: upErr } = await supabase.storage.from("documents").upload(path, file);
+      if (upErr) throw upErr;
+      const { data: pub } = supabase.storage.from("documents").getPublicUrl(path);
+      await callExtract({ fileUrl: pub.publicUrl, fileType: file.type });
+    } catch (e: any) {
+      toast.error("Falha no upload: " + (e?.message || "erro"));
+      setLoading(false);
+    }
+  };
+
+  const fillNew = () => {
+    if (!extracted) return;
+    setFormInitial({
+      prefix: extracted.prefix || "",
+      manufacturer: extracted.manufacturer || "",
+      model: extracted.model || "",
+      serial_number: extracted.serial_number || "",
+      year: extracted.year || "",
+      owner: extracted.owner || "",
+      cva_expiration: extracted.cva_expiration || "",
+      notes: extracted.notes || "",
+    });
+    setFormOpen(true);
+  };
+
+  const fillExisting = () => {
+    if (!extracted?.prefix) return toast.error("Sem prefixo extraído");
+    const target = aircraft.find((a: any) => a.prefix?.toUpperCase().replace(/[^A-Z0-9]/g, "") === extracted.prefix?.toUpperCase().replace(/[^A-Z0-9]/g, ""));
+    if (!target) return toast.error("Aeronave com este prefixo não está cadastrada");
+    setFormInitial({
+      ...target,
+      manufacturer: extracted.manufacturer || target.manufacturer,
+      model: extracted.model || target.model,
+      serial_number: extracted.serial_number || target.serial_number,
+      year: extracted.year || target.year,
+      owner: extracted.owner || target.owner,
+      cva_expiration: extracted.cva_expiration || target.cva_expiration,
+      notes: [target.notes, extracted.notes].filter(Boolean).join("\n"),
+    });
+    setFormOpen(true);
+  };
+
   return (
     <>
       <PageHeader
         title="Consulta RAB"
-        description="Consulte o Registro Aeronáutico Brasileiro diretamente no portal ANAC."
+        description="Consulte o RAB no portal ANAC ou importe dados manualmente para preencher a frota."
       />
 
       <Card className="border-white/5 bg-card/60 backdrop-blur">
@@ -62,6 +154,83 @@ function RabPage() {
           <p className="mt-3 text-xs text-muted-foreground">
             A consulta abre o portal oficial sistemas.anac.gov.br em uma nova aba.
           </p>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Sparkles className="h-4 w-4 text-primary" /> Importação manual + extração por IA
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="url">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="url">Por URL</TabsTrigger>
+              <TabsTrigger value="file">Upload (PDF/Imagem)</TabsTrigger>
+            </TabsList>
+            <TabsContent value="url" className="mt-4">
+              <form onSubmit={extractFromUrl} className="flex flex-col gap-3 sm:flex-row">
+                <Input
+                  value={importUrl}
+                  onChange={(e) => setImportUrl(e.target.value)}
+                  placeholder="https://sistemas.anac.gov.br/aeronaves/..."
+                  className="flex-1"
+                />
+                <Button type="submit" disabled={loading || !importUrl.trim()}>
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
+                  Extrair
+                </Button>
+              </form>
+              <p className="mt-2 text-xs text-muted-foreground">Cole a URL da consulta RAB para que a IA leia e extraia os dados.</p>
+            </TabsContent>
+            <TabsContent value="file" className="mt-4">
+              <Label className="block">
+                <input
+                  type="file"
+                  accept="image/*,application/pdf"
+                  className="sr-only"
+                  onChange={(e) => e.target.files?.[0] && extractFromFile(e.target.files[0])}
+                />
+                <div className="flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-white/10 px-4 py-8 text-center hover:border-primary/40 hover:bg-card/40">
+                  {loading ? (
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                  ) : (
+                    <Upload className="h-8 w-8 text-muted-foreground" />
+                  )}
+                  <p className="mt-2 text-sm font-medium">Selecione um PDF ou imagem do RAB</p>
+                  <p className="text-xs text-muted-foreground">A IA fará OCR e extrairá os dados automaticamente</p>
+                </div>
+              </Label>
+            </TabsContent>
+          </Tabs>
+
+          {extracted && (
+            <div className="mt-6 rounded-lg border border-primary/20 bg-primary/5 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <FileText className="h-4 w-4 text-primary" />
+                <h3 className="text-sm font-semibold">Dados extraídos</h3>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
+                <Field label="Prefixo" value={extracted.prefix} mono />
+                <Field label="Fabricante" value={extracted.manufacturer} />
+                <Field label="Modelo" value={extracted.model} />
+                <Field label="N° Série" value={extracted.serial_number} />
+                <Field label="Ano" value={extracted.year?.toString()} />
+                <Field label="Vencimento CVA" value={extracted.cva_expiration} />
+                <Field label="Proprietário" value={extracted.owner} className="col-span-2 sm:col-span-3" />
+                {extracted.notes && <Field label="Observações" value={extracted.notes} className="col-span-2 sm:col-span-3" />}
+              </div>
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <Button onClick={fillNew} className="flex-1">
+                  <Plane className="mr-2 h-4 w-4" /> Preencher nova aeronave
+                </Button>
+                <Button onClick={fillExisting} variant="outline" className="flex-1">
+                  <Wand2 className="mr-2 h-4 w-4" /> Atualizar existente
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -108,6 +277,28 @@ function RabPage() {
           </div>
         )}
       </div>
+
+      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{formInitial?.id ? "Atualizar aeronave" : "Cadastrar aeronave"}</DialogTitle>
+          </DialogHeader>
+          {formInitial && (
+            <AircraftForm initial={formInitial} onDone={() => setFormOpen(false)} />
+          )}
+        </DialogContent>
+      </Dialog>
     </>
+  );
+}
+
+function Field({ label, value, mono, className }: { label: string; value?: string | null; mono?: boolean; className?: string }) {
+  return (
+    <div className={className}>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <p className={`mt-0.5 ${mono ? "font-mono" : ""} ${value ? "" : "text-muted-foreground/50"}`}>
+        {value || "—"}
+      </p>
+    </div>
   );
 }
