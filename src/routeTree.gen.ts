@@ -15,6 +15,7 @@ import { Route as RabRouteImport } from './routes/rab'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as BackupRouteImport } from './routes/backup'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssistantRouteImport } from './routes/assistant'
 import { Route as AircraftRouteImport } from './routes/aircraft'
@@ -50,6 +51,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BackupRoute = BackupRouteImport.update({
+  id: '/backup',
+  path: '/backup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -76,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/aircraft': typeof AircraftRoute
   '/assistant': typeof AssistantRoute
   '/auth': typeof AuthRoute
+  '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/aircraft': typeof AircraftRoute
   '/assistant': typeof AssistantRoute
   '/auth': typeof AuthRoute
+  '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/aircraft': typeof AircraftRoute
   '/assistant': typeof AssistantRoute
   '/auth': typeof AuthRoute
+  '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/aircraft'
     | '/assistant'
     | '/auth'
+    | '/backup'
     | '/dashboard'
     | '/library'
     | '/parts'
@@ -127,6 +137,7 @@ export interface FileRouteTypes {
     | '/aircraft'
     | '/assistant'
     | '/auth'
+    | '/backup'
     | '/dashboard'
     | '/library'
     | '/parts'
@@ -139,6 +150,7 @@ export interface FileRouteTypes {
     | '/aircraft'
     | '/assistant'
     | '/auth'
+    | '/backup'
     | '/dashboard'
     | '/library'
     | '/parts'
@@ -152,6 +164,7 @@ export interface RootRouteChildren {
   AircraftRoute: typeof AircraftRoute
   AssistantRoute: typeof AssistantRoute
   AuthRoute: typeof AuthRoute
+  BackupRoute: typeof BackupRoute
   DashboardRoute: typeof DashboardRoute
   LibraryRoute: typeof LibraryRoute
   PartsRoute: typeof PartsRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/backup': {
+      id: '/backup'
+      path: '/backup'
+      fullPath: '/backup'
+      preLoaderRoute: typeof BackupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -240,6 +260,7 @@ const rootRouteChildren: RootRouteChildren = {
   AircraftRoute: AircraftRoute,
   AssistantRoute: AssistantRoute,
   AuthRoute: AuthRoute,
+  BackupRoute: BackupRoute,
   DashboardRoute: DashboardRoute,
   LibraryRoute: LibraryRoute,
   PartsRoute: PartsRoute,
@@ -250,12 +271,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
