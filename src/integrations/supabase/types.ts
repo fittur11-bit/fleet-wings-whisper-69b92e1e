@@ -313,6 +313,7 @@ export type Database = {
           notes: string | null
           performed_at: string | null
           photos: Json | null
+          repair_photos: Json
           report_url: string | null
           service_type: string
           service_types: Json | null
@@ -334,6 +335,7 @@ export type Database = {
           notes?: string | null
           performed_at?: string | null
           photos?: Json | null
+          repair_photos?: Json
           report_url?: string | null
           service_type: string
           service_types?: Json | null
@@ -355,6 +357,7 @@ export type Database = {
           notes?: string | null
           performed_at?: string | null
           photos?: Json | null
+          repair_photos?: Json
           report_url?: string | null
           service_type?: string
           service_types?: Json | null
