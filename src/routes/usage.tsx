@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, HardDrive, Database, Sparkles, TrendingUp } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
-import { PageHeader } from "@/components/AppShell";
+import { AppShell, PageHeader } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
