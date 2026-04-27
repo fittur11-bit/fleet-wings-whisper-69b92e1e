@@ -120,7 +120,7 @@ function UsagePage() {
     : [];
 
   return (
-    <>
+    <AppShell>
       <PageHeader
         title="Custos e Uso"
         description="Acompanhe storage, banco de dados e chamadas de IA dos últimos 30 dias."
@@ -238,7 +238,7 @@ function UsagePage() {
       <p className="mt-6 text-xs text-muted-foreground">
         💡 Os custos são estimativas baseadas nas tabelas públicas de preço do Lovable Cloud e do AI Gateway. Valores reais podem variar — consulte <strong>Settings → Workspace → Usage</strong> para a fatura oficial.
       </p>
-    </>
+    </AppShell>
   );
 }
 
