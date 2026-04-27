@@ -1,20 +1,30 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useAuth } from "@/lib/auth";
-import { Plane, ShieldCheck, Sparkles, Wrench, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Landing,
 });
 
 function Landing() {
-  const { user, loading } = useAuth();
   const navigate = useNavigate();
 
+  // DEV MODE: pula a landing/auth e vai direto pro dashboard.
   useEffect(() => {
-    if (!loading && user) navigate({ to: "/dashboard" });
-  }, [user, loading, navigate]);
+    navigate({ to: "/dashboard" });
+  }, [navigate]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+    </div>
+  );
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function _Landing_OriginalDisabled() {
+  const navigate = useNavigate();
+  useEffect(() => {}, [navigate]);
 
   return (
     <div className="min-h-screen">
