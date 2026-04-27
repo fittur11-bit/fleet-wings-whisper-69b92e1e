@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Wrench, Trash2, FileDown } from "lucide-react";
+import { Plus, Wrench, Trash2, FileDown, Pencil } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useServices, useAircraft } from "@/lib/queries";
@@ -32,11 +32,12 @@ function ServicesPage() {
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<any | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [form, setForm] = useState<any>({
     aircraft_id: "", status: "pending", performed_at: "", technician: "",
-    location: "", description: "", checklist: [], photos: [], cost: "",
+    location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "",
   });
 
   const filtered = services.filter((s: any) => filterStatus === "all" || s.status === filterStatus);
@@ -56,20 +57,54 @@ function ServicesPage() {
     if (!user || selectedTypes.length === 0) { toast.error("Selecione ao menos 1 tipo"); return; }
     const ac = aircraft.find(a => a.id === form.aircraft_id);
     const checklist = form.checklist.length ? form.checklist : buildChecklist();
-    const { error } = await supabase.from("services").insert({
-      ...form, user_id: user.id,
+    const payload: any = {
+      ...form,
+      user_id: user.id,
       aircraft_prefix: ac?.prefix,
       service_type: selectedTypes[0],
       service_types: selectedTypes,
       checklist,
       cost: form.cost ? Number(form.cost) : null,
       performed_at: form.performed_at || null,
-    });
+    };
+    let error;
+    if (editing) {
+      const { id, ...rest } = payload;
+      const res = await supabase.from("services").update(rest).eq("id", editing.id);
+      error = res.error;
+    } else {
+      const res = await supabase.from("services").insert(payload);
+      error = res.error;
+    }
     if (error) return toast.error(error.message);
-    toast.success("Serviço cadastrado");
+    toast.success(editing ? "Serviço atualizado" : "Serviço cadastrado");
     qc.invalidateQueries({ queryKey: ["services"] });
-    setOpen(false); setSelectedTypes([]);
-    setForm({ aircraft_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], cost: "" });
+    closeDialog();
+  };
+
+  const closeDialog = () => {
+    setOpen(false);
+    setEditing(null);
+    setSelectedTypes([]);
+    setForm({ aircraft_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "" });
+  };
+
+  const openEdit = (s: any) => {
+    setEditing(s);
+    setSelectedTypes(s.service_types?.length ? s.service_types : (s.service_type ? [s.service_type] : []));
+    setForm({
+      aircraft_id: s.aircraft_id || "",
+      status: s.status || "pending",
+      performed_at: s.performed_at || "",
+      technician: s.technician || "",
+      location: s.location || "",
+      description: s.description || "",
+      checklist: s.checklist || [],
+      photos: s.photos || [],
+      repair_photos: s.repair_photos || [],
+      cost: s.cost != null ? String(s.cost) : "",
+    });
+    setOpen(true);
   };
 
   const remove = async (id: string) => {
@@ -92,20 +127,21 @@ function ServicesPage() {
   return (
     <AppShell>
       <PageHeader title="Serviços" description="Manutenções e inspeções da frota" actions={
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : closeDialog())}>
           <DialogTrigger asChild>
             <Button className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
               <Plus className="mr-2 h-4 w-4" /> Novo Serviço
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
-            <DialogHeader><DialogTitle>Novo Serviço</DialogTitle></DialogHeader>
+            <DialogHeader><DialogTitle>{editing ? "Editar Serviço" : "Novo Serviço"}</DialogTitle></DialogHeader>
             <form onSubmit={submit} className="space-y-4">
               <Tabs defaultValue="info">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="info">Informações</TabsTrigger>
                   <TabsTrigger value="checklist">Checklist</TabsTrigger>
                   <TabsTrigger value="photos">Fotos</TabsTrigger>
+                  <TabsTrigger value="repair">Peças/Reparo</TabsTrigger>
                 </TabsList>
                 <TabsContent value="info" className="space-y-4 mt-4">
                   <div className="grid grid-cols-2 gap-3">
@@ -154,10 +190,14 @@ function ServicesPage() {
                 <TabsContent value="photos" className="mt-4">
                   <ImageUpload bucket="service-photos" multiple value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
                 </TabsContent>
+                <TabsContent value="repair" className="mt-4 space-y-2">
+                  <p className="text-sm text-muted-foreground">Fotos das peças que precisam de reparo. Aparecem em seção dedicada no relatório.</p>
+                  <ImageUpload bucket="part-photos" multiple value={form.repair_photos} onChange={(v) => setForm({...form, repair_photos: v})} />
+                </TabsContent>
               </Tabs>
               <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
-                <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
-                <Button type="submit" className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">Cadastrar</Button>
+                <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
+                <Button type="submit" className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">{editing ? "Salvar" : "Cadastrar"}</Button>
               </div>
             </form>
           </DialogContent>
@@ -189,6 +229,9 @@ function ServicesPage() {
                   <h3 className="font-display font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
                 </div>
                 <div className="flex items-center gap-1">
+                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Editar" onClick={() => openEdit(s)}>
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
                   <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Emitir relatório" onClick={() => emitReport(s)}>
                     <FileDown className="h-3.5 w-3.5" />
                   </Button>
@@ -202,6 +245,9 @@ function ServicesPage() {
               {s.description && <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{s.description}</p>}
               {s.photos?.length ? (
                 <p className="mt-2 text-[11px] text-muted-foreground">{s.photos.length} foto(s) anexada(s)</p>
+              ) : null}
+              {s.repair_photos?.length ? (
+                <p className="text-[11px] text-muted-foreground">{s.repair_photos.length} foto(s) de peças/reparo</p>
               ) : null}
             </div>
           ))}
