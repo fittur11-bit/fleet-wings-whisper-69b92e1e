@@ -188,14 +188,14 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
   }
 
   // Photos
-  const photos: string[] = (service.photos || []).filter(Boolean);
-  if (photos.length) {
+  const renderPhotoSection = async (title: string, photos: string[]) => {
+    if (!photos.length) return;
     doc.addPage();
     y = margin;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
     doc.setTextColor(20, 20, 30);
-    doc.text(`Fotos (${photos.length})`, margin, y);
+    doc.text(`${title} (${photos.length})`, margin, y);
     y += 6;
 
     const cols = 2;
@@ -231,7 +231,13 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
         xPos += imgW + gap;
       }
     }
-  }
+    if (col !== 0) y += rowH + gap;
+  };
+
+  const photos: string[] = (service.photos || []).filter(Boolean);
+  const repairPhotos: string[] = (service.repair_photos || []).filter(Boolean);
+  await renderPhotoSection("Fotos do Serviço", photos);
+  await renderPhotoSection("Fotos de Peças / Reparo", repairPhotos);
 
   // Footer page numbers
   const pageCount = doc.getNumberOfPages();
