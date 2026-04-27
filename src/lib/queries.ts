@@ -6,7 +6,6 @@ export function useAircraft() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ["aircraft", user?.id],
-    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("aircraft").select("*").order("prefix");
       if (error) throw error;
@@ -19,7 +18,6 @@ export function useServices() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ["services", user?.id],
-    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("services")
@@ -35,7 +33,6 @@ export function useParts() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ["parts", user?.id],
-    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("parts")
@@ -51,7 +48,6 @@ export function useDocuments() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ["documents", user?.id],
-    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase.from("documents").select("*").order("created_at", { ascending: false });
       if (error) throw error;
@@ -64,7 +60,6 @@ export function useMaintenanceItems() {
   const { user } = useAuth();
   return useQuery({
     queryKey: ["maintenance_items", user?.id],
-    enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("maintenance_items")
