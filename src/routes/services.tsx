@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Wrench, Trash2 } from "lucide-react";
+import { Plus, Wrench, Trash2, FileDown } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useServices, useAircraft } from "@/lib/queries";
@@ -20,6 +20,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { downloadServiceReport } from "@/lib/service-report";
 
 export const Route = createFileRoute("/services")({
   component: () => <AuthGuard><ServicesPage /></AuthGuard>,
@@ -75,6 +76,17 @@ function ServicesPage() {
     if (!confirm("Excluir serviço?")) return;
     await supabase.from("services").delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["services"] });
+  };
+
+  const emitReport = async (s: any) => {
+    try {
+      toast.loading("Gerando relatório...", { id: `rep-${s.id}` });
+      const ac = aircraft.find((a) => a.id === s.aircraft_id);
+      await downloadServiceReport(s, ac);
+      toast.success("Relatório gerado", { id: `rep-${s.id}` });
+    } catch (err: any) {
+      toast.error(err?.message || "Falha ao gerar relatório", { id: `rep-${s.id}` });
+    }
   };
 
   return (
@@ -176,13 +188,21 @@ function ServicesPage() {
                   <p className="font-mono text-sm font-bold text-primary">{s.aircraft?.prefix || s.aircraft_prefix}</p>
                   <h3 className="font-display font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
                 </div>
-                <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-destructive" onClick={() => remove(s.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                <div className="flex items-center gap-1">
+                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Emitir relatório" onClick={() => emitReport(s)}>
+                    <FileDown className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-destructive" onClick={() => remove(s.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                </div>
               </div>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span className="capitalize">{s.status}</span>
                 <span>{s.performed_at ? format(parseISO(s.performed_at), "dd MMM yyyy", { locale: ptBR }) : "—"}</span>
               </div>
               {s.description && <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{s.description}</p>}
+              {s.photos?.length ? (
+                <p className="mt-2 text-[11px] text-muted-foreground">{s.photos.length} foto(s) anexada(s)</p>
+              ) : null}
             </div>
           ))}
         </div>
