@@ -373,6 +373,42 @@ export type Database = {
           },
         ]
       }
+      usage_events: {
+        Row: {
+          bytes: number | null
+          category: string
+          created_at: string
+          estimated_cost_usd: number | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          units: number | null
+          user_id: string
+        }
+        Insert: {
+          bytes?: number | null
+          category: string
+          created_at?: string
+          estimated_cost_usd?: number | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          units?: number | null
+          user_id: string
+        }
+        Update: {
+          bytes?: number | null
+          category?: string
+          created_at?: string
+          estimated_cost_usd?: number | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          units?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
