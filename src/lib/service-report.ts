@@ -187,7 +187,24 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     y += 4;
   }
 
-  // Photos
+  // Photos — ordered by upload timestamp embedded in the filename (Date.now() prefix)
+  const sortByUploadDate = (urls: string[]) => {
+    const seen = new Set<string>();
+    return urls
+      .filter((u) => {
+        if (!u || seen.has(u)) return false;
+        seen.add(u);
+        return true;
+      })
+      .map((u) => {
+        const file = u.split("/").pop() || "";
+        const ts = parseInt(file.split("-")[0], 10);
+        return { url: u, ts: Number.isFinite(ts) ? ts : 0 };
+      })
+      .sort((a, b) => a.ts - b.ts)
+      .map((x) => x.url);
+  };
+
   const renderPhotoSection = async (title: string, photos: string[]) => {
     if (!photos.length) return;
     doc.addPage();
@@ -198,44 +215,60 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     doc.text(`${title} (${photos.length})`, margin, y);
     y += 6;
 
+    // Uniform square cells; images rendered inside preserving aspect ratio (no distortion)
     const cols = 2;
     const gap = 5;
-    const imgW = (pageW - margin * 2 - gap * (cols - 1)) / cols;
+    const cellW = (pageW - margin * 2 - gap * (cols - 1)) / cols;
+    const cellH = cellW; // square cells for consistent layout
+
     let col = 0;
-    let rowH = 0;
     let xPos = margin;
 
     for (const url of photos) {
       const img = await fetchImageAsDataURL(url);
       if (!img) continue;
-      const ratio = img.h / img.w;
-      const h = imgW * ratio;
+
       if (col === 0) {
-        ensureSpace(h + 4);
+        ensureSpace(cellH + 4);
         xPos = margin;
-        rowH = h;
-      } else {
-        rowH = Math.max(rowH, h);
       }
+
+      // Fit image inside cell preserving aspect ratio (contain)
+      const ratio = img.w / img.h;
+      let drawW = cellW;
+      let drawH = cellW / ratio;
+      if (drawH > cellH) {
+        drawH = cellH;
+        drawW = cellH * ratio;
+      }
+      const offX = xPos + (cellW - drawW) / 2;
+      const offY = y + (cellH - drawH) / 2;
+
+      // Subtle frame around the cell for visual consistency
+      doc.setDrawColor(230, 230, 235);
+      doc.setLineWidth(0.2);
+      doc.rect(xPos, y, cellW, cellH);
+
       const fmt = img.data.startsWith("data:image/png") ? "PNG" : "JPEG";
       try {
-        doc.addImage(img.data, fmt, xPos, y, imgW, h);
+        doc.addImage(img.data, fmt, offX, offY, drawW, drawH);
       } catch {
         // skip unsupported format
       }
+
       col++;
       if (col >= cols) {
         col = 0;
-        y += rowH + gap;
+        y += cellH + gap;
       } else {
-        xPos += imgW + gap;
+        xPos += cellW + gap;
       }
     }
-    if (col !== 0) y += rowH + gap;
+    if (col !== 0) y += cellH + gap;
   };
 
-  const photos: string[] = (service.photos || []).filter(Boolean);
-  const repairPhotos: string[] = (service.repair_photos || []).filter(Boolean);
+  const photos = sortByUploadDate((service.photos || []).filter(Boolean));
+  const repairPhotos = sortByUploadDate((service.repair_photos || []).filter(Boolean));
   await renderPhotoSection("Fotos do Serviço", photos);
   await renderPhotoSection("Fotos de Peças / Reparo", repairPhotos);
 
