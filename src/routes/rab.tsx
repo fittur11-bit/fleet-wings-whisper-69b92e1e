@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AircraftForm } from "@/components/AircraftForm";
+import { trackUsage, COSTS, bytesToGB } from "@/lib/usage-tracking";
 
 export const Route = createFileRoute("/rab")({
   component: () => <AuthGuard><RabPage /></AuthGuard>,
@@ -61,6 +62,12 @@ function RabPage() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setExtracted(data?.data || {});
+      trackUsage({
+        event_type: "ai_call",
+        category: "ai",
+        estimated_cost_usd: payload.fileUrl ? COSTS.AI_VISION_CALL : COSTS.AI_FLASH_CALL,
+        metadata: { source: "rab-extract", mode: payload.url ? "url" : "file" },
+      });
       toast.success("Dados extraídos com sucesso");
     } catch (e: any) {
       toast.error("Falha na extração: " + (e?.message || "erro"));
@@ -83,6 +90,13 @@ function RabPage() {
       const path = `rab-import/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error: upErr } = await supabase.storage.from("documents").upload(path, file);
       if (upErr) throw upErr;
+      trackUsage({
+        event_type: "upload",
+        category: "storage",
+        bytes: file.size,
+        estimated_cost_usd: bytesToGB(file.size) * COSTS.STORAGE_GB_MONTH,
+        metadata: { bucket: "documents", source: "rab-import", name: file.name },
+      });
       const { data: pub } = supabase.storage.from("documents").getPublicUrl(path);
       await callExtract({ fileUrl: pub.publicUrl, fileType: file.type });
     } catch (e: any) {
