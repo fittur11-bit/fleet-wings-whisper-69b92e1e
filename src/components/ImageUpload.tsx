@@ -63,9 +63,10 @@ export function ImageUpload({ bucket, value, onChange, multiple = false, classNa
               <button
                 type="button"
                 onClick={() => remove(url)}
-                className="absolute right-1 top-1 rounded-full bg-black/70 p-1 opacity-0 transition group-hover:opacity-100"
+                aria-label="Remover foto"
+                className="absolute right-1 top-1 rounded-full bg-black/75 p-1.5 text-white shadow-lg ring-1 ring-white/20 transition hover:bg-destructive"
               >
-                <X className="h-3 w-3" />
+                <X className="h-3.5 w-3.5" />
               </button>
             </div>
           ))}
