@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, Sparkles, LogOut, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, Sparkles, LogOut, ShieldCheck, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ const items = [
   { to: "/services", label: "Serviços", icon: Wrench },
   { to: "/library", label: "Biblioteca", icon: BookMarked },
   { to: "/assistant", label: "Assistente IA", icon: Sparkles },
+  { to: "/usage", label: "Custos e Uso", icon: BarChart3 },
 ] as const;
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
