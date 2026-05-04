@@ -36,8 +36,8 @@ export const Route = createRootRoute({
       { title: "FleetControl — Gestão de Frotas Aeronáuticas" },
       { name: "description", content: "Plataforma profissional para gestão de frotas aeronáuticas: aeronaves, manutenção, conformidade CVA e biblioteca técnica." },
       { name: "author", content: "FleetControl" },
-      { property: "og:title", content: "FleetControl" },
-      { property: "og:description", content: "Gestão profissional de frotas aeronáuticas." },
+      { property: "og:title", content: "FleetControl — Gestão de Frotas Aeronáuticas" },
+      { property: "og:description", content: "Plataforma profissional para gestão de frotas aeronáuticas: aeronaves, manutenção, conformidade CVA e biblioteca técnica." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "theme-color", content: "#0F2139" },
@@ -50,6 +50,10 @@ export const Route = createRootRoute({
       { name: "format-detection", content: "telephone=no" },
       { name: "msapplication-TileColor", content: "#0F2139" },
       { name: "msapplication-tap-highlight", content: "no" },
+      { name: "twitter:title", content: "FleetControl — Gestão de Frotas Aeronáuticas" },
+      { name: "twitter:description", content: "Plataforma profissional para gestão de frotas aeronáuticas: aeronaves, manutenção, conformidade CVA e biblioteca técnica." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e692e94f-691b-4c93-897f-5ad01ac8f718/id-preview-6e168a87--0f5ffe6a-715a-4275-9fa6-47307f34f1d2.lovable.app-1777904687193.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e692e94f-691b-4c93-897f-5ad01ac8f718/id-preview-6e168a87--0f5ffe6a-715a-4275-9fa6-47307f34f1d2.lovable.app-1777904687193.png" },
     ],
     links: [
       {
