@@ -5,8 +5,8 @@ export function getCVAStatus(expiration: string | null | undefined) {
   if (!expiration) return { label: "Sem CVA", days: null, color: "muted" as const };
   const exp = typeof expiration === "string" ? parseISO(expiration) : expiration;
   const days = differenceInDays(exp, new Date());
-  if (days < 0) return { label: `Vencido há ${Math.abs(days)}d`, days, color: "danger" as const };
-  if (days < 7) return { label: `${days}d restantes`, days, color: "danger" as const };
+   if (days < 0) return { label: `Vencido há ${Math.abs(days)}d`, days, color: "danger" as const };
+   if (days < 7) return { label: `${days}d (Crítico)`, days, color: "danger" as const };
   if (days < 30) return { label: `${days}d restantes`, days, color: "orange" as const };
   if (days < 60) return { label: `${days}d restantes`, days, color: "warning" as const };
   return { label: `${days}d restantes`, days, color: "success" as const };
