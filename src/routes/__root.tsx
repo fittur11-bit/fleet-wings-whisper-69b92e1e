@@ -1,8 +1,9 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useState } from "react";
+ import { useState, useEffect } from "react";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
+ import { SplashScreen } from "@/components/SplashScreen";
 
 import appCss from "../styles.css?url";
 
@@ -86,16 +87,21 @@ function RootShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-function RootComponent() {
-  const [queryClient] = useState(() => new QueryClient({
-    defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
-  }));
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Outlet />
-        <Toaster position="top-right" theme="dark" />
-      </AuthProvider>
-    </QueryClientProvider>
-  );
-}
+ function RootComponent() {
+   const [queryClient] = useState(() => new QueryClient({
+     defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
+   }));
+   const [showSplash, setShowSplash] = useState(true);
+ 
+   return (
+     <QueryClientProvider client={queryClient}>
+       <AuthProvider>
+         {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+         <div className={showSplash ? "hidden" : "block"}>
+           <Outlet />
+         </div>
+         <Toaster position="top-right" theme="dark" />
+       </AuthProvider>
+     </QueryClientProvider>
+   );
+ }
