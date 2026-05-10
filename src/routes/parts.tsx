@@ -88,11 +88,11 @@ function PartsPage() {
         description="Controle de estoque, instalação e rastreabilidade"
         actions={
           <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
-            <DialogTrigger asChild>
-              <Button onClick={openCreate} className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground shadow-lg shadow-primary/20">
-                <Plus className="mr-2 h-4 w-4" /> Nova Peça
-              </Button>
-            </DialogTrigger>
+             <DialogTrigger asChild>
+               <Button onClick={openCreate} className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                 <Plus className="mr-2 h-4 w-4" /> Nova Peça
+               </Button>
+             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="font-display text-xl">

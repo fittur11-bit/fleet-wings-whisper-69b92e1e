@@ -65,11 +65,11 @@ function AircraftPage() {
         description={`${aircraft.length} aeronave(s) cadastrada(s) na frota`}
         actions={
           <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
-            <DialogTrigger asChild>
-              <Button onClick={openCreate} className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground shadow-lg shadow-primary/20">
-                <Plus className="mr-2 h-4 w-4" /> Nova Aeronave
-              </Button>
-            </DialogTrigger>
+             <DialogTrigger asChild>
+               <Button onClick={openCreate} className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+                 <Plus className="mr-2 h-4 w-4" /> Nova Aeronave
+               </Button>
+             </DialogTrigger>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle className="font-display text-xl">
@@ -122,11 +122,11 @@ function AircraftPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             {aircraft.length === 0 ? "Adicione sua primeira aeronave para começar." : "Tente ajustar os filtros de busca."}
           </p>
-          {aircraft.length === 0 && (
-            <Button onClick={openCreate} className="mt-6 bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
-              <Plus className="mr-2 h-4 w-4" /> Cadastrar Aeronave
-            </Button>
-          )}
+           {aircraft.length === 0 && (
+             <Button onClick={openCreate} className="mt-6 bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+               <Plus className="mr-2 h-4 w-4" /> Cadastrar Aeronave
+             </Button>
+           )}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
