@@ -144,7 +144,7 @@ function ShipmentsPage() {
         actions={
           <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : closeDialog())}>
             <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
+               <Button className="bg-primary text-primary-foreground shadow-lg">
                 <Plus className="mr-2 h-4 w-4" /> Novo Envio
               </Button>
             </DialogTrigger>
@@ -293,7 +293,7 @@ function ShipmentsPage() {
 
                 <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
                   <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
-                  <Button type="submit" className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
+                   <Button type="submit" className="bg-primary text-primary-foreground shadow-lg">
                     {editing ? "Salvar Alterações" : "Cadastrar Envio"}
                   </Button>
                 </div>

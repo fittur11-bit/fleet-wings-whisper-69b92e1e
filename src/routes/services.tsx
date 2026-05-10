@@ -128,11 +128,11 @@ function ServicesPage() {
     <AppShell>
       <PageHeader title="Serviços" description="Manutenções e inspeções da frota" actions={
         <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : closeDialog())}>
-          <DialogTrigger asChild>
-            <Button className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
-              <Plus className="mr-2 h-4 w-4" /> Novo Serviço
-            </Button>
-          </DialogTrigger>
+           <DialogTrigger asChild>
+             <Button className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+               <Plus className="mr-2 h-4 w-4" /> Novo Serviço
+             </Button>
+           </DialogTrigger>
           <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
             <DialogHeader><DialogTitle>{editing ? "Editar Serviço" : "Novo Serviço"}</DialogTitle></DialogHeader>
             <form onSubmit={submit} className="space-y-4">
@@ -197,7 +197,7 @@ function ServicesPage() {
               </Tabs>
               <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
                 <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
-                <Button type="submit" className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">{editing ? "Salvar" : "Cadastrar"}</Button>
+                 <Button type="submit" className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">{editing ? "Salvar" : "Cadastrar"}</Button>
               </div>
             </form>
           </DialogContent>

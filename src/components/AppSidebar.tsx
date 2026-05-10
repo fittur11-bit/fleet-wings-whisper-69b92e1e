@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
- import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, BarChart3, Archive, Package } from "lucide-react";
+ import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, BarChart3, Archive, Package, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ const items = [
   { to: "/rab", label: "Consulta RAB", icon: Search },
    { to: "/parts", label: "Peças", icon: Cog },
    { to: "/services", label: "Serviços", icon: Wrench },
-   { to: "/shipments", label: "Envio de Peças", icon: Package },
+   { to: "/shipments", label: "Peças em Manutenção", icon: History },
    { to: "/library", label: "Biblioteca", icon: BookMarked },
   { to: "/usage", label: "Custos e Uso", icon: BarChart3 },
   { to: "/backup", label: "Backup & Limpeza", icon: Archive },
@@ -22,11 +22,11 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/80 backdrop-blur-xl">
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-white/5">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[oklch(0.74_0.142_78)] to-[oklch(0.86_0.11_86)] shadow-lg">
-          <ShieldCheck className="h-5 w-5 text-[oklch(0.16_0.04_255)]" />
-        </div>
-        <div>
+       <div className="flex items-center gap-3 px-6 py-6 border-b border-white/5">
+         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg">
+           <Plane className="h-5 w-5 text-primary-foreground" />
+         </div>
+         <div>
           <h1 className="font-display text-lg font-bold leading-none tracking-tight">FleetControl</h1>
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1">Aviation</p>
         </div>
