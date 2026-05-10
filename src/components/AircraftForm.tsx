@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +12,6 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () => void }) {
-  const { user } = useAuth();
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
