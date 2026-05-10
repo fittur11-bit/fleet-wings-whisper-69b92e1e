@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2 } from "lucide-react";
+ import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useDocuments, useAircraft } from "@/lib/queries";
@@ -29,14 +29,15 @@ function LibraryPage() {
   const { data: aircraft = [] } = useAircraft();
   const { user } = useAuth();
   const qc = useQueryClient();
-  const [open, setOpen] = useState(false);
+   const [open, setOpen] = useState(false);
+   const [editing, setEditing] = useState<any | null>(null);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState<any>({
-    title: "", doc_type: "AMM", model: "", aircraft_id: "",
-    version: "", revision_date: "", file_url: "", notes: "",
-  });
+   const [form, setForm] = useState<any>({
+     title: "", doc_type: "AMM", model: "", aircraft_id: "",
+     version: "", revision_date: "", file_url: "", notes: "",
+   });
 
   const filtered = docs.filter((d: any) => {
     const matchType = typeFilter === "all" || d.doc_type === typeFilter;
@@ -65,28 +66,58 @@ function LibraryPage() {
     }
   };
 
-  const save = async () => {
-    if (!form.title || !form.doc_type) {
-      toast.error("Título e tipo são obrigatórios");
-      return;
-    }
-    if (!user) {
-      toast.error("Faça login para salvar documentos");
-      return;
-    }
-    const payload = {
-      ...form,
-      user_id: user.id,
-      aircraft_id: form.aircraft_id || null,
-      revision_date: form.revision_date || null,
-    };
-    const { error } = await supabase.from("documents").insert(payload);
-    if (error) return toast.error(error.message);
-    toast.success("Documento adicionado");
-    setOpen(false);
-    setForm({ title: "", doc_type: "AMM", model: "", aircraft_id: "", version: "", revision_date: "", file_url: "", notes: "" });
-    qc.invalidateQueries({ queryKey: ["documents"] });
-  };
+   const save = async () => {
+     if (!form.title || !form.doc_type) {
+       toast.error("Título e tipo são obrigatórios");
+       return;
+     }
+     if (!user) {
+       toast.error("Faça login para salvar documentos");
+       return;
+     }
+     const payload = {
+       ...form,
+       user_id: user.id,
+       aircraft_id: form.aircraft_id || null,
+       revision_date: form.revision_date || null,
+     };
+     
+     let error;
+     if (editing) {
+       const { id, ...rest } = payload;
+       const res = await supabase.from("documents").update(rest).eq("id", editing.id);
+       error = res.error;
+     } else {
+       const res = await supabase.from("documents").insert(payload);
+       error = res.error;
+     }
+
+     if (error) return toast.error(error.message);
+     toast.success(editing ? "Documento atualizado" : "Documento adicionado");
+     closeDialog();
+     qc.invalidateQueries({ queryKey: ["documents"] });
+   };
+
+   const closeDialog = () => {
+     setOpen(false);
+     setEditing(null);
+     setForm({ title: "", doc_type: "AMM", model: "", aircraft_id: "", version: "", revision_date: "", file_url: "", notes: "" });
+   };
+
+   const openEdit = (d: any) => {
+     setEditing(d);
+     setForm({
+       title: d.title || "",
+       doc_type: d.doc_type || "AMM",
+       model: d.model || "",
+       aircraft_id: d.aircraft_id || "",
+       version: d.version || "",
+       revision_date: d.revision_date || "",
+       file_url: d.file_url || "",
+       notes: d.notes || "",
+     });
+     setOpen(true);
+   };
 
   const remove = async (id: string) => {
     if (!confirm("Remover este documento?")) return;
@@ -107,15 +138,15 @@ function LibraryPage() {
       <PageHeader
         title="Biblioteca Técnica"
         description="Manuais, ADs, SBs e documentos de aeronavegabilidade."
-        actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button><Plus className="mr-2 h-4 w-4" /> Novo documento</Button>
-            </DialogTrigger>
-            <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Adicionar documento</DialogTitle>
-              </DialogHeader>
+         actions={
+           <Dialog open={open} onOpenChange={(v) => (v ? setOpen(true) : closeDialog())}>
+             <DialogTrigger asChild>
+               <Button className="bg-primary text-primary-foreground shadow-lg"><Plus className="mr-2 h-4 w-4" /> Novo documento</Button>
+             </DialogTrigger>
+             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95 backdrop-blur-xl border-white/10">
+               <DialogHeader>
+                 <DialogTitle className="font-display text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
+               </DialogHeader>
               <div className="space-y-4 pt-2">
                 <div>
                   <Label>Título *</Label>
@@ -213,56 +244,81 @@ function LibraryPage() {
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
-        <Card className="border-dashed border-white/10 bg-card/30">
-          <CardContent className="flex flex-col items-center py-12 text-center">
-            <BookMarked className="h-10 w-10 text-muted-foreground" />
-            <p className="mt-3 text-sm text-muted-foreground">
-              {docs.length === 0 ? "Sua biblioteca está vazia. Adicione o primeiro documento." : "Nenhum documento encontrado."}
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((d: any) => (
-            <Card key={d.id} className="group border-white/5 bg-card/60 backdrop-blur transition hover:border-primary/30">
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <FileText className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <p className="truncate font-medium">{d.title}</p>
-                      <Badge variant="outline" className="shrink-0 text-[10px]">{d.doc_type}</Badge>
-                    </div>
-                    <p className="mt-1 truncate text-xs text-muted-foreground">
-                      {d.model || "Geral"} {d.version && `· v${d.version}`}
-                    </p>
-                    {d.revision_date && (
-                      <p className="text-xs text-muted-foreground">
-                        Rev. {format(parseISO(d.revision_date), "dd/MM/yyyy", { locale: ptBR })}
-                      </p>
-                    )}
-                    <div className="mt-3 flex items-center gap-2">
-                      {d.file_url && (
-                        <Button size="sm" variant="outline" asChild className="h-7 text-xs">
-                          <a href={d.file_url} target="_blank" rel="noreferrer">
-                            <ExternalLink className="mr-1 h-3 w-3" /> Abrir
-                          </a>
-                        </Button>
-                      )}
-                      <Button size="sm" variant="ghost" onClick={() => remove(d.id)} className="h-7 text-xs text-destructive hover:text-destructive">
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+       {filtered.length === 0 ? (
+         <div className="glass-card rounded-2xl p-16 text-center border-dashed border-white/10">
+           <BookMarked className="mx-auto h-14 w-14 text-muted-foreground/40" />
+           <h3 className="mt-4 font-display text-lg font-semibold">
+             {docs.length === 0 ? "Biblioteca vazia" : "Nenhum documento encontrado"}
+           </h3>
+           <p className="mt-1 text-sm text-muted-foreground">
+             {docs.length === 0 ? "Adicione o primeiro manual ou documento técnico." : "Tente ajustar os filtros ou a busca."}
+           </p>
+         </div>
+       ) : (
+         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+           {filtered.map((d: any) => (
+             <div key={d.id} className="glass-card glass-card-hover rounded-2xl p-5 border border-white/5 flex flex-col">
+               <div className="flex items-start justify-between mb-4">
+                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                   <FileText className="h-5 w-5" />
+                 </div>
+                 <div className="flex items-center gap-1">
+                   <Button size="icon" variant="ghost" className="h-8 w-8 hover:text-primary" onClick={() => openEdit(d)}>
+                     <Pencil className="h-4 w-4" />
+                   </Button>
+                   <Button size="icon" variant="ghost" className="h-8 w-8 hover:text-destructive" onClick={() => remove(d.id)}>
+                     <Trash2 className="h-4 w-4" />
+                   </Button>
+                 </div>
+               </div>
+
+               <div className="flex-1">
+                 <div className="flex items-center gap-2 mb-1">
+                   <Badge variant="outline" className="text-[10px] uppercase font-bold tracking-wider bg-white/5 border-white/10">
+                     {d.doc_type}
+                   </Badge>
+                   {d.version && (
+                     <Badge variant="secondary" className="text-[10px] font-mono py-0 px-1.5 h-4">
+                       v{d.version}
+                     </Badge>
+                   )}
+                 </div>
+                 <h3 className="font-display font-semibold text-lg line-clamp-1 leading-tight">{d.title}</h3>
+                 <p className="text-xs text-muted-foreground mt-1 mb-4">
+                   {d.model || "Uso Geral"}
+                 </p>
+
+                 <div className="space-y-2 mb-4">
+                   {d.aircraft?.prefix && (
+                     <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                       <Plane className="h-3 w-3 text-primary" />
+                       <span className="font-mono font-bold text-foreground/80">{d.aircraft.prefix}</span>
+                     </div>
+                   )}
+                   {d.revision_date && (
+                     <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                       <History className="h-3 w-3" />
+                       <span>Rev: {format(parseISO(d.revision_date), "dd/MM/yyyy", { locale: ptBR })}</span>
+                     </div>
+                   )}
+                 </div>
+               </div>
+
+               {d.file_url ? (
+                 <Button asChild className="w-full h-9 rounded-xl shadow-lg shadow-primary/10" variant="secondary">
+                   <a href={d.file_url} target="_blank" rel="noreferrer">
+                     <ExternalLink className="mr-2 h-3.5 w-3.5" /> Abrir Documento
+                   </a>
+                 </Button>
+               ) : (
+                 <Button disabled variant="outline" className="w-full h-9 rounded-xl border-dashed">
+                   Sem Arquivo
+                 </Button>
+               )}
+             </div>
+           ))}
+         </div>
+       )}
     </>
   );
 }
