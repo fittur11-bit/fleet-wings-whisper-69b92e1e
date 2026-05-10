@@ -9,10 +9,25 @@ export function useAircraft() {
     queryFn: async () => {
       const { data, error } = await supabase.from("aircraft").select("*").order("prefix");
       if (error) throw error;
-      return data || [];
-    },
-  });
-}
+       return data || [];
+     },
+   });
+ }
+ 
+ export function useShipments() {
+   const { user } = useAuth();
+   return useQuery({
+     queryKey: ["shipments", user?.id],
+     queryFn: async () => {
+       const { data, error } = await supabase
+         .from("part_shipments")
+         .select("*, aircraft:aircraft_id(prefix, model)")
+         .order("created_at", { ascending: false });
+       if (error) throw error;
+       return data || [];
+     },
+   });
+ }
 
 export function useServices() {
   const { user } = useAuth();
