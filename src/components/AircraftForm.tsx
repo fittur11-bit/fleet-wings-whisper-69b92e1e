@@ -124,7 +124,7 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
 
       <div className="flex justify-end gap-2 pt-4 border-t border-white/5 sticky bottom-0 bg-card/95 backdrop-blur">
         <Button type="button" variant="ghost" onClick={onDone}>Cancelar</Button>
-        <Button type="submit" disabled={saving} className="bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
+       <Button type="submit" disabled={saving} className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
           {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {initial ? "Atualizar" : "Cadastrar"}
         </Button>
