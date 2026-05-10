@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,7 +12,6 @@ import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
 export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () => void }) {
-  const { user } = useAuth();
   const qc = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -36,11 +34,15 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    const { data: { user: currentUser } } = await supabase.auth.getUser();
+    if (!currentUser) {
+      toast.error("Faça login para salvar a aeronave.");
+      return;
+    }
     setSaving(true);
     const payload = {
       ...form,
-      user_id: user.id,
+      user_id: currentUser.id,
       year: form.year ? Number(form.year) : null,
       total_hours: form.total_hours ? Number(form.total_hours) : 0,
       cva_expiration: form.cva_expiration || null,

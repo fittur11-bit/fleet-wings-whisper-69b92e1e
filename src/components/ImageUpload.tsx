@@ -22,10 +22,15 @@ export function ImageUpload({ bucket, value, onChange, multiple = false, classNa
   const handleUpload = async (files: FileList) => {
     setUploading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        toast.error("Faça login para enviar imagens.");
+        return;
+      }
       const uploaded: string[] = [];
       for (const file of Array.from(files)) {
         const ext = file.name.split(".").pop();
-        const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+        const path = `${session.user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
         const { error } = await supabase.storage.from(bucket).upload(path, file);
         if (error) throw error;
         const { data } = supabase.storage.from(bucket).getPublicUrl(path);
