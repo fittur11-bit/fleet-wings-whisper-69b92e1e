@@ -31,7 +31,6 @@ export const Route = createFileRoute("/usage")({
 });
 
 const FREE_CLOUD = 25;
-const FREE_AI = 1;
 
 function UsagePage() {
   const { user } = useAuth();
@@ -72,17 +71,16 @@ function UsagePage() {
 
   // Série diária dos últimos 30 dias
   const series = useMemo(() => {
-    const days: Record<string, { date: string; uploadsMB: number; aiCalls: number; cost: number }> = {};
+     const days: Record<string, { date: string; uploadsMB: number; cost: number }> = {};
     for (let i = 29; i >= 0; i--) {
       const d = startOfDay(subDays(new Date(), i));
       const k = format(d, "yyyy-MM-dd");
-      days[k] = { date: format(d, "dd/MM", { locale: ptBR }), uploadsMB: 0, aiCalls: 0, cost: 0 };
+       days[k] = { date: format(d, "dd/MM", { locale: ptBR }), uploadsMB: 0, cost: 0 };
     }
     events.forEach((e: any) => {
       const k = format(startOfDay(new Date(e.created_at)), "yyyy-MM-dd");
       if (!days[k]) return;
       if (e.category === "storage") days[k].uploadsMB += (e.bytes || 0) / (1024 * 1024);
-      if (e.category === "ai") days[k].aiCalls += Number(e.units || 1);
       days[k].cost += Number(e.estimated_cost_usd || 0);
     });
     return Object.values(days);
@@ -92,7 +90,6 @@ function UsagePage() {
     const storageBytes = events
       .filter((e: any) => e.category === "storage")
       .reduce((sum: number, e: any) => sum + Number(e.bytes || 0), 0);
-    const aiCalls = events.filter((e: any) => e.category === "ai").length;
     const cost = events.reduce((sum: number, e: any) => sum + Number(e.estimated_cost_usd || 0), 0);
     const dbRecords =
       (counts?.aircraft || 0) +
@@ -100,14 +97,10 @@ function UsagePage() {
       (counts?.parts || 0) +
       (counts?.documents || 0) +
       (counts?.maintenance || 0);
-    return { storageBytes, aiCalls, cost, dbRecords };
+     return { storageBytes, cost, dbRecords };
   }, [events, counts]);
 
   const cloudUsedPct = Math.min(100, (totals.cost / FREE_CLOUD) * 100);
-  const aiCostEstimate = events
-    .filter((e: any) => e.category === "ai")
-    .reduce((s: number, e: any) => s + Number(e.estimated_cost_usd || 0), 0);
-  const aiUsedPct = Math.min(100, (aiCostEstimate / FREE_AI) * 100);
 
   const dbBreakdown = counts
     ? [
@@ -212,9 +205,9 @@ function UsagePage() {
         </ChartCard>
       </div>
 
-      <p className="mt-6 text-xs text-muted-foreground">
-        💡 Os custos são estimativas baseadas nas tabelas públicas de preço do Lovable Cloud e do AI Gateway. Valores reais podem variar — consulte <strong>Settings → Workspace → Usage</strong> para a fatura oficial.
-      </p>
+       <p className="mt-6 text-xs text-muted-foreground">
+         💡 Os custos são estimativas baseadas nas tabelas públicas de preço do Lovable Cloud. Valores reais podem variar — consulte <strong>Settings → Workspace → Usage</strong> para a fatura oficial.
+       </p>
     </AppShell>
   );
 }
