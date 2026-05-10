@@ -106,3 +106,11 @@ export const SECURITY_QUESTIONS = [
   "Qual o nome da sua escola primária?",
   "Qual seu prato favorito?",
 ] as const;
+
+export const FLIGHT_NATURE = [
+  { value: "private", label: "Privado (TPX)" },
+  { value: "commercial", label: "Comercial (TPC)" },
+  { value: "instruction", label: "Instrução (PRI)" },
+  { value: "maintenance", label: "Voo de Experiência" },
+  { value: "ferry", label: "Traslado" },
+] as const;
