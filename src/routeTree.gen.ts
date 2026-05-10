@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsageRouteImport } from './routes/usage'
+import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RabRouteImport } from './routes/rab'
 import { Route as PartsRouteImport } from './routes/parts'
@@ -24,6 +25,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UsageRoute = UsageRouteImport.update({
   id: '/usage',
   path: '/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShipmentsRoute = ShipmentsRouteImport.update({
+  id: '/shipments',
+  path: '/shipments',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ServicesRoute = ServicesRouteImport.update({
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/shipments': typeof ShipmentsRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/shipments': typeof ShipmentsRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/parts': typeof PartsRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
+  '/shipments': typeof ShipmentsRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/shipments'
     | '/usage'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/shipments'
     | '/usage'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/rab'
     | '/services'
+    | '/shipments'
     | '/usage'
   fileRoutesById: FileRoutesById
 }
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   PartsRoute: typeof PartsRoute
   RabRoute: typeof RabRoute
   ServicesRoute: typeof ServicesRoute
+  ShipmentsRoute: typeof ShipmentsRoute
   UsageRoute: typeof UsageRoute
 }
 
@@ -180,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/usage'
       fullPath: '/usage'
       preLoaderRoute: typeof UsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shipments': {
+      id: '/shipments'
+      path: '/shipments'
+      fullPath: '/shipments'
+      preLoaderRoute: typeof ShipmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/services': {
@@ -266,8 +286,18 @@ const rootRouteChildren: RootRouteChildren = {
   PartsRoute: PartsRoute,
   RabRoute: RabRoute,
   ServicesRoute: ServicesRoute,
+  ShipmentsRoute: ShipmentsRoute,
   UsageRoute: UsageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
