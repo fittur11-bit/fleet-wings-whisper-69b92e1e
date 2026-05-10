@@ -1,6 +1,6 @@
 {
-  "name": "FleetControl — Gestão de Frotas Aeronáuticas",
-  "short_name": "FleetControl",
+  "name": "FlightCore — Gestão de Frotas Aeronáuticas",
+  "short_name": "FlightCore",
   "description": "Plataforma profissional para gestão de frotas aeronáuticas: aeronaves, manutenção, conformidade CVA e biblioteca técnica.",
   "start_url": "/dashboard",
   "id": "/",
@@ -24,14 +24,14 @@
       "sizes": "512x1024",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "FleetControl no celular"
+      "label": "FlightCore no celular"
     },
     {
       "src": "/screenshot-desktop.png",
       "sizes": "1280x800",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "FleetControl no desktop"
+      "label": "FlightCore no desktop"
     }
   ],
   "prefer_related_applications": false,
