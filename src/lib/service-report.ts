@@ -52,7 +52,7 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(110, 110, 120);
-  doc.text("FleetControl — Aviation", margin, y);
+  doc.text("FlightCore — Aviation", margin, y);
   doc.text(
     `Emitido em ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}`,
     pageW - margin,
@@ -280,7 +280,7 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     doc.setFontSize(8);
     doc.setTextColor(140, 140, 150);
     doc.text(`Página ${i} de ${pageCount}`, pageW - margin, pageH - 8, { align: "right" });
-    doc.text("FleetControl", margin, pageH - 8);
+    doc.text("FlightCore", margin, pageH - 8);
   }
 
   return doc.output("blob");

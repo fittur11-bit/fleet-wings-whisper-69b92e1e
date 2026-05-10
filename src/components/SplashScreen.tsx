@@ -5,13 +5,13 @@
  export function SplashScreen({ onFinish }: { onFinish: () => void }) {
    const [isVisible, setIsVisible] = useState(true);
  
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       setIsVisible(false);
-       setTimeout(onFinish, 1000); // Wait for exit animation
-     }, 2500);
-     return () => clearTimeout(timer);
-   }, [onFinish]);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        setTimeout(onFinish, 1200); // Wait for exit animation
+      }, 4500);
+      return () => clearTimeout(timer);
+    }, [onFinish]);
  
    return (
      <AnimatePresence>
@@ -56,14 +56,14 @@
  
              {/* Text Animation */}
              <div className="text-center">
-               <motion.h1
-                 initial={{ y: 10, opacity: 0 }}
-                 animate={{ y: 0, opacity: 1 }}
-                 transition={{ delay: 0.3, duration: 0.8 }}
-                 className="font-display text-4xl font-extrabold tracking-tight text-white sm:text-5xl"
-               >
-                 Fleet<span className="gold-text">Control</span>
-               </motion.h1>
+                <motion.h1
+                  initial={{ y: 15, opacity: 0, filter: "blur(10px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
+                  className="font-display text-5xl font-extrabold tracking-tight text-white sm:text-6xl"
+                >
+                  Flight<span className="gold-text">Core</span>
+                </motion.h1>
                
                <motion.div 
                  initial={{ scaleX: 0 }}
@@ -72,30 +72,30 @@
                  className="mt-4 h-[1px] w-48 origin-center bg-gradient-to-r from-transparent via-gold/50 to-transparent"
                />
  
-               <motion.p
-                 initial={{ opacity: 0 }}
-                 animate={{ opacity: 1 }}
-                 transition={{ delay: 0.8, duration: 0.8 }}
-                 className="mt-3 font-sans text-xs font-medium tracking-[0.2em] uppercase text-gold/60"
-               >
-                 Aviation Management Systems
-               </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, letterSpacing: "0.1em" }}
+                  animate={{ opacity: 1, letterSpacing: "0.25em" }}
+                  transition={{ delay: 1.2, duration: 1.5, ease: "easeOut" }}
+                  className="mt-3 font-sans text-[10px] font-medium uppercase text-gold/60"
+                >
+                  Sistemas de Gestão Aeronáutica
+                </motion.p>
              </div>
  
-             {/* Loading Bar */}
-             <div className="absolute -bottom-24 h-1 w-32 overflow-hidden rounded-full bg-white/5">
-               <motion.div
-                 initial={{ x: "-100%" }}
-                 animate={{ x: "100%" }}
-                 transition={{ 
-                   duration: 1.5, 
-                   repeat: Infinity, 
-                   ease: "easeInOut",
-                   repeatDelay: 0.2
-                 }}
-                 className="h-full w-1/2 bg-gradient-to-r from-transparent via-gold to-transparent"
-               />
-             </div>
+              {/* Loading Bar */}
+              <div className="absolute -bottom-24 h-[2px] w-48 overflow-hidden rounded-full bg-white/5">
+                <motion.div
+                  initial={{ left: "-100%" }}
+                  animate={{ left: "100%" }}
+                  transition={{ 
+                    duration: 2.5, 
+                    repeat: Infinity, 
+                    ease: "easeInOut",
+                    repeatDelay: 0.3
+                  }}
+                  className="absolute h-full w-1/3 bg-gradient-to-r from-transparent via-gold to-transparent shadow-[0_0_10px_rgba(212,175,55,0.5)]"
+                />
+              </div>
            </div>
          </motion.div>
        )}
