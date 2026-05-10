@@ -79,8 +79,15 @@ export const PART_CONDITION = [
   { value: "new", label: "Nova" },
   { value: "serviceable", label: "Serviceable" },
   { value: "unserviceable", label: "Unserviceable" },
-  { value: "overhauled", label: "Overhauled" },
-] as const;
+   { value: "overhauled", label: "Overhauled" },
+ ] as const;
+ 
+ export const SHIPMENT_STATUS = [
+   { value: "sent", label: "Enviado" },
+   { value: "in_repair", label: "Em Reparo" },
+   { value: "received", label: "Recebido" },
+   { value: "cancelled", label: "Cancelado" },
+ ] as const;
 
 export const SERVICE_CHECKLISTS: Record<string, string[]> = {
   "50h": ["Troca de óleo", "Filtro de óleo", "Inspeção visual motor", "Verificação de vazamentos", "Inspeção pneus"],

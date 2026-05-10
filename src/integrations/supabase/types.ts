@@ -201,6 +201,71 @@ export type Database = {
           },
         ]
       }
+      part_shipments: {
+        Row: {
+          actual_return_date: string | null
+          aircraft_id: string
+          budget_amount: number | null
+          created_at: string
+          destination_workshop: string | null
+          estimated_return_date: string | null
+          id: string
+          notes: string | null
+          overhaul_threshold: string | null
+          overhaul_type: string | null
+          part_name: string
+          serial_number: string | null
+          shipping_date: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_return_date?: string | null
+          aircraft_id: string
+          budget_amount?: number | null
+          created_at?: string
+          destination_workshop?: string | null
+          estimated_return_date?: string | null
+          id?: string
+          notes?: string | null
+          overhaul_threshold?: string | null
+          overhaul_type?: string | null
+          part_name: string
+          serial_number?: string | null
+          shipping_date?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_return_date?: string | null
+          aircraft_id?: string
+          budget_amount?: number | null
+          created_at?: string
+          destination_workshop?: string | null
+          estimated_return_date?: string | null
+          id?: string
+          notes?: string | null
+          overhaul_threshold?: string | null
+          overhaul_type?: string | null
+          part_name?: string
+          serial_number?: string | null
+          shipping_date?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "part_shipments_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parts: {
         Row: {
           aircraft_id: string | null
