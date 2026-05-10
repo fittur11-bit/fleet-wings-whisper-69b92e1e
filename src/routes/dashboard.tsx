@@ -79,7 +79,7 @@ function DashboardContent() {
                       <p className="mt-1 text-xs text-muted-foreground">de {k.total} no total</p>
                     )}
                   </div>
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20">
+                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
                     <k.icon className="h-5 w-5" />
                   </div>
                 </div>
@@ -89,7 +89,7 @@ function DashboardContent() {
         ))}
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
+       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* CVA Alerts */}
         <Card className="border-white/5 bg-card/60 backdrop-blur">
           <CardHeader className="flex flex-row items-center justify-between">
