@@ -186,17 +186,6 @@ function UsagePage() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Chamadas de IA por dia" icon={<Sparkles className="h-4 w-4" />}>
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={series}>
-              <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-              <XAxis dataKey="date" stroke="oklch(0.7 0 0)" fontSize={11} />
-              <YAxis stroke="oklch(0.7 0 0)" fontSize={11} />
-              <Tooltip contentStyle={chartTooltip} />
-              <Bar dataKey="aiCalls" fill="oklch(0.7 0.18 280)" radius={[4, 4, 0, 0]} name="Chamadas" />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
 
         <ChartCard title="Custo diário estimado (US$)" icon={<DollarSign className="h-4 w-4" />}>
           <ResponsiveContainer width="100%" height={220}>

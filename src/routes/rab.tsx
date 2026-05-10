@@ -62,12 +62,6 @@ function RabPage() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setExtracted(data?.data || {});
-      trackUsage({
-        event_type: "ai_call",
-        category: "ai",
-        estimated_cost_usd: payload.fileUrl ? COSTS.AI_VISION_CALL : COSTS.AI_FLASH_CALL,
-        metadata: { source: "rab-extract", mode: payload.url ? "url" : "file" },
-      });
       toast.success("Dados extraídos com sucesso");
     } catch (e: any) {
       toast.error("Falha na extração: " + (e?.message || "erro"));
