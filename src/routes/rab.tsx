@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Search, ExternalLink, Plane, Globe, Sparkles, Upload, Loader2, FileText, Wand2 } from "lucide-react";
+ import { Search, ExternalLink, Plane, Globe, Scan, Upload, Loader2, FileText, SearchCode } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -62,12 +62,6 @@ function RabPage() {
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
       setExtracted(data?.data || {});
-      trackUsage({
-        event_type: "ai_call",
-        category: "ai",
-        estimated_cost_usd: payload.fileUrl ? COSTS.AI_VISION_CALL : COSTS.AI_FLASH_CALL,
-        metadata: { source: "rab-extract", mode: payload.url ? "url" : "file" },
-      });
       toast.success("Dados extraídos com sucesso");
     } catch (e: any) {
       toast.error("Falha na extração: " + (e?.message || "erro"));
@@ -193,9 +187,9 @@ function RabPage() {
 
       <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Sparkles className="h-4 w-4 text-primary" /> Importação manual + extração por IA
-          </CardTitle>
+           <CardTitle className="flex items-center gap-2 text-base">
+             <Scan className="h-4 w-4 text-primary" /> Importação manual e extração automática
+           </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="url">
@@ -211,12 +205,12 @@ function RabPage() {
                   placeholder="https://sistemas.anac.gov.br/aeronaves/..."
                   className="flex-1"
                 />
-                <Button type="submit" disabled={loading || !importUrl.trim()}>
-                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Wand2 className="mr-2 h-4 w-4" />}
-                  Extrair
-                </Button>
+                 <Button type="submit" disabled={loading || !importUrl.trim()}>
+                   {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <SearchCode className="mr-2 h-4 w-4" />}
+                   Extrair
+                 </Button>
               </form>
-              <p className="mt-2 text-xs text-muted-foreground">Cole a URL da consulta RAB para que a IA leia e extraia os dados.</p>
+               <p className="mt-2 text-xs text-muted-foreground">Cole a URL da consulta RAB para que o sistema leia e extraia os dados.</p>
             </TabsContent>
             <TabsContent value="file" className="mt-4">
               <Label className="block">
@@ -232,8 +226,8 @@ function RabPage() {
                   ) : (
                     <Upload className="h-8 w-8 text-muted-foreground" />
                   )}
-                  <p className="mt-2 text-sm font-medium">Selecione um PDF ou imagem do RAB</p>
-                  <p className="text-xs text-muted-foreground">A IA fará OCR e extrairá os dados automaticamente</p>
+                   <p className="mt-2 text-sm font-medium">Selecione um PDF ou imagem do RAB</p>
+                   <p className="text-xs text-muted-foreground">O sistema fará o processamento e extrairá os dados automaticamente</p>
                 </div>
               </Label>
             </TabsContent>
@@ -259,9 +253,9 @@ function RabPage() {
                 <Button onClick={fillNew} className="flex-1">
                   <Plane className="mr-2 h-4 w-4" /> Preencher nova aeronave
                 </Button>
-                <Button onClick={fillExisting} variant="outline" className="flex-1">
-                  <Wand2 className="mr-2 h-4 w-4" /> Atualizar existente
-                </Button>
+                 <Button onClick={fillExisting} variant="outline" className="flex-1">
+                   <SearchCode className="mr-2 h-4 w-4" /> Atualizar existente
+                 </Button>
               </div>
             </div>
           )}

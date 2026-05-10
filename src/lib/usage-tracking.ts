@@ -1,13 +1,11 @@
 import { supabase } from "@/integrations/supabase/client";
 
-// Estimativas de custo (USD) — Lovable Cloud + AI Gateway
-export const COSTS = {
-  STORAGE_GB_MONTH: 0.021,
-  EGRESS_GB: 0.09,
-  AI_FLASH_CALL: 0.0008, // ~estimativa por chamada média gemini-2.5-flash
-  AI_VISION_CALL: 0.0025, // OCR/imagem mais caro
-  DB_ROW: 0.0000001, // praticamente zero
-};
+ // Estimativas de custo (USD) — Lovable Cloud
+ export const COSTS = {
+   STORAGE_GB_MONTH: 0.021,
+   EGRESS_GB: 0.09,
+   DB_ROW: 0.0000001, // praticamente zero
+ };
 
 type TrackInput = {
   event_type: "upload" | "ai_call" | "db_write";
