@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { DollarSign, HardDrive, Database, Sparkles, TrendingUp } from "lucide-react";
+ import { DollarSign, HardDrive, Database, TrendingUp } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -122,12 +122,12 @@ function UsagePage() {
   return (
     <AppShell>
       <PageHeader
-        title="Custos e Uso"
-        description="Acompanhe storage, banco de dados e chamadas de IA dos últimos 30 dias."
-      />
+         title="Custos e Uso"
+         description="Acompanhe o uso de armazenamento e banco de dados dos últimos 30 dias."
+       />
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <KpiCard
           icon={<DollarSign className="h-4 w-4" />}
           label="Custo estimado (30d)"
@@ -140,12 +140,6 @@ function UsagePage() {
           label="Uploads (30d)"
           value={fmtBytes(totals.storageBytes)}
           hint={`${bytesToGB(totals.storageBytes).toFixed(3)} GB`}
-        />
-        <KpiCard
-          icon={<Sparkles className="h-4 w-4" />}
-          label="Chamadas de IA"
-          value={String(totals.aiCalls)}
-          hint={`Saldo grátis AI: ${fmtUSD(FREE_AI)}/mês`}
         />
         <KpiCard
           icon={<Database className="h-4 w-4" />}
@@ -168,12 +162,6 @@ function UsagePage() {
             used={totals.cost}
             total={FREE_CLOUD}
             pct={cloudUsedPct}
-          />
-          <ProgressBar
-            label="Lovable AI (Gateway)"
-            used={aiCostEstimate}
-            total={FREE_AI}
-            pct={aiUsedPct}
           />
         </CardContent>
       </Card>
