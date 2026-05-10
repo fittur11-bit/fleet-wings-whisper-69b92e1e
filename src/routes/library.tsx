@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
- import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil } from "lucide-react";
+ import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useDocuments, useAircraft } from "@/lib/queries";
@@ -31,6 +31,7 @@ function LibraryPage() {
   const qc = useQueryClient();
    const [open, setOpen] = useState(false);
    const [editing, setEditing] = useState<any | null>(null);
+   const [previewDoc, setPreviewDoc] = useState<any | null>(null);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
@@ -304,13 +305,22 @@ function LibraryPage() {
                  </div>
                </div>
 
-               {d.file_url ? (
-                 <Button asChild className="w-full h-9 rounded-xl shadow-lg shadow-primary/10" variant="secondary">
-                   <a href={d.file_url} target="_blank" rel="noreferrer">
-                     <ExternalLink className="mr-2 h-3.5 w-3.5" /> Abrir Documento
-                   </a>
-                 </Button>
-               ) : (
+                {d.file_url ? (
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={() => setPreviewDoc(d)} 
+                      className="flex-1 h-9 rounded-xl shadow-lg shadow-primary/10" 
+                      variant="secondary"
+                    >
+                      <Eye className="mr-2 h-3.5 w-3.5" /> Visualizar
+                    </Button>
+                    <Button asChild size="icon" variant="outline" className="h-9 w-9 rounded-xl shrink-0">
+                      <a href={d.file_url} target="_blank" rel="noreferrer" title="Abrir em nova aba">
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    </Button>
+                  </div>
+                ) : (
                  <Button disabled variant="outline" className="w-full h-9 rounded-xl border-dashed">
                    Sem Arquivo
                  </Button>
@@ -319,6 +329,47 @@ function LibraryPage() {
            ))}
          </div>
        )}
+
+      <Dialog open={!!previewDoc} onOpenChange={(v) => !v && setPreviewDoc(null)}>
+        <DialogContent className="max-w-5xl h-[90vh] p-0 flex flex-col bg-[#0B1221] border-white/10 overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-sidebar/50">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <FileText className="h-4 w-4" />
+              </div>
+              <div>
+                <h3 className="text-sm font-display font-semibold text-foreground leading-none">{previewDoc?.title}</h3>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
+                  {previewDoc?.doc_type} {previewDoc?.version && `· v${previewDoc.version}`}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+                <a href={previewDoc?.file_url} target="_blank" rel="noreferrer">
+                  <ExternalLink className="mr-2 h-3.5 w-3.5" /> Externo
+                </a>
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setPreviewDoc(null)}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1 w-full bg-white/5 relative">
+            {previewDoc?.file_url ? (
+              <iframe 
+                src={previewDoc.file_url} 
+                className="w-full h-full border-none"
+                title={previewDoc.title}
+              />
+            ) : (
+              <div className="flex h-full items-center justify-center text-muted-foreground">
+                Falha ao carregar visualização
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
