@@ -201,7 +201,7 @@ function PartsPage() {
                   <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground font-mono">
                     {p.part_number && <span>P/N: <span className="text-foreground/80">{p.part_number}</span></span>}
                     {p.serial_number && <span>S/N: <span className="text-foreground/80">{p.serial_number}</span></span>}
-                    {p.aircraft?.prefix && <span className="text-primary">★ {p.aircraft.prefix}</span>}
+                     {p.aircraft?.prefix && <span className="text-primary">{p.aircraft.prefix}</span>}
                   </div>
                 </div>
 

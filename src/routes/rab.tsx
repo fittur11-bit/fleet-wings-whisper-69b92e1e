@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
- import { Search, ExternalLink, Plane, Globe, Scan, Upload, Loader2, FileText, SearchCode } from "lucide-react";
+  import { Search, ExternalLink, Plane, Globe, FileSearch, Upload, Loader2, FileText, SearchCode } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
@@ -187,9 +187,9 @@ function RabPage() {
 
       <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
         <CardHeader>
-           <CardTitle className="flex items-center gap-2 text-base">
-             <Scan className="h-4 w-4 text-primary" /> Importação manual e extração automática
-           </CardTitle>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <FileSearch className="h-4 w-4 text-primary" /> Importação manual e leitura técnica
+            </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="url">
