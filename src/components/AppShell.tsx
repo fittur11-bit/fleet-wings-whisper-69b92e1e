@@ -50,7 +50,7 @@ export function AppShell({ children }: { children: ReactNode }) {
              </Button>
            )}
           <Link to="/dashboard" className="ml-auto font-display font-semibold tracking-tight">
-            FleetControl
+            FlightCore
           </Link>
         </header>
 
