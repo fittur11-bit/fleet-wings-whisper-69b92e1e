@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked } from "lucide-react";
+import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
-import { useAircraft, useServices, useParts, useMaintenanceItems } from "@/lib/queries";
+import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs } from "@/lib/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ function DashboardContent() {
   const { data: services = [] } = useServices();
   const { data: parts = [] } = useParts();
   const { data: mx = [] } = useMaintenanceItems();
+  const { data: logs = [] } = useFlightLogs();
 
   const activeAircraft = aircraft.filter((a: any) => a.status === "active").length;
   const inMaintenance = aircraft.filter((a: any) => a.status === "maintenance").length;
@@ -52,11 +53,17 @@ function DashboardContent() {
 
   const recentServices = services.slice(0, 5);
 
+  const totalFlightHours = aircraft.reduce((sum: number, a: any) => sum + Number(a.total_hours || 0), 0);
+  const monthlyFlights = logs.filter((l: any) => {
+    const d = parseISO(l.date);
+    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  }).length;
+
   const kpis = [
-    { label: "Aeronaves ativas", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
-    { label: "Em manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
-    { label: "Serviços abertos", value: pendingServices, total: services.length, icon: Clock, to: "/services" },
-    { label: "Peças instaladas", value: installedParts, total: parts.length, icon: Cog, to: "/parts" },
+    { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
+    { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
+    { label: "Voos no Mês", value: monthlyFlights, icon: History, to: "/flight-logs" },
+    { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
   ];
 
   return (
@@ -190,10 +197,11 @@ function DashboardContent() {
       </Card>
 
       {/* Quick links */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <QuickLink to="/aircraft" icon={Plane} label="Aeronaves" />
-        <QuickLink to="/services" icon={Wrench} label="Serviços" />
-        <QuickLink to="/parts" icon={Cog} label="Peças" />
+      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
+        <QuickLink to="/aircraft" icon={Plane} label="Frota" />
+        <QuickLink to="/flight-logs" icon={History} label="Diário" />
+        <QuickLink to="/services" icon={Wrench} label="Manutenção" />
+        <QuickLink to="/parts" icon={Cog} label="Estoque" />
         <QuickLink to="/library" icon={BookMarked} label="Biblioteca" />
       </div>
     </>

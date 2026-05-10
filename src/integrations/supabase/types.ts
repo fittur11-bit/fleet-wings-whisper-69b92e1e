@@ -80,6 +80,45 @@ export type Database = {
         }
         Relationships: []
       }
+      crew_members: {
+        Row: {
+          cma_expiration: string | null
+          created_at: string
+          full_name: string
+          id: string
+          ifr_expiration: string | null
+          is_active: boolean | null
+          license_number: string | null
+          type_ratings: string[] | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          cma_expiration?: string | null
+          created_at?: string
+          full_name: string
+          id?: string
+          ifr_expiration?: string | null
+          is_active?: boolean | null
+          license_number?: string | null
+          type_ratings?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          cma_expiration?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          ifr_expiration?: string | null
+          is_active?: boolean | null
+          license_number?: string | null
+          type_ratings?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           aircraft_id: string | null
@@ -132,6 +171,97 @@ export type Database = {
             columns: ["aircraft_id"]
             isOneToOne: false
             referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flight_logs: {
+        Row: {
+          aircraft_id: string
+          arrival_airport: string | null
+          copilot_id: string | null
+          created_at: string
+          cycles: number
+          date: string
+          departure_airport: string | null
+          flight_time: number
+          fuel_burned: number | null
+          fuel_loaded: number | null
+          id: string
+          landing_time: string | null
+          nature_of_flight: string | null
+          notes: string | null
+          off_block_time: string | null
+          on_block_time: string | null
+          pilot_id: string | null
+          takeoff_time: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          aircraft_id: string
+          arrival_airport?: string | null
+          copilot_id?: string | null
+          created_at?: string
+          cycles?: number
+          date?: string
+          departure_airport?: string | null
+          flight_time?: number
+          fuel_burned?: number | null
+          fuel_loaded?: number | null
+          id?: string
+          landing_time?: string | null
+          nature_of_flight?: string | null
+          notes?: string | null
+          off_block_time?: string | null
+          on_block_time?: string | null
+          pilot_id?: string | null
+          takeoff_time?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          aircraft_id?: string
+          arrival_airport?: string | null
+          copilot_id?: string | null
+          created_at?: string
+          cycles?: number
+          date?: string
+          departure_airport?: string | null
+          flight_time?: number
+          fuel_burned?: number | null
+          fuel_loaded?: number | null
+          id?: string
+          landing_time?: string | null
+          nature_of_flight?: string | null
+          notes?: string | null
+          off_block_time?: string | null
+          on_block_time?: string | null
+          pilot_id?: string | null
+          takeoff_time?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flight_logs_aircraft_id_fkey"
+            columns: ["aircraft_id"]
+            isOneToOne: false
+            referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "flight_logs_copilot_id_fkey"
+            columns: ["copilot_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "flight_logs_pilot_id_fkey"
+            columns: ["pilot_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
             referencedColumns: ["id"]
           },
         ]
