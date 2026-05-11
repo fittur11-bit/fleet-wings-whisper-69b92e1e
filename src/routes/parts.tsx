@@ -304,7 +304,7 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
     defaultValues: initial || {
       name: "", part_number: "", serial_number: "", origin: "",
       status: "stock", condition: "new", aircraft_id: null,
-      install_date: "", hours_at_install: "", notes: "", photos: [],
+      install_date: "", removal_date: "", hours_at_install: "", notes: "", photos: [],
     },
   });
   const photos = watch("photos") || [];
@@ -313,12 +313,18 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
   const onSubmit = async (values: any) => {
     if (!user) return;
     const payload: any = {
-      ...values,
       user_id: user.id,
+      name: values.name,
+      part_number: values.part_number || null,
+      serial_number: values.serial_number || null,
+      origin: values.origin || null,
+      status: values.status,
+      condition: values.condition || null,
       aircraft_id: values.aircraft_id || null,
       hours_at_install: values.hours_at_install ? Number(values.hours_at_install) : null,
       install_date: values.install_date || null,
       removal_date: values.removal_date || null,
+      notes: values.notes || null,
       photos: values.photos || [],
     };
     const { error } = initial
