@@ -367,27 +367,28 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
           <Label>Origem</Label>
           <Input {...register("origin")} placeholder="Ex: Fabricante, fornecedor" className="bg-card/50 border-white/10" />
         </div>
-        {status === "installed" && (
-          <>
-            <div>
-              <Label>Aeronave</Label>
-              <Select value={watch("aircraft_id") || ""} onValueChange={(v) => setValue("aircraft_id", v)}>
-                <SelectTrigger className="bg-card/50 border-white/10"><SelectValue placeholder="Selecione" /></SelectTrigger>
-                <SelectContent>
-                  {aircraft.map((a) => <SelectItem key={a.id} value={a.id}>{a.prefix} — {a.model}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Data de instalação</Label>
-              <Input type="date" {...register("install_date")} className="bg-card/50 border-white/10" />
-            </div>
-            <div>
-              <Label>Horas na instalação</Label>
-              <Input type="number" step="0.1" {...register("hours_at_install")} className="bg-card/50 border-white/10 font-mono" />
-            </div>
-          </>
-        )}
+        <div>
+          <Label>Aeronave</Label>
+          <Select value={watch("aircraft_id") || ""} onValueChange={(v) => setValue("aircraft_id", v === "none" ? null : v)}>
+            <SelectTrigger className="bg-card/50 border-white/10"><SelectValue placeholder="Selecione" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">Nenhuma</SelectItem>
+              {aircraft.map((a) => <SelectItem key={a.id} value={a.id}>{a.prefix} — {a.model}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label>Instalada em</Label>
+          <Input type="date" {...register("install_date")} className="bg-card/50 border-white/10" />
+        </div>
+        <div>
+          <Label>Removida em</Label>
+          <Input type="date" {...register("removal_date")} className="bg-card/50 border-white/10" />
+        </div>
+        <div>
+          <Label>Horas na instalação</Label>
+          <Input type="number" step="0.1" {...register("hours_at_install")} className="bg-card/50 border-white/10 font-mono" />
+        </div>
         <div className="sm:col-span-2">
           <Label>Observações</Label>
           <Textarea {...register("notes")} rows={3} className="bg-card/50 border-white/10" />
