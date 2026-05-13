@@ -288,19 +288,22 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
 
   const blob = doc.output("blob");
 
-  // Track PDF generation: image egress (download) + PDF size as egress estimate
+  // Track PDF generation as egress (download bandwidth). bytes=0 to avoid
+  // inflating the "Uploads" chart; real total is in metadata + cost.
   const totalEgressBytes = downloadedBytes + blob.size;
   await trackUsage({
-    event_type: "ai_call",
-    category: "ai",
-    bytes: totalEgressBytes,
+    event_type: "db_write",
+    category: "database",
+    bytes: 0,
     units: 1,
     estimated_cost_usd: bytesToGB(totalEgressBytes) * COSTS.EGRESS_GB,
     metadata: {
       fn: "service-report",
+      kind: "egress",
       service_id: service?.id,
       pdf_bytes: blob.size,
       photos_bytes: downloadedBytes,
+      egress_bytes: totalEgressBytes,
       photos_count: photos.length + repairPhotos.length,
     },
   });
