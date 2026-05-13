@@ -2,8 +2,9 @@ import { jsPDF } from "jspdf";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { SERVICE_TYPES } from "./constants";
+import { trackUsage, COSTS, bytesToGB } from "./usage-tracking";
 
-async function fetchImageAsDataURL(url: string): Promise<{ data: string; w: number; h: number } | null> {
+async function fetchImageAsDataURL(url: string): Promise<{ data: string; w: number; h: number; bytes: number } | null> {
   try {
     const res = await fetch(url, { mode: "cors" });
     const blob = await res.blob();
@@ -19,13 +20,14 @@ async function fetchImageAsDataURL(url: string): Promise<{ data: string; w: numb
       img.onerror = () => resolve({ w: 1, h: 1 });
       img.src = dataUrl;
     });
-    return { data: dataUrl, w: dims.w, h: dims.h };
+    return { data: dataUrl, w: dims.w, h: dims.h, bytes: blob.size };
   } catch {
     return null;
   }
 }
 
 export async function generateServiceReport(service: any, aircraft?: any): Promise<Blob> {
+  let downloadedBytes = 0;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
@@ -227,6 +229,7 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     for (const url of photos) {
       const img = await fetchImageAsDataURL(url);
       if (!img) continue;
+      downloadedBytes += img.bytes;
 
       if (col === 0) {
         ensureSpace(cellH + 4);
@@ -283,7 +286,26 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     doc.text("FlightCore", margin, pageH - 8);
   }
 
-  return doc.output("blob");
+  const blob = doc.output("blob");
+
+  // Track PDF generation: image egress (download) + PDF size as egress estimate
+  const totalEgressBytes = downloadedBytes + blob.size;
+  await trackUsage({
+    event_type: "ai_call",
+    category: "ai",
+    bytes: totalEgressBytes,
+    units: 1,
+    estimated_cost_usd: bytesToGB(totalEgressBytes) * COSTS.EGRESS_GB,
+    metadata: {
+      fn: "service-report",
+      service_id: service?.id,
+      pdf_bytes: blob.size,
+      photos_bytes: downloadedBytes,
+      photos_count: photos.length + repairPhotos.length,
+    },
+  });
+
+  return blob;
 }
 
 export async function downloadServiceReport(service: any, aircraft?: any) {
