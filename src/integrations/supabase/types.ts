@@ -343,6 +343,7 @@ export type Database = {
           notes: string | null
           overhaul_threshold: string | null
           overhaul_type: string | null
+          part_id: string | null
           part_name: string
           serial_number: string | null
           shipping_date: string
@@ -361,6 +362,7 @@ export type Database = {
           notes?: string | null
           overhaul_threshold?: string | null
           overhaul_type?: string | null
+          part_id?: string | null
           part_name: string
           serial_number?: string | null
           shipping_date?: string
@@ -379,6 +381,7 @@ export type Database = {
           notes?: string | null
           overhaul_threshold?: string | null
           overhaul_type?: string | null
+          part_id?: string | null
           part_name?: string
           serial_number?: string | null
           shipping_date?: string
@@ -392,6 +395,13 @@ export type Database = {
             columns: ["aircraft_id"]
             isOneToOne: false
             referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_shipments_part_id_fkey"
+            columns: ["part_id"]
+            isOneToOne: false
+            referencedRelation: "parts"
             referencedColumns: ["id"]
           },
         ]

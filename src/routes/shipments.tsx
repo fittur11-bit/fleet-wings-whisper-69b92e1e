@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Package, Trash2, Pencil, Calendar, Building2, DollarSign, Clock } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useShipments, useAircraft } from "@/lib/queries";
+import { useShipments, useAircraft, useParts } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,12 +27,14 @@ export const Route = createFileRoute("/shipments")({
 function ShipmentsPage() {
   const { data: shipments = [] } = useShipments();
   const { data: aircraft = [] } = useAircraft();
+  const { data: parts = [] } = useParts();
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [form, setForm] = useState<any>({
+    part_id: "",
     aircraft_id: "",
     part_name: "",
     serial_number: "",
@@ -59,6 +61,7 @@ function ShipmentsPage() {
     const payload = {
       ...form,
       user_id: user.id,
+      part_id: form.part_id || null,
       budget_amount: form.budget_amount ? Number(form.budget_amount) : 0,
       estimated_return_date: form.estimated_return_date || null,
       actual_return_date: form.actual_return_date || null,
@@ -75,6 +78,14 @@ function ShipmentsPage() {
     }
 
     if (error) return toast.error(error.message);
+
+    // Sync linked part status with shipment status
+    if (form.part_id) {
+      const partStatus = form.status === "received" ? "stock" : "sent_repair";
+      await supabase.from("parts").update({ status: partStatus }).eq("id", form.part_id);
+      qc.invalidateQueries({ queryKey: ["parts"] });
+    }
+
     toast.success(editing ? "Envio atualizado" : "Envio cadastrado");
     qc.invalidateQueries({ queryKey: ["shipments"] });
     closeDialog();
@@ -84,6 +95,7 @@ function ShipmentsPage() {
     setOpen(false);
     setEditing(null);
     setForm({
+      part_id: "",
       aircraft_id: "",
       part_name: "",
       serial_number: "",
@@ -102,6 +114,7 @@ function ShipmentsPage() {
   const openEdit = (s: any) => {
     setEditing(s);
     setForm({
+      part_id: s.part_id || "",
       aircraft_id: s.aircraft_id || "",
       part_name: s.part_name || "",
       serial_number: s.serial_number || "",
@@ -116,6 +129,22 @@ function ShipmentsPage() {
       notes: s.notes || "",
     });
     setOpen(true);
+  };
+
+  const selectPart = (partId: string) => {
+    if (partId === "manual") {
+      setForm({ ...form, part_id: "" });
+      return;
+    }
+    const p = parts.find((x: any) => x.id === partId);
+    if (!p) return;
+    setForm({
+      ...form,
+      part_id: p.id,
+      part_name: p.name || "",
+      serial_number: p.serial_number || "",
+      aircraft_id: p.aircraft_id || form.aircraft_id,
+    });
   };
 
   const remove = async (id: string) => {
@@ -153,6 +182,31 @@ function ShipmentsPage() {
                 <DialogTitle className="font-display text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
               </DialogHeader>
               <form onSubmit={submit} className="space-y-4 pt-4">
+                <div className="space-y-2 p-4 rounded-xl bg-primary/5 border border-primary/20">
+                  <Label className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-primary" />
+                    Peça cadastrada (opcional)
+                  </Label>
+                  <Select value={form.part_id || "manual"} onValueChange={selectPart}>
+                    <SelectTrigger className="bg-white/5 border-white/10">
+                      <SelectValue placeholder="Selecione uma peça do estoque" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="manual">— Entrada manual —</SelectItem>
+                      {parts.map((p: any) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.name}{p.part_number ? ` · P/N ${p.part_number}` : ""}{p.serial_number ? ` · S/N ${p.serial_number}` : ""}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {form.part_id && (
+                    <p className="text-[11px] text-muted-foreground">
+                      Vinculada — o status da peça será atualizado automaticamente conforme o envio.
+                    </p>
+                  )}
+                </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Aeronave *</Label>
