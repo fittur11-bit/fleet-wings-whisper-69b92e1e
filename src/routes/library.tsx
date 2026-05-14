@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
- import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X } from "lucide-react";
+ import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X, Download, Maximize2, Minimize2 } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useDocuments, useAircraft } from "@/lib/queries";
@@ -32,6 +32,7 @@ function LibraryPage() {
    const [open, setOpen] = useState(false);
    const [editing, setEditing] = useState<any | null>(null);
    const [previewDoc, setPreviewDoc] = useState<any | null>(null);
+   const [fullscreen, setFullscreen] = useState(false);
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
@@ -126,6 +127,40 @@ function LibraryPage() {
     if (error) return toast.error(error.message);
     toast.success("Removido");
     qc.invalidateQueries({ queryKey: ["documents"] });
+  };
+
+  const getFileExt = (url: string) => {
+    try {
+      const clean = url.split("?")[0].split("#")[0];
+      return (clean.split(".").pop() || "").toLowerCase();
+    } catch {
+      return "";
+    }
+  };
+
+  const isImage = (url: string) => ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"].includes(getFileExt(url));
+  const isPdf = (url: string) => getFileExt(url) === "pdf";
+
+  const downloadFile = async (doc: any) => {
+    if (!doc?.file_url) return;
+    try {
+      const res = await fetch(doc.file_url);
+      const blob = await res.blob();
+      const ext = getFileExt(doc.file_url) || "bin";
+      const safeTitle = (doc.title || "documento").replace(/[^\w\-. ]+/g, "_");
+      const filename = safeTitle.toLowerCase().endsWith("." + ext) ? safeTitle : `${safeTitle}.${ext}`;
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+      toast.success("Download iniciado");
+    } catch (e: any) {
+      toast.error("Falha no download: " + e.message);
+    }
   };
 
   // Group counts by type
@@ -314,6 +349,15 @@ function LibraryPage() {
                     >
                       <Eye className="mr-2 h-3.5 w-3.5" /> Visualizar
                     </Button>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-9 w-9 rounded-xl shrink-0"
+                      onClick={() => downloadFile(d)}
+                      title="Baixar arquivo"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                    </Button>
                     <Button asChild size="icon" variant="outline" className="h-9 w-9 rounded-xl shrink-0">
                       <a href={d.file_url} target="_blank" rel="noreferrer" title="Abrir em nova aba">
                         <ExternalLink className="h-3.5 w-3.5" />
@@ -330,41 +374,69 @@ function LibraryPage() {
          </div>
        )}
 
-      <Dialog open={!!previewDoc} onOpenChange={(v) => !v && setPreviewDoc(null)}>
-        <DialogContent className="max-w-5xl h-[90vh] p-0 flex flex-col bg-[#0B1221] border-white/10 overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-sidebar/50">
-            <div className="flex items-center gap-3">
+      <Dialog open={!!previewDoc} onOpenChange={(v) => { if (!v) { setPreviewDoc(null); setFullscreen(false); } }}>
+        <DialogContent
+          className={
+            fullscreen
+              ? "max-w-none w-screen h-screen p-0 flex flex-col bg-[#0B1221] border-0 rounded-none overflow-hidden"
+              : "max-w-5xl w-[100vw] sm:w-auto h-[100dvh] sm:h-[90vh] p-0 flex flex-col bg-[#0B1221] border-white/10 overflow-hidden rounded-none sm:rounded-lg"
+          }
+        >
+          <div className="flex items-center justify-between gap-2 px-3 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-sidebar/50 shrink-0">
+            <div className="flex items-center gap-3 min-w-0">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <FileText className="h-4 w-4" />
               </div>
-              <div>
-                <h3 className="text-sm font-display font-semibold text-foreground leading-none">{previewDoc?.title}</h3>
+              <div className="min-w-0">
+                <h3 className="text-sm font-display font-semibold text-foreground leading-none truncate">{previewDoc?.title}</h3>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
                   {previewDoc?.doc_type} {previewDoc?.version && `· v${previewDoc.version}`}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
+            <div className="flex items-center gap-1 shrink-0">
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => downloadFile(previewDoc)} title="Baixar">
+                <Download className="h-4 w-4" />
+              </Button>
+              <Button asChild variant="ghost" size="icon" className="h-8 w-8" title="Abrir em nova aba">
                 <a href={previewDoc?.file_url} target="_blank" rel="noreferrer">
-                  <ExternalLink className="mr-2 h-3.5 w-3.5" /> Externo
+                  <ExternalLink className="h-4 w-4" />
                 </a>
               </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setPreviewDoc(null)}>
+              <Button variant="ghost" size="icon" className="hidden sm:inline-flex h-8 w-8" onClick={() => setFullscreen((f) => !f)} title={fullscreen ? "Sair de tela cheia" : "Tela cheia"}>
+                {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+              </Button>
+              <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => { setPreviewDoc(null); setFullscreen(false); }}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
           </div>
-          <div className="flex-1 w-full bg-white/5 relative">
+          <div className="flex-1 w-full bg-neutral-900 relative overflow-auto">
             {previewDoc?.file_url ? (
-              <iframe 
-                src={previewDoc.file_url} 
-                className="w-full h-full border-none"
-                title={previewDoc.title}
-              />
+              isImage(previewDoc.file_url) ? (
+                <div className="flex h-full w-full items-center justify-center p-2">
+                  <img
+                    src={previewDoc.file_url}
+                    alt={previewDoc.title}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+              ) : isPdf(previewDoc.file_url) ? (
+                <iframe
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(previewDoc.file_url)}&embedded=true`}
+                  className="w-full h-full border-none bg-white"
+                  title={previewDoc.title}
+                />
+              ) : (
+                <iframe
+                  src={previewDoc.file_url}
+                  className="w-full h-full border-none bg-white"
+                  title={previewDoc.title}
+                />
+              )
             ) : (
               <div className="flex h-full items-center justify-center text-muted-foreground">
-                Falha ao carregar visualização
+                Nenhum arquivo disponível
               </div>
             )}
           </div>
