@@ -47,6 +47,12 @@ const conditionStyles: Record<string, string> = {
   core: "bg-fuchsia-500/10 text-fuchsia-300",
 };
 
+const fmtBRL = (v: any) => {
+  const n = Number(v);
+  if (!Number.isFinite(n) || n === 0) return null;
+  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+};
+
 function PartsPage() {
   const { data: parts = [], isLoading } = useParts();
   const { data: aircraft = [] } = useAircraft();
@@ -94,9 +100,9 @@ function PartsPage() {
 
   const downloadTemplate = () => {
     const csv = [
-      "name,part_number,serial_number,condition,status,aircraft_prefix,origin,install_date,removal_date,hours_at_install,notes",
-      "Filtro de Óleo,CH48108-1,,new,stock,,Tempest,,,,Exemplo em estoque",
-      "Vela,REM38E,SN12345,serviceable,installed,PT-ABC,Champion,2025-01-15,,1250.5,Exemplo instalada",
+      "name,part_number,serial_number,condition,status,aircraft_prefix,origin,unit_price,install_date,removal_date,hours_at_install,notes",
+      "Filtro de Óleo,CH48108-1,,new,stock,,Tempest,45.90,,,,Exemplo em estoque",
+      "Vela,REM38E,SN12345,serviceable,installed,PT-ABC,Champion,120.00,2025-01-15,,1250.5,Exemplo instalada",
     ].join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
     const url = URL.createObjectURL(blob);
@@ -160,6 +166,7 @@ function PartsPage() {
         if (cond && !validConditions.includes(cond as any)) { errors.push(`Linha ${idx + 2}: condição inválida (${cond})`); return; }
         if (!validStatuses.includes(status as any)) { errors.push(`Linha ${idx + 2}: status inválido (${status})`); return; }
         const hrs = r["hours_at_install"]?.trim();
+        const price = r["unit_price"]?.trim().replace(",", ".");
         payload.push({
           user_id: user.id,
           name,
@@ -169,6 +176,7 @@ function PartsPage() {
           status,
           aircraft_id,
           origin: r["origin"]?.trim() || null,
+          unit_price: price ? Number(price) : 0,
           install_date: r["install_date"]?.trim() || null,
           removal_date: r["removal_date"]?.trim() || null,
           hours_at_install: hrs ? Number(hrs) : null,
@@ -324,6 +332,7 @@ function PartsPage() {
                     {p.part_number && <span>P/N: <span className="text-foreground/80">{p.part_number}</span></span>}
                     {p.serial_number && <span>S/N: <span className="text-foreground/80">{p.serial_number}</span></span>}
                      {p.aircraft?.prefix && <span className="text-primary">{p.aircraft.prefix}</span>}
+                     {fmtBRL(p.unit_price) && <span className="text-emerald-300">{fmtBRL(p.unit_price)}</span>}
                   </div>
                 </div>
 
@@ -434,6 +443,7 @@ function PartDetail({ part }: { part: any }) {
             { label: "Serial Number", value: part.serial_number },
             { label: "Origem", value: part.origin },
             { label: "Aeronave", value: part.aircraft?.prefix },
+            { label: "Preço unitário", value: fmtBRL(part.unit_price) },
             { label: "Instalada em", value: part.install_date },
             { label: "Removida em", value: part.removal_date },
             { label: "Horas na Instalação", value: part.hours_at_install },
@@ -487,7 +497,7 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
   const { register, handleSubmit, watch, setValue, formState: { isSubmitting } } = useForm({
     defaultValues: initial || {
       name: "", part_number: "", serial_number: "", origin: "",
-      status: "stock", condition: "new", aircraft_id: null,
+      status: "stock", condition: "new", aircraft_id: null, unit_price: "",
       install_date: "", removal_date: "", hours_at_install: "", notes: "", photos: [],
     },
   });
@@ -505,6 +515,7 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
       status: values.status,
       condition: values.condition || null,
       aircraft_id: values.aircraft_id || null,
+      unit_price: values.unit_price ? Number(String(values.unit_price).replace(",", ".")) : 0,
       hours_at_install: values.hours_at_install ? Number(values.hours_at_install) : null,
       install_date: values.install_date || null,
       removal_date: values.removal_date || null,
@@ -556,6 +567,10 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
         <div>
           <Label>Origem</Label>
           <Input {...register("origin")} placeholder="Ex: Fabricante, fornecedor" className="bg-card/50 border-white/10" />
+        </div>
+        <div>
+          <Label>Preço unitário (R$)</Label>
+          <Input type="number" step="0.01" {...register("unit_price")} placeholder="0,00" className="bg-card/50 border-white/10 font-mono" />
         </div>
         <div>
           <Label>Aeronave</Label>
