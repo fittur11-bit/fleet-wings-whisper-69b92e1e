@@ -1,0 +1,2 @@
+ALTER TABLE public.part_shipments ADD COLUMN IF NOT EXISTS supplier_id uuid REFERENCES public.suppliers(id) ON DELETE SET NULL;
+CREATE INDEX IF NOT EXISTS idx_part_shipments_supplier_id ON public.part_shipments(supplier_id);
