@@ -79,6 +79,16 @@ function ServicesPage() {
       error = res.error;
     }
     if (error) return toast.error(error.message);
+    // Sync supplier_id to linked maintenance_items (same aircraft + matching item_type)
+    if (payload.supplier_id && payload.aircraft_id && selectedTypes.length) {
+      const { error: mxErr } = await supabase
+        .from("maintenance_items")
+        .update({ supplier_id: payload.supplier_id })
+        .eq("aircraft_id", payload.aircraft_id)
+        .in("item_type", selectedTypes);
+      if (mxErr) toast.warning("Serviço salvo, mas falhou ao vincular manutenções: " + mxErr.message);
+      else qc.invalidateQueries({ queryKey: ["maintenance_items"] });
+    }
     toast.success(editing ? "Serviço atualizado" : "Serviço cadastrado");
     qc.invalidateQueries({ queryKey: ["services"] });
     closeDialog();
