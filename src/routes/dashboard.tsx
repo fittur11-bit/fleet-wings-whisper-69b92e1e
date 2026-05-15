@@ -174,6 +174,34 @@ function DashboardContent() {
       <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base">
+            <AlertTriangle className="h-4 w-4 text-red-400" /> Peças com retorno atrasado
+          </CardTitle>
+          <Badge variant={lateShipments.length ? "destructive" : "outline"} className="text-xs">{lateShipments.length}</Badge>
+        </CardHeader>
+        <CardContent>
+          {lateShipments.length === 0 ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">Nenhuma peça atrasada.</p>
+          ) : (
+            <ul className="space-y-2">
+              {lateShipments.map((s: any) => (
+                <li key={s.id} className="flex items-center justify-between rounded-lg border border-red-500/10 bg-red-500/5 px-3 py-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{s.part_name}</p>
+                    <p className="text-xs text-muted-foreground font-mono">
+                      {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
+                    </p>
+                  </div>
+                  <Badge variant="destructive" className="text-[10px] shrink-0 ml-2">{s.daysLate}d atrasado</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-base">
             <TrendingUp className="h-4 w-4 text-primary" /> Serviços recentes
           </CardTitle>
           <Button variant="ghost" size="sm" asChild>
