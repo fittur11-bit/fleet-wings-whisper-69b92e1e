@@ -581,6 +581,99 @@ export type Database = {
           },
         ]
       }
+      suppliers: {
+        Row: {
+          address: string | null
+          anac_certificate: string | null
+          avg_price_note: string | null
+          category: string
+          city: string | null
+          cnpj: string | null
+          contact_name: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          id: string
+          lead_time_days: number | null
+          name: string
+          notes: string | null
+          payment_terms: string | null
+          phone: string | null
+          preferred: boolean
+          price_level: string | null
+          rating: number | null
+          service_types: Json
+          specialties: string | null
+          state: string | null
+          trade_name: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          whatsapp: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          anac_certificate?: string | null
+          avg_price_note?: string | null
+          category?: string
+          city?: string | null
+          cnpj?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lead_time_days?: number | null
+          name: string
+          notes?: string | null
+          payment_terms?: string | null
+          phone?: string | null
+          preferred?: boolean
+          price_level?: string | null
+          rating?: number | null
+          service_types?: Json
+          specialties?: string | null
+          state?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          anac_certificate?: string | null
+          avg_price_note?: string | null
+          category?: string
+          city?: string | null
+          cnpj?: string | null
+          contact_name?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          lead_time_days?: number | null
+          name?: string
+          notes?: string | null
+          payment_terms?: string | null
+          phone?: string | null
+          preferred?: boolean
+          price_level?: string | null
+          rating?: number | null
+          service_types?: Json
+          specialties?: string | null
+          state?: string | null
+          trade_name?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          whatsapp?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
       usage_events: {
         Row: {
           bytes: number | null
