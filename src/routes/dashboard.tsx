@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
-import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs } from "@/lib/queries";
+import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs, useShipments } from "@/lib/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ function DashboardContent() {
   const { data: parts = [] } = useParts();
   const { data: mx = [] } = useMaintenanceItems();
   const { data: logs = [] } = useFlightLogs();
+  const { data: shipments = [] } = useShipments();
 
   const activeAircraft = aircraft.filter((a: any) => a.status === "active").length;
   const inMaintenance = aircraft.filter((a: any) => a.status === "maintenance").length;
@@ -49,6 +50,13 @@ function DashboardContent() {
     .map((m: any) => ({ ...m, daysLeft: differenceInDays(parseISO(m.due_date), today) }))
     .filter((m: any) => m.daysLeft <= 60)
     .sort((a: any, b: any) => a.daysLeft - b.daysLeft)
+    .slice(0, 6);
+
+  const lateShipments = shipments
+    .filter((s: any) => s.status !== "received" && s.status !== "cancelled" && s.estimated_return_date)
+    .map((s: any) => ({ ...s, daysLate: differenceInDays(today, parseISO(s.estimated_return_date)) }))
+    .filter((s: any) => s.daysLate > 0)
+    .sort((a: any, b: any) => b.daysLate - a.daysLate)
     .slice(0, 6);
 
   const recentServices = services.slice(0, 5);
@@ -163,6 +171,34 @@ function DashboardContent() {
       </div>
 
       {/* Recent services */}
+      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <AlertTriangle className="h-4 w-4 text-red-400" /> Peças com retorno atrasado
+          </CardTitle>
+          <Badge variant={lateShipments.length ? "destructive" : "outline"} className="text-xs">{lateShipments.length}</Badge>
+        </CardHeader>
+        <CardContent>
+          {lateShipments.length === 0 ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">Nenhuma peça atrasada.</p>
+          ) : (
+            <ul className="space-y-2">
+              {lateShipments.map((s: any) => (
+                <li key={s.id} className="flex items-center justify-between rounded-lg border border-red-500/10 bg-red-500/5 px-3 py-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{s.part_name}</p>
+                    <p className="text-xs text-muted-foreground font-mono">
+                      {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
+                    </p>
+                  </div>
+                  <Badge variant="destructive" className="text-[10px] shrink-0 ml-2">{s.daysLate}d atrasado</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+
       <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base">

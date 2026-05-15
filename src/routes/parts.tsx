@@ -1,13 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2 } from "lucide-react";
+import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useParts, useAircraft } from "@/lib/queries";
+import { useParts, useAircraft, useShipments, useServices } from "@/lib/queries";
+import { format, parseISO } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { PART_STATUS, PART_CONDITION } from "@/lib/constants";
@@ -253,6 +255,42 @@ function PartsPage() {
 
 function PartDetail({ part }: { part: any }) {
   const photos = Array.isArray(part.photos) ? part.photos : [];
+  const { data: shipments = [] } = useShipments();
+  const { data: services = [] } = useServices();
+
+  const history = useMemo(() => {
+    const events: { date: string; type: string; title: string; subtitle?: string; color: string }[] = [];
+    if (part.install_date) events.push({
+      date: part.install_date, type: "Instalação", color: "text-emerald-400 border-emerald-500/30 bg-emerald-500/10",
+      title: `Instalada${part.aircraft?.prefix ? ` em ${part.aircraft.prefix}` : ""}`,
+      subtitle: part.hours_at_install ? `${part.hours_at_install}h da aeronave` : undefined,
+    });
+    if (part.removal_date) events.push({
+      date: part.removal_date, type: "Remoção", color: "text-amber-400 border-amber-500/30 bg-amber-500/10",
+      title: "Removida da aeronave",
+    });
+    shipments.filter((s: any) => s.part_id === part.id).forEach((s: any) => {
+      events.push({
+        date: s.shipping_date, type: "Envio", color: "text-orange-400 border-orange-500/30 bg-orange-500/10",
+        title: `Enviada para ${s.destination_workshop || "oficina"}`,
+        subtitle: s.budget_amount ? `Orçamento: R$ ${Number(s.budget_amount).toFixed(2)}` : undefined,
+      });
+      if (s.actual_return_date) events.push({
+        date: s.actual_return_date, type: "Retorno", color: "text-sky-400 border-sky-500/30 bg-sky-500/10",
+        title: "Retornou da oficina",
+      });
+    });
+    services.filter((sv: any) => sv.aircraft_id && sv.aircraft_id === part.aircraft_id && sv.performed_at).forEach((sv: any) => {
+      events.push({
+        date: sv.performed_at, type: "Serviço",
+        color: "text-primary border-primary/30 bg-primary/10",
+        title: (sv.service_types || [sv.service_type]).join(", "),
+        subtitle: sv.technician || sv.location,
+      });
+    });
+    return events.sort((a, b) => (a.date > b.date ? -1 : 1));
+  }, [part, shipments, services]);
+
   return (
     <>
       <DialogHeader>
@@ -286,6 +324,32 @@ function PartDetail({ part }: { part: any }) {
             </div>
           ))}
         </div>
+
+        <div>
+          <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3 flex items-center gap-2">
+            <HistoryIcon className="h-3.5 w-3.5" /> Histórico de vida
+          </p>
+          {history.length === 0 ? (
+            <p className="text-sm text-muted-foreground bg-white/5 rounded-lg p-3">Sem eventos registrados.</p>
+          ) : (
+            <div className="relative pl-5 border-l border-white/10 space-y-2">
+              {history.map((e, i) => (
+                <div key={i} className="relative">
+                  <div className={`absolute -left-[26px] top-2 h-3 w-3 rounded-full border ${e.color}`} />
+                  <div className="rounded-lg border border-white/5 bg-white/5 p-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{e.type}</span>
+                      <span className="text-[11px] font-mono text-muted-foreground">{format(parseISO(e.date), "dd/MM/yyyy", { locale: ptBR })}</span>
+                    </div>
+                    <p className="text-sm font-medium mt-0.5">{e.title}</p>
+                    {e.subtitle && <p className="text-xs text-muted-foreground">{e.subtitle}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {part.notes && (
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Observações</p>

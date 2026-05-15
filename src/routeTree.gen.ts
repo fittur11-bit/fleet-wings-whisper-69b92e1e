@@ -10,10 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsageRouteImport } from './routes/usage'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RabRouteImport } from './routes/rab'
+import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as FlightLogsRouteImport } from './routes/flight-logs'
@@ -26,6 +28,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UsageRoute = UsageRouteImport.update({
   id: '/usage',
   path: '/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuppliersRoute = SuppliersRouteImport.update({
@@ -46,6 +53,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const RabRoute = RabRouteImport.update({
   id: '/rab',
   path: '/rab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PendingRoute = PendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartsRoute = PartsRouteImport.update({
@@ -98,10 +110,12 @@ export interface FileRoutesByFullPath {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesByTo {
@@ -113,10 +127,12 @@ export interface FileRoutesByTo {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesById {
@@ -129,10 +145,12 @@ export interface FileRoutesById {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRouteTypes {
@@ -146,10 +164,12 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -161,10 +181,12 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   id:
     | '__root__'
@@ -176,10 +198,12 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   fileRoutesById: FileRoutesById
 }
@@ -192,10 +216,12 @@ export interface RootRouteChildren {
   FlightLogsRoute: typeof FlightLogsRoute
   LibraryRoute: typeof LibraryRoute
   PartsRoute: typeof PartsRoute
+  PendingRoute: typeof PendingRoute
   RabRoute: typeof RabRoute
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
   SuppliersRoute: typeof SuppliersRoute
+  TimelineRoute: typeof TimelineRoute
   UsageRoute: typeof UsageRoute
 }
 
@@ -206,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/usage'
       fullPath: '/usage'
       preLoaderRoute: typeof UsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/suppliers': {
@@ -234,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/rab'
       fullPath: '/rab'
       preLoaderRoute: typeof RabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pending': {
+      id: '/pending'
+      path: '/pending'
+      fullPath: '/pending'
+      preLoaderRoute: typeof PendingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parts': {
@@ -304,21 +344,14 @@ const rootRouteChildren: RootRouteChildren = {
   FlightLogsRoute: FlightLogsRoute,
   LibraryRoute: LibraryRoute,
   PartsRoute: PartsRoute,
+  PendingRoute: PendingRoute,
   RabRoute: RabRoute,
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
   SuppliersRoute: SuppliersRoute,
+  TimelineRoute: TimelineRoute,
   UsageRoute: UsageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
