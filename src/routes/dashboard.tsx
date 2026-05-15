@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
-import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs } from "@/lib/queries";
+import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs, useShipments } from "@/lib/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ function DashboardContent() {
   const { data: parts = [] } = useParts();
   const { data: mx = [] } = useMaintenanceItems();
   const { data: logs = [] } = useFlightLogs();
+  const { data: shipments = [] } = useShipments();
 
   const activeAircraft = aircraft.filter((a: any) => a.status === "active").length;
   const inMaintenance = aircraft.filter((a: any) => a.status === "maintenance").length;
@@ -49,6 +50,13 @@ function DashboardContent() {
     .map((m: any) => ({ ...m, daysLeft: differenceInDays(parseISO(m.due_date), today) }))
     .filter((m: any) => m.daysLeft <= 60)
     .sort((a: any, b: any) => a.daysLeft - b.daysLeft)
+    .slice(0, 6);
+
+  const lateShipments = shipments
+    .filter((s: any) => s.status !== "received" && s.status !== "cancelled" && s.estimated_return_date)
+    .map((s: any) => ({ ...s, daysLate: differenceInDays(today, parseISO(s.estimated_return_date)) }))
+    .filter((s: any) => s.daysLate > 0)
+    .sort((a: any, b: any) => b.daysLate - a.daysLate)
     .slice(0, 6);
 
   const recentServices = services.slice(0, 5);

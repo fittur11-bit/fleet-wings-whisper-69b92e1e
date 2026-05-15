@@ -1,11 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, BarChart3, Archive, Package, History, Building2 } from "lucide-react";
+  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, BarChart3, Archive, Package, History, Building2, ListChecks, GitBranch } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
 const items = [
   { to: "/dashboard", label: "Painel", icon: LayoutDashboard },
+  { to: "/pending", label: "Pendências", icon: ListChecks },
+  { to: "/timeline", label: "Histórico", icon: GitBranch },
   { to: "/aircraft", label: "Aeronaves", icon: Plane },
   { to: "/rab", label: "Consulta RAB", icon: Search },
    { to: "/parts", label: "Peças", icon: Cog },

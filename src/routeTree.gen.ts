@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsageRouteImport } from './routes/usage'
+import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -27,6 +28,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UsageRoute = UsageRouteImport.update({
   id: '/usage',
   path: '/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimelineRoute = TimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SuppliersRoute = SuppliersRouteImport.update({
@@ -109,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesByTo {
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesById {
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
+  '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRouteTypes {
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   id:
     | '__root__'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/shipments'
     | '/suppliers'
+    | '/timeline'
     | '/usage'
   fileRoutesById: FileRoutesById
 }
@@ -209,6 +221,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
   SuppliersRoute: typeof SuppliersRoute
+  TimelineRoute: typeof TimelineRoute
   UsageRoute: typeof UsageRoute
 }
 
@@ -219,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/usage'
       fullPath: '/usage'
       preLoaderRoute: typeof UsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timeline': {
+      id: '/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof TimelineRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/suppliers': {
@@ -329,6 +349,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
   SuppliersRoute: SuppliersRoute,
+  TimelineRoute: TimelineRoute,
   UsageRoute: UsageRoute,
 }
 export const routeTree = rootRouteImport
