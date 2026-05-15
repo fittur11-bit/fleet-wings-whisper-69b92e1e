@@ -126,3 +126,20 @@ export function useMaintenanceItems() {
      staleTime: 2 * 60 * 1000,
   });
 }
+
+export function useSuppliers() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ["suppliers", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("suppliers")
+        .select("*")
+        .order("preferred", { ascending: false })
+        .order("name");
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}

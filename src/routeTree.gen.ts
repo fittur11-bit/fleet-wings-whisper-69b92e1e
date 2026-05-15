@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsageRouteImport } from './routes/usage'
+import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RabRouteImport } from './routes/rab'
@@ -25,6 +26,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const UsageRoute = UsageRouteImport.update({
   id: '/usage',
   path: '/usage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SuppliersRoute = SuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShipmentsRoute = ShipmentsRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/suppliers': typeof SuppliersRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesByTo {
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/suppliers': typeof SuppliersRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRoutesById {
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/suppliers': typeof SuppliersRoute
   '/usage': typeof UsageRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/rab'
     | '/services'
     | '/shipments'
+    | '/suppliers'
     | '/usage'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
     | '/rab'
     | '/services'
     | '/shipments'
+    | '/suppliers'
     | '/usage'
   id:
     | '__root__'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/rab'
     | '/services'
     | '/shipments'
+    | '/suppliers'
     | '/usage'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,7 @@ export interface RootRouteChildren {
   RabRoute: typeof RabRoute
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
+  SuppliersRoute: typeof SuppliersRoute
   UsageRoute: typeof UsageRoute
 }
 
@@ -193,6 +206,13 @@ declare module '@tanstack/react-router' {
       path: '/usage'
       fullPath: '/usage'
       preLoaderRoute: typeof UsageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/suppliers': {
+      id: '/suppliers'
+      path: '/suppliers'
+      fullPath: '/suppliers'
+      preLoaderRoute: typeof SuppliersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipments': {
@@ -287,6 +307,7 @@ const rootRouteChildren: RootRouteChildren = {
   RabRoute: RabRoute,
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
+  SuppliersRoute: SuppliersRoute,
   UsageRoute: UsageRoute,
 }
 export const routeTree = rootRouteImport
