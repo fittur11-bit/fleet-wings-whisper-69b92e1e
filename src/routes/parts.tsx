@@ -37,6 +37,14 @@ const conditionStyles: Record<string, string> = {
   serviceable: "bg-sky-500/10 text-sky-300",
   unserviceable: "bg-red-500/10 text-red-300",
   overhauled: "bg-violet-500/10 text-violet-300",
+  repairable: "bg-amber-500/10 text-amber-300",
+  damaged: "bg-red-500/15 text-red-400",
+  consumable: "bg-teal-500/10 text-teal-300",
+  workshop_use: "bg-indigo-500/10 text-indigo-300",
+  quarantine: "bg-yellow-500/10 text-yellow-300",
+  expired: "bg-rose-500/10 text-rose-300",
+  loaner: "bg-cyan-500/10 text-cyan-300",
+  core: "bg-fuchsia-500/10 text-fuchsia-300",
 };
 
 function PartsPage() {
