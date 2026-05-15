@@ -282,6 +282,7 @@ export type Database = {
           last_done_hours: number | null
           notes: string | null
           status: string
+          supplier_id: string | null
           updated_at: string
           user_id: string
         }
@@ -300,6 +301,7 @@ export type Database = {
           last_done_hours?: number | null
           notes?: string | null
           status?: string
+          supplier_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -318,6 +320,7 @@ export type Database = {
           last_done_hours?: number | null
           notes?: string | null
           status?: string
+          supplier_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -327,6 +330,13 @@ export type Database = {
             columns: ["aircraft_id"]
             isOneToOne: false
             referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_items_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
@@ -523,6 +533,7 @@ export type Database = {
           service_type: string
           service_types: Json | null
           status: string
+          supplier_id: string | null
           technician: string | null
           updated_at: string
           user_id: string
@@ -545,6 +556,7 @@ export type Database = {
           service_type: string
           service_types?: Json | null
           status?: string
+          supplier_id?: string | null
           technician?: string | null
           updated_at?: string
           user_id: string
@@ -567,6 +579,7 @@ export type Database = {
           service_type?: string
           service_types?: Json | null
           status?: string
+          supplier_id?: string | null
           technician?: string | null
           updated_at?: string
           user_id?: string
@@ -577,6 +590,13 @@ export type Database = {
             columns: ["aircraft_id"]
             isOneToOne: false
             referencedRelation: "aircraft"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "services_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
