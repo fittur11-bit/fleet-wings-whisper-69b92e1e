@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon } from "lucide-react";
+import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon, Upload, Download } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -59,6 +59,7 @@ function PartsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [conditionFilter, setConditionFilter] = useState("all");
+  const [importing, setImporting] = useState(false);
 
   const filtered = useMemo(() => {
     return parts.filter((p: any) => {
@@ -91,13 +92,123 @@ function PartsPage() {
   const openCreate = () => { setEditing(null); setOpen(true); };
   const openAction = (p: any, mode: "install" | "remove") => { setActionPart(p); setActionMode(mode); };
 
+  const downloadTemplate = () => {
+    const csv = [
+      "name,part_number,serial_number,condition,status,aircraft_prefix,origin,install_date,removal_date,hours_at_install,notes",
+      "Filtro de Óleo,CH48108-1,,new,stock,,Tempest,,,,Exemplo em estoque",
+      "Vela,REM38E,SN12345,serviceable,installed,PT-ABC,Champion,2025-01-15,,1250.5,Exemplo instalada",
+    ].join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "modelo_pecas.csv"; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const parseCSV = (text: string): Record<string, string>[] => {
+    const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+    if (lines.length < 2) return [];
+    const parseLine = (line: string) => {
+      const out: string[] = []; let cur = ""; let q = false;
+      for (let i = 0; i < line.length; i++) {
+        const c = line[i];
+        if (c === '"') {
+          if (q && line[i + 1] === '"') { cur += '"'; i++; } else q = !q;
+        } else if (c === "," && !q) { out.push(cur); cur = ""; }
+        else cur += c;
+      }
+      out.push(cur);
+      return out.map((s) => s.trim());
+    };
+    const headers = parseLine(lines[0]).map((h) => h.toLowerCase());
+    return lines.slice(1).map((l) => {
+      const cells = parseLine(l);
+      const row: Record<string, string> = {};
+      headers.forEach((h, i) => { row[h] = cells[i] ?? ""; });
+      return row;
+    });
+  };
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return toast.error("Faça login para importar.");
+    setImporting(true);
+    try {
+      const text = await file.text();
+      const rows = parseCSV(text);
+      if (rows.length === 0) { toast.error("CSV vazio ou inválido."); return; }
+
+      const validConditions = PART_CONDITION.map((c) => c.value);
+      const validStatuses = PART_STATUS.map((s) => s.value);
+      const prefixMap = new Map<string, string>(
+        (aircraft as any[]).map((a) => [a.prefix?.toUpperCase(), a.id])
+      );
+
+      const payload: any[] = [];
+      const errors: string[] = [];
+      rows.forEach((r, idx) => {
+        const name = r["name"]?.trim();
+        if (!name) { errors.push(`Linha ${idx + 2}: nome obrigatório`); return; }
+        const prefix = r["aircraft_prefix"]?.toUpperCase().trim();
+        const aircraft_id = prefix ? prefixMap.get(prefix) ?? null : null;
+        if (prefix && !aircraft_id) errors.push(`Linha ${idx + 2}: prefixo ${prefix} não encontrado (peça importada sem aeronave)`);
+        const cond = r["condition"]?.trim() || null;
+        const status = r["status"]?.trim() || "stock";
+        if (cond && !validConditions.includes(cond as any)) { errors.push(`Linha ${idx + 2}: condição inválida (${cond})`); return; }
+        if (!validStatuses.includes(status as any)) { errors.push(`Linha ${idx + 2}: status inválido (${status})`); return; }
+        const hrs = r["hours_at_install"]?.trim();
+        payload.push({
+          user_id: user.id,
+          name,
+          part_number: r["part_number"]?.trim() || null,
+          serial_number: r["serial_number"]?.trim() || null,
+          condition: cond,
+          status,
+          aircraft_id,
+          origin: r["origin"]?.trim() || null,
+          install_date: r["install_date"]?.trim() || null,
+          removal_date: r["removal_date"]?.trim() || null,
+          hours_at_install: hrs ? Number(hrs) : null,
+          notes: r["notes"]?.trim() || null,
+        });
+      });
+
+      if (payload.length === 0) {
+        toast.error("Nenhuma linha válida. " + (errors[0] ?? ""));
+        return;
+      }
+      const { error } = await supabase.from("parts").insert(payload);
+      if (error) { toast.error(error.message); return; }
+      toast.success(`${payload.length} peça(s) importada(s)${errors.length ? ` · ${errors.length} aviso(s)` : ""}`);
+      if (errors.length) console.warn("Avisos de importação:", errors);
+      qc.invalidateQueries({ queryKey: ["parts"] });
+    } catch (err: any) {
+      toast.error("Erro ao ler CSV: " + err.message);
+    } finally {
+      setImporting(false);
+    }
+  };
+
   return (
     <AppShell>
       <PageHeader
         title="Peças & Componentes"
         description="Controle de estoque, instalação e rastreabilidade"
         actions={
-          <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="outline" size="sm" onClick={downloadTemplate} className="border-white/10">
+              <Download className="mr-2 h-4 w-4" /> Modelo CSV
+            </Button>
+            <label>
+              <input type="file" accept=".csv,text/csv" className="hidden" onChange={handleImport} disabled={importing} />
+              <Button type="button" variant="outline" size="sm" disabled={importing} className="border-white/10" asChild>
+                <span><Upload className="mr-2 h-4 w-4" /> {importing ? "Importando..." : "Importar CSV"}</span>
+              </Button>
+            </label>
+            <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
              <DialogTrigger asChild>
                <Button onClick={openCreate} className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                  <Plus className="mr-2 h-4 w-4" /> Nova Peça
@@ -112,6 +223,7 @@ function PartsPage() {
               <PartForm initial={editing} aircraft={aircraft} onDone={() => { setOpen(false); setEditing(null); }} />
             </DialogContent>
           </Dialog>
+          </div>
         }
       />
 
