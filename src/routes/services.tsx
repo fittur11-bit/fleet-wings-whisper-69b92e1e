@@ -263,6 +263,11 @@ function ServicesPage() {
                 <span>{s.performed_at ? format(parseISO(s.performed_at), "dd MMM yyyy", { locale: ptBR }) : "—"}</span>
               </div>
               {s.description && <p className="mt-3 text-sm text-muted-foreground line-clamp-2">{s.description}</p>}
+              {s.supplier_id && (
+                <p className="mt-2 text-[11px] text-muted-foreground">
+                  Executado por: <span className="text-foreground">{suppliers.find((sp: any) => sp.id === s.supplier_id)?.name || "—"}</span>
+                </p>
+              )}
               {s.photos?.length ? (
                 <p className="mt-2 text-[11px] text-muted-foreground">{s.photos.length} foto(s) anexada(s)</p>
               ) : null}
