@@ -14,6 +14,7 @@ import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as RabRouteImport } from './routes/rab'
+import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as FlightLogsRouteImport } from './routes/flight-logs'
@@ -46,6 +47,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const RabRoute = RabRouteImport.update({
   id: '/rab',
   path: '/rab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PendingRoute = PendingRouteImport.update({
+  id: '/pending',
+  path: '/pending',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartsRoute = PartsRouteImport.update({
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
+  '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/flight-logs'
     | '/library'
     | '/parts'
+    | '/pending'
     | '/rab'
     | '/services'
     | '/shipments'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   FlightLogsRoute: typeof FlightLogsRoute
   LibraryRoute: typeof LibraryRoute
   PartsRoute: typeof PartsRoute
+  PendingRoute: typeof PendingRoute
   RabRoute: typeof RabRoute
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
@@ -234,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/rab'
       fullPath: '/rab'
       preLoaderRoute: typeof RabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pending': {
+      id: '/pending'
+      path: '/pending'
+      fullPath: '/pending'
+      preLoaderRoute: typeof PendingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/parts': {
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   FlightLogsRoute: FlightLogsRoute,
   LibraryRoute: LibraryRoute,
   PartsRoute: PartsRoute,
+  PendingRoute: PendingRoute,
   RabRoute: RabRoute,
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
