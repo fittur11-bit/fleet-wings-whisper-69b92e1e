@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon, Wrench } from "lucide-react";
+import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
