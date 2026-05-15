@@ -134,6 +134,14 @@ export const PART_CONDITION = [
   { value: "serviceable", label: "Serviceable" },
   { value: "unserviceable", label: "Unserviceable" },
    { value: "overhauled", label: "Overhauled" },
+   { value: "repairable", label: "Reparável" },
+   { value: "damaged", label: "Estragada / Danificada" },
+   { value: "consumable", label: "Insumo / Consumível" },
+   { value: "workshop_use", label: "Uso de Oficina" },
+   { value: "quarantine", label: "Em Quarentena" },
+   { value: "expired", label: "Vencida" },
+   { value: "loaner", label: "Empréstimo" },
+   { value: "core", label: "Core / Devolução" },
  ] as const;
  
  export const SHIPMENT_STATUS = [
