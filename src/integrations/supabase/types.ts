@@ -358,6 +358,7 @@ export type Database = {
           serial_number: string | null
           shipping_date: string
           status: string
+          supplier_id: string | null
           updated_at: string
           user_id: string
         }
@@ -377,6 +378,7 @@ export type Database = {
           serial_number?: string | null
           shipping_date?: string
           status?: string
+          supplier_id?: string | null
           updated_at?: string
           user_id: string
         }
@@ -396,6 +398,7 @@ export type Database = {
           serial_number?: string | null
           shipping_date?: string
           status?: string
+          supplier_id?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -412,6 +415,13 @@ export type Database = {
             columns: ["part_id"]
             isOneToOne: false
             referencedRelation: "parts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "part_shipments_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
             referencedColumns: ["id"]
           },
         ]
