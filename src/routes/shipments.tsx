@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Package, Trash2, Pencil, Calendar, Building2, DollarSign, Clock } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useShipments, useAircraft, useParts } from "@/lib/queries";
+import { useShipments, useAircraft, useParts, useSuppliers } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +28,7 @@ function ShipmentsPage() {
   const { data: shipments = [] } = useShipments();
   const { data: aircraft = [] } = useAircraft();
   const { data: parts = [] } = useParts();
+  const { data: suppliers = [] } = useSuppliers();
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -36,6 +37,7 @@ function ShipmentsPage() {
   const [form, setForm] = useState<any>({
     part_id: "",
     aircraft_id: "",
+    supplier_id: "",
     part_name: "",
     serial_number: "",
     shipping_date: format(new Date(), "yyyy-MM-dd"),
@@ -62,6 +64,7 @@ function ShipmentsPage() {
       ...form,
       user_id: user.id,
       part_id: form.part_id || null,
+      supplier_id: form.supplier_id || null,
       budget_amount: form.budget_amount ? Number(form.budget_amount) : 0,
       estimated_return_date: form.estimated_return_date || null,
       actual_return_date: form.actual_return_date || null,
@@ -97,6 +100,7 @@ function ShipmentsPage() {
     setForm({
       part_id: "",
       aircraft_id: "",
+      supplier_id: "",
       part_name: "",
       serial_number: "",
       shipping_date: format(new Date(), "yyyy-MM-dd"),
@@ -116,6 +120,7 @@ function ShipmentsPage() {
     setForm({
       part_id: s.part_id || "",
       aircraft_id: s.aircraft_id || "",
+      supplier_id: s.supplier_id || "",
       part_name: s.part_name || "",
       serial_number: s.serial_number || "",
       shipping_date: s.shipping_date || "",
