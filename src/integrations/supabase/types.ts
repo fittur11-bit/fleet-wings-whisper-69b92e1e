@@ -442,6 +442,7 @@ export type Database = {
           removal_date: string | null
           serial_number: string | null
           status: string
+          unit_price: number | null
           updated_at: string
           user_id: string
         }
@@ -460,6 +461,7 @@ export type Database = {
           removal_date?: string | null
           serial_number?: string | null
           status?: string
+          unit_price?: number | null
           updated_at?: string
           user_id: string
         }
@@ -478,6 +480,7 @@ export type Database = {
           removal_date?: string | null
           serial_number?: string | null
           status?: string
+          unit_price?: number | null
           updated_at?: string
           user_id?: string
         }

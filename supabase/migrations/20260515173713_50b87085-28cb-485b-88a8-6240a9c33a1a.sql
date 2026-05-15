@@ -1,0 +1,1 @@
+ALTER TABLE public.parts ADD COLUMN IF NOT EXISTS unit_price numeric DEFAULT 0;
