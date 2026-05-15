@@ -294,12 +294,39 @@ function ShipmentsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Oficina / Destino</Label>
-                    <Input 
-                      className="bg-white/5 border-white/10"
-                      placeholder="Nome da oficina ou local"
-                      value={form.destination_workshop} 
-                      onChange={(e) => setForm({ ...form, destination_workshop: e.target.value })} 
+                    <Label>Fornecedor / Oficina</Label>
+                    <Select
+                      value={form.supplier_id || "manual"}
+                      onValueChange={(v) => {
+                        if (v === "manual") {
+                          setForm({ ...form, supplier_id: "" });
+                        } else {
+                          const sp = suppliers.find((x: any) => x.id === v);
+                          setForm({
+                            ...form,
+                            supplier_id: v,
+                            destination_workshop: sp?.name || form.destination_workshop,
+                          });
+                        }
+                      }}
+                    >
+                      <SelectTrigger className="bg-white/5 border-white/10">
+                        <SelectValue placeholder="Selecione um fornecedor..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="manual">— Entrada manual —</SelectItem>
+                        {suppliers.map((sp: any) => (
+                          <SelectItem key={sp.id} value={sp.id}>
+                            {sp.preferred ? "⭐ " : ""}{sp.name}{sp.city ? ` — ${sp.city}` : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      className="bg-white/5 border-white/10 mt-2"
+                      placeholder="Nome da oficina (texto livre)"
+                      value={form.destination_workshop}
+                      onChange={(e) => setForm({ ...form, destination_workshop: e.target.value })}
                     />
                   </div>
                   <div className="space-y-2">
