@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Wrench, Trash2, FileDown, Pencil } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useServices, useAircraft } from "@/lib/queries";
+import { useServices, useAircraft, useSuppliers } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,6 +29,7 @@ export const Route = createFileRoute("/services")({
 function ServicesPage() {
   const { data: services = [] } = useServices();
   const { data: aircraft = [] } = useAircraft();
+  const { data: suppliers = [] } = useSuppliers();
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -36,7 +37,7 @@ function ServicesPage() {
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [form, setForm] = useState<any>({
-    aircraft_id: "", status: "pending", performed_at: "", technician: "",
+    aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "",
     location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "",
   });
 
@@ -66,6 +67,7 @@ function ServicesPage() {
       checklist,
       cost: form.cost ? Number(form.cost) : null,
       performed_at: form.performed_at || null,
+      supplier_id: form.supplier_id || null,
     };
     let error;
     if (editing) {
@@ -86,7 +88,7 @@ function ServicesPage() {
     setOpen(false);
     setEditing(null);
     setSelectedTypes([]);
-    setForm({ aircraft_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "" });
+    setForm({ aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "" });
   };
 
   const openEdit = (s: any) => {
@@ -94,6 +96,7 @@ function ServicesPage() {
     setSelectedTypes(s.service_types?.length ? s.service_types : (s.service_type ? [s.service_type] : []));
     setForm({
       aircraft_id: s.aircraft_id || "",
+      supplier_id: s.supplier_id || "",
       status: s.status || "pending",
       performed_at: s.performed_at || "",
       technician: s.technician || "",
@@ -165,6 +168,23 @@ function ServicesPage() {
                     <div><Label>Custo (R$)</Label><Input type="number" step="0.01" value={form.cost} onChange={(e) => setForm({...form, cost: e.target.value})} /></div>
                     <div><Label>Técnico</Label><Input value={form.technician} onChange={(e) => setForm({...form, technician: e.target.value})} /></div>
                     <div><Label>Local</Label><Input value={form.location} onChange={(e) => setForm({...form, location: e.target.value})} /></div>
+                    <div className="col-span-2">
+                      <Label>Fornecedor / Oficina (opcional)</Label>
+                      <Select value={form.supplier_id || "none"} onValueChange={(v) => setForm({...form, supplier_id: v === "none" ? "" : v})}>
+                        <SelectTrigger><SelectValue placeholder="Selecione um fornecedor..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Nenhum</SelectItem>
+                          {suppliers.map((sp: any) => (
+                            <SelectItem key={sp.id} value={sp.id}>
+                              {sp.preferred ? "⭐ " : ""}{sp.name}{sp.city ? ` — ${sp.city}` : ""}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {suppliers.length === 0 && (
+                        <p className="text-xs text-muted-foreground mt-1">Nenhum fornecedor cadastrado. Cadastre em Fornecedores.</p>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <Label>Tipos de serviço (múltipla seleção) *</Label>
