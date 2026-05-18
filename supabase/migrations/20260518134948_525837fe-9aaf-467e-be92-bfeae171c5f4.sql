@@ -1,0 +1,1 @@
+ALTER TABLE public.part_shipments ADD COLUMN IF NOT EXISTS part_number text;
