@@ -39,6 +39,7 @@ function ShipmentsPage() {
     aircraft_id: "",
     supplier_id: "",
     part_name: "",
+    part_number: "",
     serial_number: "",
     shipping_date: format(new Date(), "yyyy-MM-dd"),
     estimated_return_date: "",
@@ -102,6 +103,7 @@ function ShipmentsPage() {
       aircraft_id: "",
       supplier_id: "",
       part_name: "",
+      part_number: "",
       serial_number: "",
       shipping_date: format(new Date(), "yyyy-MM-dd"),
       estimated_return_date: "",
@@ -122,6 +124,7 @@ function ShipmentsPage() {
       aircraft_id: s.aircraft_id || "",
       supplier_id: s.supplier_id || "",
       part_name: s.part_name || "",
+      part_number: s.part_number || "",
       serial_number: s.serial_number || "",
       shipping_date: s.shipping_date || "",
       estimated_return_date: s.estimated_return_date || "",
@@ -147,6 +150,7 @@ function ShipmentsPage() {
       ...form,
       part_id: p.id,
       part_name: p.name || "",
+      part_number: p.part_number || "",
       serial_number: p.serial_number || "",
       aircraft_id: p.aircraft_id || form.aircraft_id,
     });
@@ -260,6 +264,16 @@ function ShipmentsPage() {
                       onChange={(e) => setForm({ ...form, serial_number: e.target.value })} 
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Part Number (P/N)</Label>
+                  <Input
+                    className="bg-white/5 border-white/10"
+                    placeholder="Ex: 10-357550-1"
+                    value={form.part_number}
+                    onChange={(e) => setForm({ ...form, part_number: e.target.value })}
+                  />
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
@@ -429,6 +443,7 @@ function ShipmentsPage() {
                     <span className="text-[10px] font-mono font-bold text-primary">{s.aircraft?.prefix}</span>
                   </div>
                   <h3 className="font-display font-semibold text-lg line-clamp-1">{s.part_name}</h3>
+                  {s.part_number && <p className="text-xs text-muted-foreground">P/N: {s.part_number}</p>}
                   {s.serial_number && <p className="text-xs text-muted-foreground">S/N: {s.serial_number}</p>}
                 </div>
                 <div className="flex items-center gap-1">
