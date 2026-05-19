@@ -432,11 +432,14 @@ export type Database = {
       parts: {
         Row: {
           aircraft_id: string | null
+          applicable_models: Json | null
           condition: string | null
           created_at: string
+          cross_reference_pns: string[] | null
           hours_at_install: number | null
           id: string
           install_date: string | null
+          is_pma: boolean | null
           name: string
           notes: string | null
           origin: string | null
@@ -451,11 +454,14 @@ export type Database = {
         }
         Insert: {
           aircraft_id?: string | null
+          applicable_models?: Json | null
           condition?: string | null
           created_at?: string
+          cross_reference_pns?: string[] | null
           hours_at_install?: number | null
           id?: string
           install_date?: string | null
+          is_pma?: boolean | null
           name: string
           notes?: string | null
           origin?: string | null
@@ -470,11 +476,14 @@ export type Database = {
         }
         Update: {
           aircraft_id?: string | null
+          applicable_models?: Json | null
           condition?: string | null
           created_at?: string
+          cross_reference_pns?: string[] | null
           hours_at_install?: number | null
           id?: string
           install_date?: string | null
+          is_pma?: boolean | null
           name?: string
           notes?: string | null
           origin?: string | null
