@@ -533,7 +533,8 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
     defaultValues: initial || {
       name: "", part_number: "", serial_number: "", origin: "",
       status: "stock", condition: "new", aircraft_id: null, unit_price: "",
-      install_date: "", removal_date: "", hours_at_install: "", notes: "", photos: [],
+       install_date: "", removal_date: "", hours_at_install: "", notes: "", photos: [],
+       applicable_models: [], cross_reference_pns: "", is_pma: false,
     },
   });
   const photos = watch("photos") || [];
@@ -555,7 +556,71 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
       install_date: values.install_date || null,
       removal_date: values.removal_date || null,
       notes: values.notes || null,
-      photos: values.photos || [],
+       photos: values.photos || [],
+       applicable_models: values.applicable_models || [],
+       cross_reference_pns: typeof values.cross_reference_pns === 'string' 
+         ? values.cross_reference_pns.split(",").map((s: string) => s.trim()).filter(Boolean)
+         : values.cross_reference_pns || [],
+       is_pma: !!values.is_pma,
+         <div className="sm:col-span-2 border-t border-white/5 pt-4">
+           <Label className="text-primary">Dados de Aplicabilidade (Assistente de Vendas)</Label>
+           <div className="grid gap-4 sm:grid-cols-2 mt-2">
+             <div>
+               <Label>P/Ns Alternativos (separados por vírgula)</Label>
+               <Input 
+                 {...register("cross_reference_pns")} 
+                 placeholder="Ex: PN-123, PN-456"
+                 className="bg-card/50 border-white/10 font-mono"
+                 defaultValue={Array.isArray(initial?.cross_reference_pns) ? initial.cross_reference_pns.join(", ") : ""}
+               />
+             </div>
+             <div className="flex items-center gap-2 pt-6">
+               <Checkbox 
+                 id="is_pma" 
+                 checked={watch("is_pma")} 
+                 onCheckedChange={(v) => setValue("is_pma", !!v)} 
+               />
+               <Label htmlFor="is_pma" className="cursor-pointer">Certificado PMA</Label>
+             </div>
+             <div className="sm:col-span-2">
+               <Label>Modelos de Aeronaves Compatíveis (ex: Cessna 172, Piper Arrow)</Label>
+               <Input 
+                 placeholder="Digite um modelo e pressione Enter"
+                 className="bg-card/50 border-white/10"
+                 onKeyDown={(e) => {
+                   if (e.key === 'Enter') {
+                     e.preventDefault();
+                     const val = (e.target as HTMLInputElement).value.trim();
+                     if (val) {
+                       const current = watch("applicable_models") || [];
+                       if (!current.includes(val)) {
+                         setValue("applicable_models", [...current, val]);
+                         (e.target as HTMLInputElement).value = "";
+                       }
+                     }
+                   }
+                 }}
+               />
+               <div className="flex flex-wrap gap-2 mt-2">
+                 {(watch("applicable_models") || []).map((m: string, idx: number) => (
+                   <Badge key={idx} variant="outline" className="gap-1 bg-primary/5">
+                     {m}
+                     <button 
+                       type="button" 
+                       onClick={() => {
+                         const current = watch("applicable_models") || [];
+                         setValue("applicable_models", current.filter((_: any, i: number) => i !== idx));
+                       }}
+                       className="ml-1 text-muted-foreground hover:text-destructive"
+                     >
+                       ×
+                     </button>
+                   </Badge>
+                 ))}
+               </div>
+             </div>
+           </div>
+         </div>
     };
     const { error } = initial
       ? await supabase.from("parts").update(payload).eq("id", initial.id)
