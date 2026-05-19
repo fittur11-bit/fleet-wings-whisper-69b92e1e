@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Wrench, Trash2, FileDown, Pencil } from "lucide-react";
+import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon, CheckCircle2 } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useServices, useAircraft, useSuppliers } from "@/lib/queries";
@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { downloadServiceReport } from "@/lib/service-report";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/services")({
   component: () => <AuthGuard><ServicesPage /></AuthGuard>,
@@ -34,6 +35,7 @@ function ServicesPage() {
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<any | null>(null);
+  const [viewing, setViewing] = useState<any | null>(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [form, setForm] = useState<any>({
@@ -259,6 +261,9 @@ function ServicesPage() {
                   <h3 className="font-display font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
                 </div>
                 <div className="flex items-center gap-1">
+                  <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Visualizar" onClick={() => setViewing(s)}>
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
                   <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Editar" onClick={() => openEdit(s)}>
                     <Pencil className="h-3.5 w-3.5" />
                   </Button>
@@ -278,16 +283,152 @@ function ServicesPage() {
                   Executado por: <span className="text-foreground">{suppliers.find((sp: any) => sp.id === s.supplier_id)?.name || "—"}</span>
                 </p>
               )}
-              {s.photos?.length ? (
-                <p className="mt-2 text-[11px] text-muted-foreground">{s.photos.length} foto(s) anexada(s)</p>
-              ) : null}
-              {s.repair_photos?.length ? (
-                <p className="text-[11px] text-muted-foreground">{s.repair_photos.length} foto(s) de peças/reparo</p>
-              ) : null}
+              <div className="mt-3 flex gap-2">
+                {s.photos?.length ? (
+                  <div className="flex -space-x-2 overflow-hidden">
+                    {s.photos.slice(0, 3).map((url: string, i: number) => (
+                      <img 
+                        key={i} 
+                        src={url} 
+                        alt="" 
+                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background object-cover" 
+                      />
+                    ))}
+                    {s.photos.length > 3 && (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-background">
+                        +{s.photos.length - 3}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+                {s.repair_photos?.length ? (
+                  <div className="flex -space-x-2 overflow-hidden">
+                    {s.repair_photos.slice(0, 3).map((url: string, i: number) => (
+                      <img 
+                        key={i} 
+                        src={url} 
+                        alt="" 
+                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background border-2 border-destructive/30 object-cover" 
+                      />
+                    ))}
+                    {s.repair_photos.length > 3 && (
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-medium ring-2 ring-background text-destructive">
+                        +{s.repair_photos.length - 3}
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </div>
           ))}
         </div>
       )}
+
+      <Dialog open={!!viewing} onOpenChange={(v) => !v && setViewing(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {viewing && (
+            <div className="space-y-6">
+              <DialogHeader>
+                <DialogTitle className="text-2xl flex items-center gap-2">
+                  <Wrench className="h-6 w-6 text-primary" />
+                  Detalhes do Serviço
+                </DialogTitle>
+                <p className="text-muted-foreground">
+                  {viewing.aircraft?.prefix || viewing.aircraft_prefix} — {viewing.performed_at ? format(parseISO(viewing.performed_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : "Data não informada"}
+                </p>
+              </DialogHeader>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="glass-card p-4 rounded-xl space-y-3">
+                    <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Informações Gerais</h4>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-muted-foreground">Status</p>
+                        <p className="font-medium capitalize">{viewing.status}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Custo</p>
+                        <p className="font-medium">{viewing.cost ? `R$ ${viewing.cost.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Técnico</p>
+                        <p className="font-medium">{viewing.technician || "—"}</p>
+                      </div>
+                      <div>
+                        <p className="text-muted-foreground">Local</p>
+                        <p className="font-medium">{viewing.location || "—"}</p>
+                      </div>
+                    </div>
+                    {viewing.supplier_id && (
+                      <div className="pt-2 border-t border-white/5">
+                        <p className="text-muted-foreground text-xs uppercase tracking-wider">Oficina / Fornecedor</p>
+                        <p className="font-medium">{suppliers.find((sp: any) => sp.id === viewing.supplier_id)?.name || "—"}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="glass-card p-4 rounded-xl space-y-3">
+                    <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Descrição</h4>
+                    <p className="text-sm whitespace-pre-wrap">{viewing.description || "Nenhuma descrição fornecida."}</p>
+                  </div>
+
+                  {(viewing.checklist || []).length > 0 && (
+                    <div className="glass-card p-4 rounded-xl space-y-3">
+                      <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Checklist</h4>
+                      <div className="space-y-2">
+                        {viewing.checklist.map((item: any, i: number) => (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <CheckCircle2 className={cn("h-4 w-4", item.done ? "text-green-500" : "text-muted-foreground/30")} />
+                            <span className={item.done ? "text-foreground" : "text-muted-foreground line-through decoration-1"}>{item.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-sm uppercase tracking-wider text-primary flex items-center gap-2">
+                    <ImageIcon className="h-4 w-4" />
+                    Fotos do Serviço
+                  </h4>
+                  {viewing.photos?.length ? (
+                    <div className="grid grid-cols-2 gap-2">
+                      {viewing.photos.map((url: string, i: number) => (
+                        <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-primary transition-all">
+                          <img src={url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+                        </a>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="h-32 flex flex-col items-center justify-center rounded-lg border border-dashed border-white/10 text-muted-foreground">
+                      <ImageIcon className="h-8 w-8 mb-2 opacity-20" />
+                      <p className="text-xs">Nenhuma foto anexada</p>
+                    </div>
+                  )}
+
+                  {viewing.repair_photos?.length > 0 && (
+                    <>
+                      <h4 className="font-semibold text-sm uppercase tracking-wider text-destructive flex items-center gap-2 mt-4">
+                        <ImageIcon className="h-4 w-4" />
+                        Fotos de Reparo / Peças
+                      </h4>
+                      <div className="grid grid-cols-2 gap-2">
+                        {viewing.repair_photos.map((url: string, i: number) => (
+                          <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-destructive transition-all">
+                            <img src={url} alt={`Reparo ${i + 1}`} className="h-full w-full object-cover" />
+                          </a>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </AppShell>
   );
 }
