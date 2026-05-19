@@ -22,6 +22,7 @@ import { Route as FlightLogsRouteImport } from './routes/flight-logs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BackupRouteImport } from './routes/backup'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ApplicabilityRouteImport } from './routes/applicability'
 import { Route as AircraftRouteImport } from './routes/aircraft'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -90,6 +91,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicabilityRoute = ApplicabilityRouteImport.update({
+  id: '/applicability',
+  path: '/applicability',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AircraftRoute = AircraftRouteImport.update({
   id: '/aircraft',
   path: '/aircraft',
@@ -104,6 +110,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aircraft': typeof AircraftRoute
+  '/applicability': typeof ApplicabilityRoute
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aircraft': typeof AircraftRoute
+  '/applicability': typeof ApplicabilityRoute
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/aircraft': typeof AircraftRoute
+  '/applicability': typeof ApplicabilityRoute
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/aircraft'
+    | '/applicability'
     | '/auth'
     | '/backup'
     | '/dashboard'
@@ -175,6 +185,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/aircraft'
+    | '/applicability'
     | '/auth'
     | '/backup'
     | '/dashboard'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/aircraft'
+    | '/applicability'
     | '/auth'
     | '/backup'
     | '/dashboard'
@@ -210,6 +222,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AircraftRoute: typeof AircraftRoute
+  ApplicabilityRoute: typeof ApplicabilityRoute
   AuthRoute: typeof AuthRoute
   BackupRoute: typeof BackupRoute
   DashboardRoute: typeof DashboardRoute
@@ -318,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applicability': {
+      id: '/applicability'
+      path: '/applicability'
+      fullPath: '/applicability'
+      preLoaderRoute: typeof ApplicabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aircraft': {
       id: '/aircraft'
       path: '/aircraft'
@@ -338,6 +358,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AircraftRoute: AircraftRoute,
+  ApplicabilityRoute: ApplicabilityRoute,
   AuthRoute: AuthRoute,
   BackupRoute: BackupRoute,
   DashboardRoute: DashboardRoute,
