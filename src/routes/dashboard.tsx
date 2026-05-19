@@ -85,7 +85,7 @@ function DashboardContent() {
      { name: "Novo", value: parts.filter(p => p.condition === "new").length, color: "#10b981" },
      { name: "Serviçável", value: parts.filter(p => p.condition === "serviceable").length, color: "#0ea5e9" },
      { name: "Reparo", value: parts.filter(p => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#f59e0b" },
-     { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition)).length, color: "#64748b" },
+      { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#64748b" },
    ].filter(d => d.value > 0);
  
    const monthlyFlights = logs.filter((l: any) => {
