@@ -90,19 +90,11 @@
            </div>
          )}
  
-         {query && results.length === 0 && !loadingParts && (
-           <div className="text-center py-12 glass-card rounded-2xl border-dashed">
-             <p className="text-muted-foreground">Nenhum resultado encontrado no seu estoque.</p>
-             <div className="mt-4 flex flex-wrap justify-center gap-2">
-               <Button variant="outline" className="gap-2 border-white/10" onClick={() => window.open(`https://www.google.com/search?q=aircraft+parts+applicability+${query}`, '_blank')}>
-                 <Search className="h-4 w-4" /> Buscar aplicabilidade na Web
-               </Button>
-               <Button variant="outline" className="gap-2 border-white/10" onClick={() => window.open(`https://www.google.com/search?q=aircraft+parts+IPC+manual+${query}`, '_blank')}>
-                 <Search className="h-4 w-4" /> Consultar Manual IPC
-               </Button>
-             </div>
-           </div>
-         )}
+          {query && results.length === 0 && !loadingParts && (
+            <div className="text-center py-12 glass-card rounded-2xl border-dashed">
+              <p className="text-muted-foreground">Nenhum resultado encontrado no seu estoque.</p>
+            </div>
+          )}
  
          <div className="grid gap-4">
            {results.map((part: any, i: number) => (
