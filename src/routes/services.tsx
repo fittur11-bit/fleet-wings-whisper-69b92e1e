@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { downloadServiceReport } from "@/lib/service-report";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/services")({
   component: () => <AuthGuard><ServicesPage /></AuthGuard>,
