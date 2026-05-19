@@ -11,6 +11,7 @@ const items = [
   { to: "/aircraft", label: "Aeronaves", icon: Plane },
   { to: "/rab", label: "Consulta RAB", icon: Search },
    { to: "/parts", label: "Peças", icon: Cog },
+   { to: "/applicability", label: "Aplicabilidade", icon: ShieldCheck },
   { to: "/flight-logs", label: "Diário de Bordo", icon: History },
   { to: "/services", label: "Manutenção", icon: Wrench },
   { to: "/shipments", label: "Componentes Externos", icon: Package },
