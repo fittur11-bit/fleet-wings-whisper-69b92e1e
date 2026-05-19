@@ -4,36 +4,6 @@ import { motion } from "framer-motion";
  import { Plus, Package, Search, Pencil, Trash2, Eye, ArrowDownToLine, ArrowUpFromLine, Settings2, History as HistoryIcon, Upload, Download, FileText } from "lucide-react";
  import { jsPDF } from "jspdf";
  import autoTable from "jspdf-autotable";
-   const downloadPDF = () => {
-     const doc = new jsPDF();
-     doc.setFontSize(18);
-     doc.text("Relatório de Peças e Componentes", 14, 22);
-     doc.setFontSize(11);
-     doc.setTextColor(100);
-     doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 30);
- 
-     const tableData = filtered.map((p: any) => [
-       p.name || "",
-       p.part_number || "",
-       p.serial_number || "",
-       PART_CONDITION.find(c => c.value === p.condition)?.label || "",
-       PART_STATUS.find(s => s.value === p.status)?.label || "",
-       p.aircraft?.prefix || "",
-       fmtBRL(p.unit_price) || "—"
-     ]);
- 
-     autoTable(doc, {
-       startY: 35,
-       head: [["Nome", "P/N", "S/N", "Condição", "Status", "Aeronave", "Vlr. Unit"]],
-       body: tableData,
-       headStyles: { fillColor: [12, 17, 29] },
-       alternateRowStyles: { fillColor: [245, 247, 250] },
-     });
- 
-     doc.save("relatorio_pecas.pdf");
-     toast.success("Relatório PDF gerado com sucesso");
-   };
- 
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -111,12 +81,42 @@ function PartsPage() {
     });
   }, [parts, search, statusFilter, conditionFilter]);
 
-  const stats = useMemo(() => ({
-    total: parts.length,
-    stock: parts.filter((p: any) => p.status === "stock").length,
-    installed: parts.filter((p: any) => p.status === "installed").length,
-    repair: parts.filter((p: any) => p.status === "sent_repair").length,
-  }), [parts]);
+   const stats = useMemo(() => ({
+     total: parts.length,
+     stock: parts.filter((p: any) => p.status === "stock").length,
+     installed: parts.filter((p: any) => p.status === "installed").length,
+     repair: parts.filter((p: any) => p.status === "sent_repair").length,
+   }), [parts]);
+ 
+   const downloadPDF = () => {
+     const doc = new jsPDF();
+     doc.setFontSize(18);
+     doc.text("Relatório de Peças e Componentes", 14, 22);
+     doc.setFontSize(11);
+     doc.setTextColor(100);
+     doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy HH:mm")}`, 14, 30);
+ 
+     const tableData = filtered.map((p: any) => [
+       p.name || "",
+       p.part_number || "",
+       p.serial_number || "",
+       PART_CONDITION.find(c => c.value === p.condition)?.label || "",
+       PART_STATUS.find(s => s.value === p.status)?.label || "",
+       p.aircraft?.prefix || "",
+       fmtBRL(p.unit_price) || "—"
+     ]);
+ 
+     autoTable(doc, {
+       startY: 35,
+       head: [["Nome", "P/N", "S/N", "Condição", "Status", "Aeronave", "Vlr. Unit"]],
+       body: tableData,
+       headStyles: { fillColor: [12, 17, 29] },
+       alternateRowStyles: { fillColor: [245, 247, 250] },
+     });
+ 
+     doc.save("relatorio_pecas.pdf");
+     toast.success("Relatório PDF gerado com sucesso");
+   };
 
   const remove = async (id: string) => {
     if (!confirm("Excluir peça? Esta ação não pode ser desfeita.")) return;
