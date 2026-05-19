@@ -61,6 +61,10 @@
                  <Cog className="mr-2 h-4 w-4" />
                  <span>Estoque</span>
                </CommandItem>
+               <CommandItem onSelect={() => runCommand(() => navigate({ to: "/applicability" }))}>
+                 <ShieldCheck className="mr-2 h-4 w-4" />
+                 <span>Aplicabilidade</span>
+               </CommandItem>
                <CommandItem onSelect={() => runCommand(() => navigate({ to: "/flight-logs" }))}>
                  <History className="mr-2 h-4 w-4" />
                  <span>Diário de Bordo</span>
