@@ -1,26 +1,24 @@
-O sistema atual já possui uma base sólida com gestão de frota, biblioteca técnica e controle de envio de peças. Para elevar o patamar e torná-lo um sistema de aviação profissional completo, os seguintes módulos e funcionalidades serão implementados:
+To transform this system into a world-class global SaaS, I would focus on three main pillars: **Strategic Intelligence**, **Operational Speed**, and **Universal Accessibility**.
 
-### 1. Gestão de Diários de Bordo e Jornada
-- **Registro de Voos:** Interface intuitiva para lançar horas de decolagem/pouso, ciclos e consumo de combustível.
-- **Atualização Automática de Horas:** O tempo total da aeronave (TTSN) será atualizado automaticamente após cada voo lançado.
-- **Controle de Tripulação:** Registro de quem realizou o voo e monitoramento de validade de habilitações (CMA, IFR, etc.).
+### Phase 1: Strategic Intelligence (Dashboard & Analytics)
+*   **Maintenance Predictive Charts**: Replace static cards with interactive line and bar charts showing maintenance trends and fleet uptime.
+*   **Financial Visibility**: A new dashboard section visualizing the total value of stock, parts under repair, and historical maintenance costs.
+*   **Fleet Health Map**: A visual status grid showing which aircraft are ready for flight vs. grounded, with "one-click" drill-downs.
 
-### 2. Manutenção Preditiva e Preventiva
-- **Status das Inspeções:** Painel visual mostrando quanto tempo resta para as próximas inspeções (50h, 100h, Anual).
-- **Controle de Componentes:** Monitoramento de peças com limite de vida (LLP) e itens que requerem revisão periódica.
-- **Alertas Antecipados:** Notificações quando uma aeronave estiver próxima de um vencimento técnico.
+### Phase 2: Operational Speed (UX/UI Excellence)
+*   **Global Command Palette (CMD+K)**: Allow users to navigate, search parts, or create flight logs from anywhere in the app instantly.
+*   **Automated Inventory Alerts**: Smart notifications system for low consumable stock or parts nearing their expiration/overhaul limits.
+*   **Mobile-First "Hangar Mode"**: Optimize the interface for mechanics using tablets and phones in the hangar, including a dark mode that reduces eye strain in low-light environments.
 
-### 3. Gestão de Documentação Legal (RAB & ANAC)
-- **Vencimento de Documentos:** Monitoramento automático de CVA, Seguro RETA e Fiam.
-- **Histórico de Proprietários/Operadores:** Espaço para armazenar o histórico legal da aeronave.
+### Phase 3: Universal Accessibility (Global Scaling)
+*   **Internationalization (i18n)**: Full support for English, Spanish, and Portuguese, including local currency and date formats.
+*   **Compliance Export**: Automated generation of regulatory PDFs (like FAA or ANAC forms) directly from maintenance logs.
+*   **Audit Trail**: A detailed log of all changes for transparency and regulatory compliance.
 
-### 4. Relatórios e Dashboards Executivos
-- **Custo Operacional:** Gráficos mostrando o gasto por hora de voo e por aeronave.
-- **Disponibilidade de Frota:** Indicadores de quantas aeronaves estão prontas para voo vs. em manutenção.
+---
 
-### Detalhes Técnicos:
-- **Banco de Dados:** Criação das tabelas `flight_logs` (diários), `inspections` (manutenções programadas) e `crew_members`.
-- **Lógica de Horas:** Implementação de triggers no Supabase para garantir que o horímetro da aeronave esteja sempre sincronizado.
-- **UI/UX:** Adição de um menu lateral consolidado e um Dashboard central que resume o status de toda a operação.
-
-Deseja que eu comece pela implementação dos **Diários de Bordo** para automatizar o controle de horas das aeronaves?
+### Technical Implementation Details
+1.  **Analytics**: Use `recharts` to build responsive charts in `src/routes/dashboard.tsx`.
+2.  **Navigation**: Implement `cmdk` for a professional command-palette experience.
+3.  **i18n**: Integrate `react-i18next` for scalable multi-language support.
+4.  **Reporting**: Utilize `jspdf` for high-quality PDF document generation.

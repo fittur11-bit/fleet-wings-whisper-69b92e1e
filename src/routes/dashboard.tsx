@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History } from "lucide-react";
+ import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History, BarChart3, PieChart as PieChartIcon } from "lucide-react";
+ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from "recharts";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs, useShipments } from "@/lib/queries";
@@ -61,18 +62,119 @@ function DashboardContent() {
 
   const recentServices = services.slice(0, 5);
 
-  const totalFlightHours = aircraft.reduce((sum: number, a: any) => sum + Number(a.total_hours || 0), 0);
-  const monthlyFlights = logs.filter((l: any) => {
-    const d = parseISO(l.date);
-    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-  }).length;
+   const totalFlightHours = aircraft.reduce((sum: number, a: any) => sum + Number(a.total_hours || 0), 0);
+   const stockValue = parts.reduce((sum: number, p: any) => sum + (Number(p.unit_price) || 0), 0);
+ 
+   // Chart Data: Services by month
+   const last6Months = [...Array(6)].map((_, i) => {
+     const d = new Date();
+     d.setMonth(d.getMonth() - i);
+     return {
+       month: format(d, "MMM", { locale: ptBR }),
+        count: services.filter(s => {
+          if (!s.performed_at) return false;
+          const sd = parseISO(s.performed_at);
+          return sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+        }).length,
+       rawDate: d
+     };
+   }).reverse();
+ 
+   // Chart Data: Parts by condition
+   const conditionData = [
+     { name: "Novo", value: parts.filter(p => p.condition === "new").length, color: "#10b981" },
+     { name: "Serviçável", value: parts.filter(p => p.condition === "serviceable").length, color: "#0ea5e9" },
+     { name: "Reparo", value: parts.filter(p => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#f59e0b" },
+      { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#64748b" },
+   ].filter(d => d.value > 0);
+ 
+   const monthlyFlights = logs.filter((l: any) => {
+     if (!l.date) return false;
+     const d = parseISO(l.date);
+     return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+   }).length;
 
-  const kpis = [
-    { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
-    { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
-    { label: "Voos no Mês", value: monthlyFlights, icon: History, to: "/flight-logs" },
-    { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
-  ];
+   const kpis = [
+     { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
+     { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
+     { label: "Valor em Estoque", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stockValue), icon: TrendingUp, to: "/parts" },
+     { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
+   ];
+       {/* Charts Section */}
+       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+         <Card className="lg:col-span-2 border-white/5 bg-card/60 backdrop-blur">
+           <CardHeader>
+             <CardTitle className="flex items-center gap-2 text-base">
+               <BarChart3 className="h-4 w-4 text-primary" /> Tendência de Manutenção (6 meses)
+             </CardTitle>
+           </CardHeader>
+           <CardContent className="h-[240px] pl-0">
+             <ResponsiveContainer width="100%" height="100%">
+               <BarChart data={last6Months}>
+                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                 <XAxis 
+                   dataKey="month" 
+                   stroke="#94a3b8" 
+                   fontSize={12} 
+                   tickLine={false} 
+                   axisLine={false} 
+                 />
+                 <YAxis 
+                   stroke="#94a3b8" 
+                   fontSize={12} 
+                   tickLine={false} 
+                   axisLine={false}
+                   allowDecimals={false}
+                 />
+                 <Tooltip 
+                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
+                   itemStyle={{ color: "#38bdf8" }}
+                 />
+                 <Bar dataKey="count" fill="#0ea5e9" radius={[4, 4, 0, 0]} barSize={32} />
+               </BarChart>
+             </ResponsiveContainer>
+           </CardContent>
+         </Card>
+ 
+         <Card className="border-white/5 bg-card/60 backdrop-blur">
+           <CardHeader>
+             <CardTitle className="flex items-center gap-2 text-base">
+               <PieChartIcon className="h-4 w-4 text-primary" /> Distribuição de Estoque
+             </CardTitle>
+           </CardHeader>
+           <CardContent className="h-[240px]">
+             <ResponsiveContainer width="100%" height="100%">
+               <PieChart>
+                 <Pie
+                   data={conditionData}
+                   cx="50%"
+                   cy="50%"
+                   innerRadius={60}
+                   outerRadius={80}
+                   paddingAngle={5}
+                   dataKey="value"
+                 >
+                   {conditionData.map((entry, index) => (
+                     <Cell key={`cell-${index}`} fill={entry.color} />
+                   ))}
+                 </Pie>
+                 <Tooltip 
+                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
+                 />
+               </PieChart>
+             </ResponsiveContainer>
+             <div className="mt-2 flex flex-wrap justify-center gap-4">
+               {conditionData.map((d) => (
+                 <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+                   <div className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+                   {d.name} ({d.value})
+                 </div>
+               ))}
+             </div>
+           </CardContent>
+         </Card>
+       </div>
+ 
 
   return (
     <>

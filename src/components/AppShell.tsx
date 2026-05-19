@@ -1,7 +1,8 @@
 import { useState, type ReactNode } from "react";
-import { Menu, X, ArrowLeft } from "lucide-react";
+ import { Menu, X, ArrowLeft, Search } from "lucide-react";
 import { useRouter, useRouterState, Link } from "@tanstack/react-router";
-import { AppSidebar } from "./AppSidebar";
+ import { AppSidebar } from "./AppSidebar";
+ import { CommandMenu } from "./CommandMenu";
 import { Button } from "@/components/ui/button";
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -10,8 +11,9 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
    const canGoBack = pathname !== "/dashboard" && pathname !== "/dashboard/" && pathname !== "/";
 
-  return (
-    <div className="flex min-h-screen w-full">
+   return (
+     <div className="flex min-h-screen w-full">
+       <CommandMenu />
       {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed inset-y-0 left-0 z-30">
         <AppSidebar />
@@ -38,17 +40,31 @@ export function AppShell({ children }: { children: ReactNode }) {
                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
              </Button>
            </div>
-           {canGoBack && (
+           <div className="flex items-center gap-2">
+             {canGoBack && (
+               <Button
+                 variant="ghost"
+                 size="sm"
+                 onClick={() => router.navigate({ to: "/dashboard" })}
+                 className="gap-1 px-2 hover:bg-white/10"
+               >
+                 <ArrowLeft className="h-4 w-4" />
+                 Início
+               </Button>
+             )}
              <Button
                variant="ghost"
                size="sm"
-               onClick={() => router.navigate({ to: "/dashboard" })}
-               className="gap-1 px-2 hover:bg-white/10"
+               className="hidden sm:flex items-center gap-2 px-3 py-1.5 h-auto text-muted-foreground bg-white/5 border border-white/5 hover:bg-white/10"
+               onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
              >
-               <ArrowLeft className="h-4 w-4" />
-               Início
+               <Search className="h-3.5 w-3.5" />
+               <span className="text-xs">Buscar...</span>
+               <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 sm:flex">
+                 <span className="text-xs">⌘</span>K
+               </kbd>
              </Button>
-           )}
+           </div>
           <Link to="/dashboard" className="ml-auto font-display font-semibold tracking-tight">
             FlightCore
           </Link>
