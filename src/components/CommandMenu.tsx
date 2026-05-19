@@ -1,7 +1,7 @@
  import * as React from "react";
  import { useNavigate } from "@tanstack/react-router";
  import { Command } from "cmdk";
- import { Plane, History, Wrench, Cog, BookMarked, Users, Settings, Search, Package, Plus } from "lucide-react";
+ import { Plane, History, Wrench, Cog, BookMarked, Users, Settings, Search, Package, Plus, ShieldCheck } from "lucide-react";
  
  export function CommandMenu() {
    const [open, setOpen] = React.useState(false);
