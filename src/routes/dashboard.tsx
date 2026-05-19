@@ -71,10 +71,11 @@ function DashboardContent() {
      d.setMonth(d.getMonth() - i);
      return {
        month: format(d, "MMM", { locale: ptBR }),
-       count: services.filter(s => {
-         const sd = parseISO(s.performed_at);
-         return sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
-       }).length,
+        count: services.filter(s => {
+          if (!s.performed_at) return false;
+          const sd = parseISO(s.performed_at);
+          return sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+        }).length,
        rawDate: d
      };
    }).reverse();
@@ -87,10 +88,11 @@ function DashboardContent() {
      { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition)).length, color: "#64748b" },
    ].filter(d => d.value > 0);
  
-  const monthlyFlights = logs.filter((l: any) => {
-    const d = parseISO(l.date);
-    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-  }).length;
+   const monthlyFlights = logs.filter((l: any) => {
+     if (!l.date) return false;
+     const d = parseISO(l.date);
+     return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+   }).length;
 
    const kpis = [
      { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
