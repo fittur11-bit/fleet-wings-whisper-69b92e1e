@@ -92,7 +92,7 @@ function ServicesPage() {
     setOpen(false);
     setEditing(null);
     setSelectedTypes([]);
-    setForm({ aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "" });
+    setForm({ aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", photos: [], repair_photos: [], cost: "" });
   };
 
   const openEdit = (s: any) => {
