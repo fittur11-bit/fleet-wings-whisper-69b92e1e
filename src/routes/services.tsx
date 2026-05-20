@@ -106,7 +106,6 @@ function ServicesPage() {
       technician: s.technician || "",
       location: s.location || "",
       description: s.description || "",
-      checklist: s.checklist || [],
       photos: s.photos || [],
       repair_photos: s.repair_photos || [],
       cost: s.cost != null ? String(s.cost) : "",
