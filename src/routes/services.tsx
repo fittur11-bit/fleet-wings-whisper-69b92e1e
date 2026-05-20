@@ -48,11 +48,6 @@ function ServicesPage() {
     setSelectedTypes((p) => p.includes(v) ? p.filter(x => x !== v) : [...p, v]);
   };
 
-  const buildChecklist = () => {
-    const items = new Set<string>();
-    selectedTypes.forEach(t => (SERVICE_CHECKLISTS[t] || []).forEach(i => items.add(i)));
-    return Array.from(items).map(label => ({ label, done: false }));
-  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
