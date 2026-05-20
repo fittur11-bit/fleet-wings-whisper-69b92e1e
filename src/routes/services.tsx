@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon, CheckCircle2 } from "lucide-react";
+import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useServices, useAircraft, useSuppliers } from "@/lib/queries";
@@ -13,7 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ImageUpload } from "@/components/ImageUpload";
-import { SERVICE_TYPES, SERVICE_STATUS, SERVICE_CHECKLISTS } from "@/lib/constants";
+import { SERVICE_TYPES, SERVICE_STATUS } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,7 +21,6 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { downloadServiceReport } from "@/lib/service-report";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/services")({
   component: () => <AuthGuard><ServicesPage /></AuthGuard>,
