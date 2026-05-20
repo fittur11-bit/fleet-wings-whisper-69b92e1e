@@ -590,6 +590,63 @@ export type Database = {
         }
         Relationships: []
       }
+      service_prices: {
+        Row: {
+          aircraft_model: string | null
+          category: string
+          created_at: string
+          currency: string
+          id: string
+          max_price: number | null
+          min_price: number | null
+          notes: string | null
+          price: number
+          service_name: string
+          supplier_id: string | null
+          supplier_name: string | null
+          unit: string
+          updated_at: string
+          user_id: string
+          validity_date: string | null
+        }
+        Insert: {
+          aircraft_model?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          max_price?: number | null
+          min_price?: number | null
+          notes?: string | null
+          price?: number
+          service_name: string
+          supplier_id?: string | null
+          supplier_name?: string | null
+          unit?: string
+          updated_at?: string
+          user_id: string
+          validity_date?: string | null
+        }
+        Update: {
+          aircraft_model?: string | null
+          category?: string
+          created_at?: string
+          currency?: string
+          id?: string
+          max_price?: number | null
+          min_price?: number | null
+          notes?: string | null
+          price?: number
+          service_name?: string
+          supplier_id?: string | null
+          supplier_name?: string | null
+          unit?: string
+          updated_at?: string
+          user_id?: string
+          validity_date?: string | null
+        }
+        Relationships: []
+      }
       services: {
         Row: {
           aircraft_id: string | null
