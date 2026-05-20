@@ -53,14 +53,12 @@ function ServicesPage() {
     e.preventDefault();
     if (!user || selectedTypes.length === 0) { toast.error("Selecione ao menos 1 tipo"); return; }
     const ac = aircraft.find(a => a.id === form.aircraft_id);
-    const checklist = form.checklist.length ? form.checklist : buildChecklist();
     const payload: any = {
       ...form,
       user_id: user.id,
       aircraft_prefix: ac?.prefix,
       service_type: selectedTypes[0],
       service_types: selectedTypes,
-      checklist,
       cost: form.cost ? Number(form.cost) : null,
       performed_at: form.performed_at || null,
       supplier_id: form.supplier_id || null,
