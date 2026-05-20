@@ -14,6 +14,7 @@ import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ServicePricesRouteImport } from './routes/service-prices'
 import { Route as RabRouteImport } from './routes/rab'
 import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
@@ -50,6 +51,11 @@ const ShipmentsRoute = ShipmentsRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicePricesRoute = ServicePricesRouteImport.update({
+  id: '/service-prices',
+  path: '/service-prices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RabRoute = RabRouteImport.update({
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
+  '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
+  '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
@@ -165,6 +173,7 @@ export interface FileRoutesById {
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
+  '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
   '/suppliers': typeof SuppliersRoute
@@ -186,6 +195,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/pending'
     | '/rab'
+    | '/service-prices'
     | '/services'
     | '/shipments'
     | '/suppliers'
@@ -205,6 +215,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/pending'
     | '/rab'
+    | '/service-prices'
     | '/services'
     | '/shipments'
     | '/suppliers'
@@ -224,6 +235,7 @@ export interface FileRouteTypes {
     | '/parts'
     | '/pending'
     | '/rab'
+    | '/service-prices'
     | '/services'
     | '/shipments'
     | '/suppliers'
@@ -244,6 +256,7 @@ export interface RootRouteChildren {
   PartsRoute: typeof PartsRoute
   PendingRoute: typeof PendingRoute
   RabRoute: typeof RabRoute
+  ServicePricesRoute: typeof ServicePricesRoute
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
   SuppliersRoute: typeof SuppliersRoute
@@ -286,6 +299,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/service-prices': {
+      id: '/service-prices'
+      path: '/service-prices'
+      fullPath: '/service-prices'
+      preLoaderRoute: typeof ServicePricesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rab': {
@@ -388,6 +408,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartsRoute: PartsRoute,
   PendingRoute: PendingRoute,
   RabRoute: RabRoute,
+  ServicePricesRoute: ServicePricesRoute,
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
   SuppliersRoute: SuppliersRoute,
