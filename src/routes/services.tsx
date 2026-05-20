@@ -143,9 +143,8 @@ function ServicesPage() {
             <DialogHeader><DialogTitle>{editing ? "Editar Serviço" : "Novo Serviço"}</DialogTitle></DialogHeader>
             <form onSubmit={submit} className="space-y-4">
               <Tabs defaultValue="info">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="info">Informações</TabsTrigger>
-                  <TabsTrigger value="checklist">Checklist</TabsTrigger>
                   <TabsTrigger value="photos">Fotos</TabsTrigger>
                   <TabsTrigger value="repair">Peças/Reparo</TabsTrigger>
                 </TabsList>
@@ -201,14 +200,6 @@ function ServicesPage() {
                     </div>
                   </div>
                   <div><Label>Descrição</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} /></div>
-                </TabsContent>
-                <TabsContent value="checklist" className="space-y-2 mt-4">
-                  <p className="text-sm text-muted-foreground">Checklist gerado automaticamente conforme tipos selecionados.</p>
-                  {buildChecklist().map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 rounded-lg bg-white/5 p-2 text-sm">
-                      <Checkbox /> {item.label}
-                    </div>
-                  ))}
                 </TabsContent>
                 <TabsContent value="photos" className="mt-4">
                   <ImageUpload bucket="service-photos" multiple value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
