@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon, CheckCircle2 } from "lucide-react";
+import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useServices, useAircraft, useSuppliers } from "@/lib/queries";
@@ -13,7 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ImageUpload } from "@/components/ImageUpload";
-import { SERVICE_TYPES, SERVICE_STATUS, SERVICE_CHECKLISTS } from "@/lib/constants";
+import { SERVICE_TYPES, SERVICE_STATUS } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
@@ -21,7 +21,6 @@ import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { downloadServiceReport } from "@/lib/service-report";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/services")({
   component: () => <AuthGuard><ServicesPage /></AuthGuard>,
@@ -49,24 +48,17 @@ function ServicesPage() {
     setSelectedTypes((p) => p.includes(v) ? p.filter(x => x !== v) : [...p, v]);
   };
 
-  const buildChecklist = () => {
-    const items = new Set<string>();
-    selectedTypes.forEach(t => (SERVICE_CHECKLISTS[t] || []).forEach(i => items.add(i)));
-    return Array.from(items).map(label => ({ label, done: false }));
-  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user || selectedTypes.length === 0) { toast.error("Selecione ao menos 1 tipo"); return; }
     const ac = aircraft.find(a => a.id === form.aircraft_id);
-    const checklist = form.checklist.length ? form.checklist : buildChecklist();
     const payload: any = {
       ...form,
       user_id: user.id,
       aircraft_prefix: ac?.prefix,
       service_type: selectedTypes[0],
       service_types: selectedTypes,
-      checklist,
       cost: form.cost ? Number(form.cost) : null,
       performed_at: form.performed_at || null,
       supplier_id: form.supplier_id || null,
@@ -100,7 +92,7 @@ function ServicesPage() {
     setOpen(false);
     setEditing(null);
     setSelectedTypes([]);
-    setForm({ aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", checklist: [], photos: [], repair_photos: [], cost: "" });
+    setForm({ aircraft_id: "", supplier_id: "", status: "pending", performed_at: "", technician: "", location: "", description: "", photos: [], repair_photos: [], cost: "" });
   };
 
   const openEdit = (s: any) => {
@@ -114,7 +106,6 @@ function ServicesPage() {
       technician: s.technician || "",
       location: s.location || "",
       description: s.description || "",
-      checklist: s.checklist || [],
       photos: s.photos || [],
       repair_photos: s.repair_photos || [],
       cost: s.cost != null ? String(s.cost) : "",
@@ -152,9 +143,8 @@ function ServicesPage() {
             <DialogHeader><DialogTitle>{editing ? "Editar Serviço" : "Novo Serviço"}</DialogTitle></DialogHeader>
             <form onSubmit={submit} className="space-y-4">
               <Tabs defaultValue="info">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="info">Informações</TabsTrigger>
-                  <TabsTrigger value="checklist">Checklist</TabsTrigger>
                   <TabsTrigger value="photos">Fotos</TabsTrigger>
                   <TabsTrigger value="repair">Peças/Reparo</TabsTrigger>
                 </TabsList>
@@ -210,14 +200,6 @@ function ServicesPage() {
                     </div>
                   </div>
                   <div><Label>Descrição</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} /></div>
-                </TabsContent>
-                <TabsContent value="checklist" className="space-y-2 mt-4">
-                  <p className="text-sm text-muted-foreground">Checklist gerado automaticamente conforme tipos selecionados.</p>
-                  {buildChecklist().map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 rounded-lg bg-white/5 p-2 text-sm">
-                      <Checkbox /> {item.label}
-                    </div>
-                  ))}
                 </TabsContent>
                 <TabsContent value="photos" className="mt-4">
                   <ImageUpload bucket="service-photos" multiple value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
@@ -373,19 +355,6 @@ function ServicesPage() {
                     <p className="text-sm whitespace-pre-wrap">{viewing.description || "Nenhuma descrição fornecida."}</p>
                   </div>
 
-                  {(viewing.checklist || []).length > 0 && (
-                    <div className="glass-card p-4 rounded-xl space-y-3">
-                      <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Checklist</h4>
-                      <div className="space-y-2">
-                        {viewing.checklist.map((item: any, i: number) => (
-                          <div key={i} className="flex items-center gap-2 text-sm">
-                            <CheckCircle2 className={cn("h-4 w-4", item.done ? "text-green-500" : "text-muted-foreground/30")} />
-                            <span className={item.done ? "text-foreground" : "text-muted-foreground line-through decoration-1"}>{item.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 <div className="space-y-4">

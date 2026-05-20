@@ -147,30 +147,6 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
     y += 3;
   }
 
-  // Checklist
-  const checklist: Array<{ label: string; done?: boolean }> = service.checklist || [];
-  if (checklist.length) {
-    ensureSpace(12);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.setTextColor(20, 20, 30);
-    doc.text("Checklist", margin, y);
-    y += 6;
-    doc.setFontSize(10);
-    checklist.forEach((it) => {
-      ensureSpace(6);
-      const mark = it.done ? "[X]" : "[ ]";
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(it.done ? 30 : 150, it.done ? 130 : 150, it.done ? 60 : 160);
-      doc.text(mark, margin, y);
-      doc.setFont("helvetica", "normal");
-      doc.setTextColor(20, 20, 30);
-      const lines = doc.splitTextToSize(it.label, pageW - margin * 2 - 10);
-      doc.text(lines, margin + 8, y);
-      y += 5.5 * lines.length;
-    });
-    y += 4;
-  }
 
   if (service.notes) {
     ensureSpace(14);

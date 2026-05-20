@@ -151,15 +151,6 @@ export const PART_CONDITION = [
    { value: "cancelled", label: "Cancelado" },
  ] as const;
 
-export const SERVICE_CHECKLISTS: Record<string, string[]> = {
-  "50h": ["Troca de óleo", "Filtro de óleo", "Inspeção visual motor", "Verificação de vazamentos", "Inspeção pneus"],
-  "100h": ["Troca de óleo", "Filtro de óleo e ar", "Inspeção compressão", "Bujões magnéticos", "Sistema combustível", "Sistema elétrico"],
-  "annual_inspection": ["Inspeção anual completa", "Documentação", "Pesagem", "Sistemas de emergência", "Cinto de segurança"],
-  "cva": ["Vistoria documental", "Inspeção visual", "Teste de sistemas", "Conferência peso e balanceamento"],
-  "boroscopia": ["Inspeção câmaras combustão", "Inspeção válvulas", "Registro fotográfico", "Relatório técnico"],
-  "ad_compliance": ["Verificação aplicabilidade", "Cumprimento de instruções", "Registro em livro"],
-  "sb_compliance": ["Avaliação SB", "Aplicação", "Registro técnico"],
-};
 export const SECURITY_QUESTIONS = [
   "Qual o nome do seu primeiro animal de estimação?",
   "Em que cidade você nasceu?",
