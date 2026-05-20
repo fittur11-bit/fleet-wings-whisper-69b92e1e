@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, BarChart3, Archive, Package, History, Building2, ListChecks, GitBranch, Megaphone, DollarSign } from "lucide-react";
+  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, Package, Building2, ListChecks, GitBranch, Megaphone, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -13,14 +13,12 @@ const items = [
   { to: "/rab", label: "Consulta RAB", icon: Search },
    { to: "/parts", label: "Peças", icon: Cog },
    { to: "/applicability", label: "Aplicabilidade", icon: ShieldCheck },
-  { to: "/flight-logs", label: "Diário de Bordo", icon: History },
   { to: "/services", label: "Manutenção", icon: Wrench },
   { to: "/service-prices", label: "Tabela de Preços", icon: DollarSign },
   { to: "/shipments", label: "Componentes Externos", icon: Package },
   { to: "/suppliers", label: "Fornecedores", icon: Building2 },
    { to: "/library", label: "Biblioteca", icon: BookMarked },
-  { to: "/usage", label: "Custos e Uso", icon: BarChart3 },
-  { to: "/backup", label: "Backup & Limpeza", icon: Archive },
+  { to: "/admin", label: "Administrador", icon: ShieldCheck },
 ] as const;
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
