@@ -355,19 +355,6 @@ function ServicesPage() {
                     <p className="text-sm whitespace-pre-wrap">{viewing.description || "Nenhuma descrição fornecida."}</p>
                   </div>
 
-                  {(viewing.checklist || []).length > 0 && (
-                    <div className="glass-card p-4 rounded-xl space-y-3">
-                      <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Checklist</h4>
-                      <div className="space-y-2">
-                        {viewing.checklist.map((item: any, i: number) => (
-                          <div key={i} className="flex items-center gap-2 text-sm">
-                            <CheckCircle2 className={cn("h-4 w-4", item.done ? "text-green-500" : "text-muted-foreground/30")} />
-                            <span className={item.done ? "text-foreground" : "text-muted-foreground line-through decoration-1"}>{item.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 <div className="space-y-4">
