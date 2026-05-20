@@ -119,6 +119,57 @@ export type Database = {
         }
         Relationships: []
       }
+      demands: {
+        Row: {
+          aircraft_id: string | null
+          aircraft_prefix: string | null
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          deadline: string | null
+          description: string | null
+          id: string
+          location: string | null
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aircraft_id?: string | null
+          aircraft_prefix?: string | null
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          deadline?: string | null
+          description?: string | null
+          id?: string
+          location?: string | null
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           aircraft_id: string | null

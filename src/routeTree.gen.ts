@@ -19,6 +19,7 @@ import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as FlightLogsRouteImport } from './routes/flight-logs'
+import { Route as DemandsRouteImport } from './routes/demands'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BackupRouteImport } from './routes/backup'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -76,6 +77,11 @@ const FlightLogsRoute = FlightLogsRouteImport.update({
   path: '/flight-logs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DemandsRoute = DemandsRouteImport.update({
+  id: '/demands',
+  path: '/demands',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
+  '/demands': typeof DemandsRoute
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
+  '/demands': typeof DemandsRoute
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
+  '/demands': typeof DemandsRoute
   '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/backup'
     | '/dashboard'
+    | '/demands'
     | '/flight-logs'
     | '/library'
     | '/parts'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/backup'
     | '/dashboard'
+    | '/demands'
     | '/flight-logs'
     | '/library'
     | '/parts'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/backup'
     | '/dashboard'
+    | '/demands'
     | '/flight-logs'
     | '/library'
     | '/parts'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BackupRoute: typeof BackupRoute
   DashboardRoute: typeof DashboardRoute
+  DemandsRoute: typeof DemandsRoute
   FlightLogsRoute: typeof FlightLogsRoute
   LibraryRoute: typeof LibraryRoute
   PartsRoute: typeof PartsRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FlightLogsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/demands': {
+      id: '/demands'
+      path: '/demands'
+      fullPath: '/demands'
+      preLoaderRoute: typeof DemandsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BackupRoute: BackupRoute,
   DashboardRoute: DashboardRoute,
+  DemandsRoute: DemandsRoute,
   FlightLogsRoute: FlightLogsRoute,
   LibraryRoute: LibraryRoute,
   PartsRoute: PartsRoute,
