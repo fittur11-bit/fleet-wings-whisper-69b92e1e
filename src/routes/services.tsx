@@ -432,6 +432,45 @@ function ServicesPage() {
                     </>
                   )}
 
+                  {allShipments.filter(s => s.aircraft_id === viewing.aircraft_id && s.status !== "received").length > 0 && (
+                    <div className="pt-4 border-t border-white/5 space-y-4">
+                      <h4 className="font-semibold text-sm uppercase tracking-wider text-primary flex items-center gap-2">
+                        <Wrench className="h-4 w-4" />
+                        Peças em Reparo (Aeronave)
+                      </h4>
+                      <div className="space-y-3">
+                        {allShipments
+                          .filter(s => s.aircraft_id === viewing.aircraft_id && s.status !== "received")
+                          .map((s: any) => (
+                            <div key={s.id} className="glass-card p-3 rounded-lg border border-white/5 bg-white/5">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <p className="font-medium text-sm">{s.part_name}</p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {s.part_number && `P/N: ${s.part_number}`} {s.serial_number && ` • S/N: ${s.serial_number}`}
+                                  </p>
+                                </div>
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary uppercase font-bold">
+                                  {s.status}
+                                </span>
+                              </div>
+                              {s.parts?.photos?.length > 0 && (
+                                <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
+                                  {s.parts.photos.map((photo: any, i: number) => (
+                                    <img 
+                                      key={i} 
+                                      src={photo.url} 
+                                      alt="" 
+                                      className="h-12 w-12 rounded object-cover border border-white/10"
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
