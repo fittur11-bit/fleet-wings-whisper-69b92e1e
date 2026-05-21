@@ -159,6 +159,55 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     y += 5;
   }
 
+  // Parts in Repair Section
+  if (partShipments.length > 0) {
+    ensureSpace(30);
+    doc.setFillColor(245, 245, 250);
+    doc.rect(margin, y - 5, pageW - margin * 2, 8, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(20, 20, 30);
+    doc.text("PEÇAS ENVIADAS PARA REPARO", margin + 2, y);
+    y += 10;
+
+    for (const ship of partShipments) {
+      ensureSpace(25);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(20, 20, 30);
+      doc.text(ship.part_name || "Peça sem nome", margin, y);
+      y += 5;
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(80, 80, 90);
+      
+      const details = [
+        ship.part_number ? `P/N: ${ship.part_number}` : null,
+        ship.serial_number ? `S/N: ${ship.serial_number}` : null,
+        ship.shipping_date ? `Enviado em: ${format(parseISO(ship.shipping_date), "dd/MM/yyyy")}` : null,
+        ship.destination_workshop ? `Oficina: ${ship.destination_workshop}` : null,
+        ship.status ? `Status: ${ship.status}` : null
+      ].filter(Boolean).join("  •  ");
+
+      doc.text(details, margin, y);
+      y += 5;
+
+      if (ship.notes) {
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 110);
+        const notes = doc.splitTextToSize(`Obs: ${ship.notes}`, pageW - margin * 2);
+        notes.forEach((line: string) => {
+          ensureSpace(5);
+          doc.text(line, margin, y);
+          y += 4;
+        });
+      }
+      y += 4;
+    }
+    y += 5;
+  }
+
   // Photos — ordered by upload timestamp
   const sortByUploadDate = (photos: any[]) => {
     const seen = new Set<string>();
