@@ -26,7 +26,7 @@ async function fetchImageAsDataURL(url: string): Promise<{ data: string; w: numb
   }
 }
 
-export async function generateServiceReport(service: any, aircraft?: any): Promise<Blob> {
+export async function generateServiceReport(service: any, aircraft?: any, partShipments: any[] = []): Promise<Blob> {
   let downloadedBytes = 0;
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
