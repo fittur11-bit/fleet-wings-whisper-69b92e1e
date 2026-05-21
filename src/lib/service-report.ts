@@ -203,7 +203,23 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
           y += 4;
         });
       }
-      y += 4;
+
+      // Show photo captions if they exist
+      const partPhotos = ship.parts?.photos || [];
+      const captions = partPhotos.map((p: any) => p.description).filter(Boolean);
+      if (captions.length > 0) {
+        doc.setFontSize(8);
+        doc.setTextColor(110, 110, 120);
+        captions.forEach((cap: string) => {
+          ensureSpace(5);
+          const capText = doc.splitTextToSize(`• Foto: ${cap}`, pageW - margin * 4);
+          capText.forEach((line: string) => {
+            doc.text(line, margin + 5, y);
+            y += 4;
+          });
+        });
+      }
+      y += 3;
     }
     y += 5;
   }

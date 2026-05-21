@@ -702,7 +702,7 @@ function PartForm({ initial, aircraft, onDone }: { initial: any; aircraft: any[]
          </div>
          <div className="sm:col-span-2">
            <Label>Fotos</Label>
-           <ImageUpload bucket="part-photos" value={photos} onChange={(v) => setValue("photos", v)} multiple label="Adicionar fotos" />
+           <ImageUpload bucket="part-photos" value={photos} onChange={(v) => setValue("photos", v)} multiple withDescription label="Adicionar fotos" />
          </div>
       </div>
       <DialogFooter>

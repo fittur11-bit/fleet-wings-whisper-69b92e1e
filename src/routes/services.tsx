@@ -457,12 +457,18 @@ function ServicesPage() {
                               {s.parts?.photos?.length > 0 && (
                                 <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
                                   {s.parts.photos.map((photo: any, i: number) => (
-                                    <img 
-                                      key={i} 
-                                      src={photo.url} 
-                                      alt="" 
-                                      className="h-12 w-12 rounded object-cover border border-white/10"
-                                    />
+                                    <div key={i} className="flex-shrink-0 space-y-1">
+                                      <img 
+                                        src={photo.url} 
+                                        alt="" 
+                                        className="h-12 w-12 rounded object-cover border border-white/10"
+                                      />
+                                      {photo.description && (
+                                        <p className="text-[8px] text-muted-foreground max-w-[48px] truncate">
+                                          {photo.description}
+                                        </p>
+                                      )}
+                                    </div>
                                   ))}
                                 </div>
                               )}
