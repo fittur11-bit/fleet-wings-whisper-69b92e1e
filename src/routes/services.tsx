@@ -432,7 +432,7 @@ function ServicesPage() {
                     </>
                   )}
 
-                  {allShipments.filter(s => s.aircraft_id === viewing.aircraft_id && s.status !== "received").length > 0 && (
+                  {allShipments.filter(s => s.aircraft_id === viewing.aircraft_id && !["received", "cancelled"].includes(s.status)).length > 0 && (
                     <div className="pt-4 border-t border-white/5 space-y-4">
                       <h4 className="font-semibold text-sm uppercase tracking-wider text-primary flex items-center gap-2">
                         <Wrench className="h-4 w-4" />
@@ -440,7 +440,7 @@ function ServicesPage() {
                       </h4>
                       <div className="space-y-3">
                         {allShipments
-                          .filter(s => s.aircraft_id === viewing.aircraft_id && s.status !== "received")
+                          .filter(s => s.aircraft_id === viewing.aircraft_id && !["received", "cancelled"].includes(s.status))
                           .map((s: any) => (
                             <div key={s.id} className="glass-card p-3 rounded-lg border border-white/5 bg-white/5">
                               <div className="flex justify-between items-start">
