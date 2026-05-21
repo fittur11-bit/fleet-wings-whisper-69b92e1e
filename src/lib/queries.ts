@@ -22,7 +22,7 @@ export function useAircraft() {
      queryFn: async () => {
        const { data, error } = await supabase
          .from("part_shipments")
-         .select("*, aircraft:aircraft_id(prefix, model)")
+          .select("*, aircraft:aircraft_id(prefix, model), parts:part_id(photos)")
          .order("created_at", { ascending: false });
        if (error) throw error;
        return data || [];
