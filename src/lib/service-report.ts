@@ -356,8 +356,8 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
   return blob;
 }
 
-export async function downloadServiceReport(service: any, aircraft?: any) {
-  const blob = await generateServiceReport(service, aircraft);
+export async function downloadServiceReport(service: any, aircraft?: any, partShipments: any[] = []) {
+  const blob = await generateServiceReport(service, aircraft, partShipments);
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
