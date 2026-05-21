@@ -31,129 +31,123 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
-  const margin = 15;
+  const margin = 12;
   let y = margin;
 
   const ensureSpace = (needed: number) => {
     if (y + needed > pageH - margin) {
       doc.addPage();
       y = margin;
+      renderHeaderCompact();
     }
   };
 
-  // Header gold bar
-  doc.setFillColor(212, 175, 55);
-  doc.rect(0, 0, pageW, 8, "F");
-  y = 18;
+  const renderHeaderCompact = () => {
+    doc.setFillColor(212, 175, 55);
+    doc.rect(0, 0, pageW, 5, "F");
+    y = margin + 5;
+  };
 
+  // Header
+  doc.setFillColor(20, 20, 30);
+  doc.rect(0, 0, pageW, 25, "F");
+  
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
-  doc.setTextColor(20, 20, 30);
-  doc.text("Relatório de Serviço", margin, y);
-  y += 6;
+  doc.setFontSize(22);
+  doc.setTextColor(255, 255, 255);
+  doc.text("RELATÓRIO DE SERVIÇO", margin, 17);
+  
+  doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
-  doc.setTextColor(110, 110, 120);
-  doc.text("FlightCore — Aviation", margin, y);
+  doc.setTextColor(200, 200, 200);
+  doc.text("FLIGHTCORE — AVIATION", margin, 21);
+  
+  doc.setTextColor(255, 255, 255);
   doc.text(
-    `Emitido em ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}`,
+    `Emitido: ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}`,
     pageW - margin,
-    y,
-    { align: "right" },
+    17,
+    { align: "right" }
   );
-  y += 8;
+  
+  y = 35;
 
-  doc.setDrawColor(220, 220, 225);
-  doc.line(margin, y, pageW - margin, y);
-  y += 8;
-
-  // Aircraft section
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(13);
-  doc.setTextColor(20, 20, 30);
-  doc.text("Aeronave", margin, y);
-  y += 6;
-
+  // Compact Info Grid
   const ac = aircraft || service.aircraft || {};
-  const acRows: [string, string][] = [
-    ["Prefixo", ac.prefix || service.aircraft_prefix || "—"],
-    ["Modelo", ac.model || "—"],
-    ["Fabricante", ac.manufacturer || "—"],
-    ["N° Série", ac.serial_number || "—"],
-    ["Proprietário", ac.owner || "—"],
-    ["Horas Totais", ac.total_hours != null ? String(ac.total_hours) : "—"],
-  ];
-  doc.setFontSize(10);
-  acRows.forEach(([k, v]) => {
-    ensureSpace(6);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(90, 90, 100);
-    doc.text(`${k}:`, margin, y);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(20, 20, 30);
-    doc.text(String(v), margin + 35, y);
-    y += 5.5;
-  });
-  y += 4;
-
-  // Service section
-  ensureSpace(20);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(13);
-  doc.text("Detalhes do Serviço", margin, y);
-  y += 6;
-
   const types = (service.service_types?.length ? service.service_types : [service.service_type])
     .filter(Boolean)
     .map((t: string) => SERVICE_TYPES.find((x) => x.value === t)?.label || t)
     .join(", ");
 
-  const svcRows: [string, string][] = [
-    ["Tipos", types || "—"],
-    ["Status", service.status || "—"],
-    ["Data", service.performed_at ? format(parseISO(service.performed_at), "dd/MM/yyyy", { locale: ptBR }) : "—"],
-    ["Horas no Serviço", service.hours_at_service != null ? String(service.hours_at_service) : "—"],
-    ["Técnico", service.technician || "—"],
-    ["Local", service.location || "—"],
-    ["Custo", service.cost != null ? `R$ ${Number(service.cost).toFixed(2)}` : "—"],
-  ];
-  doc.setFontSize(10);
-  svcRows.forEach(([k, v]) => {
-    ensureSpace(6);
+  const leftColX = margin;
+  const rightColX = pageW / 2 + 5;
+  const labelW = 35;
+
+  const renderRow = (label: string, value: string, x: number, currentY: number) => {
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(90, 90, 100);
-    doc.text(`${k}:`, margin, y);
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 110);
+    doc.text(`${label}:`, x, currentY);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(20, 20, 30);
-    doc.text(String(v), margin + 35, y);
-    y += 5.5;
-  });
-  y += 3;
+    doc.text(String(value || "—"), x + labelW, currentY);
+  };
 
+  // Aircraft Section Header
+  doc.setFillColor(245, 245, 250);
+  doc.rect(margin, y - 5, pageW - margin * 2, 8, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(20, 20, 30);
+  doc.text("DADOS DA AERONAVE E SERVIÇO", margin + 2, y);
+  y += 10;
+
+  // Grid Layout
+  renderRow("Prefixo", ac.prefix || service.aircraft_prefix, leftColX, y);
+  renderRow("Status", service.status, rightColX, y);
+  y += 6;
+  renderRow("Modelo", ac.model, leftColX, y);
+  renderRow("Data", service.performed_at ? format(parseISO(service.performed_at), "dd/MM/yyyy", { locale: ptBR }) : "", rightColX, y);
+  y += 6;
+  renderRow("Fabricante", ac.manufacturer, leftColX, y);
+  renderRow("Horas Totais", ac.total_hours != null ? String(ac.total_hours) : "", rightColX, y);
+  y += 6;
+  renderRow("N° Série", ac.serial_number, leftColX, y);
+  renderRow("Técnico", service.technician, rightColX, y);
+  y += 6;
+  renderRow("Proprietário", ac.owner, leftColX, y);
+  renderRow("Local", service.location, rightColX, y);
+  y += 6;
+  renderRow("Tipo(s)", types, leftColX, y);
+  renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
+  
+  y += 10;
+
+  // Description and Notes
   if (service.description) {
-    ensureSpace(14);
+    ensureSpace(20);
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(90, 90, 100);
-    doc.text("Descrição:", margin, y);
+    doc.setFontSize(11);
+    doc.setTextColor(20, 20, 30);
+    doc.text("DESCRIÇÃO DOS SERVIÇOS", margin, y);
     y += 5;
     doc.setFont("helvetica", "normal");
-    doc.setTextColor(20, 20, 30);
+    doc.setFontSize(10);
     const desc = doc.splitTextToSize(String(service.description), pageW - margin * 2);
     desc.forEach((line: string) => {
       ensureSpace(5);
       doc.text(line, margin, y);
       y += 5;
     });
-    y += 3;
+    y += 5;
   }
 
-
   if (service.notes) {
-    ensureSpace(14);
+    ensureSpace(20);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
-    doc.text("Observações", margin, y);
-    y += 6;
+    doc.setFontSize(11);
+    doc.text("OBSERVAÇÕES ADICIONAIS", margin, y);
+    y += 5;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(10);
     const notes = doc.splitTextToSize(String(service.notes), pageW - margin * 2);
@@ -162,57 +156,67 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
       doc.text(line, margin, y);
       y += 5;
     });
-    y += 4;
+    y += 5;
   }
 
-  // Photos — ordered by upload timestamp embedded in the filename (Date.now() prefix)
-  const sortByUploadDate = (urls: string[]) => {
+  // Photos — ordered by upload timestamp
+  const sortByUploadDate = (photos: any[]) => {
     const seen = new Set<string>();
-    return urls
-      .filter((u) => {
-        if (!u || seen.has(u)) return false;
-        seen.add(u);
+    return photos
+      .filter((p) => {
+        const url = typeof p === 'string' ? p : p.url;
+        if (!url || seen.has(url)) return false;
+        seen.add(url);
         return true;
       })
-      .map((u) => {
-        const file = u.split("/").pop() || "";
+      .map((p) => {
+        const url = typeof p === 'string' ? p : p.url;
+        const file = url.split("/").pop() || "";
         const ts = parseInt(file.split("-")[0], 10);
-        return { url: u, ts: Number.isFinite(ts) ? ts : 0 };
+        return { 
+          url, 
+          description: typeof p === 'string' ? '' : p.description,
+          ts: Number.isFinite(ts) ? ts : 0 
+        };
       })
-      .sort((a, b) => a.ts - b.ts)
-      .map((x) => x.url);
+      .sort((a, b) => a.ts - b.ts);
   };
 
-  const renderPhotoSection = async (title: string, photos: string[]) => {
-    if (!photos.length) return;
-    doc.addPage();
-    y = margin;
+  const renderPhotoSection = async (title: string, photoObjects: any[]) => {
+    if (!photoObjects.length) return;
+    
+    ensureSpace(30);
+    y += 5;
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(13);
+    doc.setFontSize(12);
     doc.setTextColor(20, 20, 30);
-    doc.text(`${title} (${photos.length})`, margin, y);
-    y += 6;
+    doc.text(`${title} (${photoObjects.length})`, margin, y);
+    y += 8;
 
-    // Uniform square cells; images rendered inside preserving aspect ratio (no distortion)
     const cols = 2;
-    const gap = 5;
+    const gap = 6;
     const cellW = (pageW - margin * 2 - gap * (cols - 1)) / cols;
-    const cellH = cellW; // square cells for consistent layout
+    const cellH = cellW * 0.75; // 4:3 aspect ratio cells
 
     let col = 0;
     let xPos = margin;
 
-    for (const url of photos) {
-      const img = await fetchImageAsDataURL(url);
+    for (const photo of photoObjects) {
+      const img = await fetchImageAsDataURL(photo.url);
       if (!img) continue;
       downloadedBytes += img.bytes;
 
       if (col === 0) {
-        ensureSpace(cellH + 4);
-        xPos = margin;
+        // Need space for image + description lines
+        const needed = cellH + (photo.description ? 12 : 5);
+        if (y + needed > pageH - margin) {
+          doc.addPage();
+          y = margin + 10;
+          xPos = margin;
+        }
       }
 
-      // Fit image inside cell preserving aspect ratio (contain)
+      // Fit image inside cell
       const ratio = img.w / img.h;
       let drawW = cellW;
       let drawH = cellW / ratio;
@@ -223,49 +227,65 @@ export async function generateServiceReport(service: any, aircraft?: any): Promi
       const offX = xPos + (cellW - drawW) / 2;
       const offY = y + (cellH - drawH) / 2;
 
-      // Subtle frame around the cell for visual consistency
-      doc.setDrawColor(230, 230, 235);
-      doc.setLineWidth(0.2);
-      doc.rect(xPos, y, cellW, cellH);
-
+      // Draw image
       const fmt = img.data.startsWith("data:image/png") ? "PNG" : "JPEG";
       try {
         doc.addImage(img.data, fmt, offX, offY, drawW, drawH);
-      } catch {
-        // skip unsupported format
+      } catch (e) {
+        console.error("PDF Image error", e);
+      }
+
+      // Border
+      doc.setDrawColor(220, 220, 225);
+      doc.setLineWidth(0.1);
+      doc.rect(xPos, y, cellW, cellH);
+
+      // Description
+      if (photo.description) {
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(60, 60, 70);
+        const descLines = doc.splitTextToSize(photo.description, cellW);
+        let descY = y + cellH + 4;
+        descLines.slice(0, 2).forEach((line: string) => {
+          doc.text(line, xPos, descY);
+          descY += 4;
+        });
       }
 
       col++;
       if (col >= cols) {
         col = 0;
-        y += cellH + gap;
+        y += cellH + (photoObjects.some(p => p.description) ? 15 : 8);
+        xPos = margin;
       } else {
         xPos += cellW + gap;
       }
     }
-    if (col !== 0) y += cellH + gap;
+    if (col !== 0) y += cellH + 15;
   };
 
-  const photos = sortByUploadDate((service.photos || []).filter(Boolean));
-  const repairPhotos = sortByUploadDate((service.repair_photos || []).filter(Boolean));
-  await renderPhotoSection("Fotos do Serviço", photos);
-  await renderPhotoSection("Fotos de Peças / Reparo", repairPhotos);
+  const photos = sortByUploadDate(service.photos || []);
+  const repairPhotos = sortByUploadDate(service.repair_photos || []);
+  
+  await renderPhotoSection("FOTOS DO SERVIÇO", photos);
+  await renderPhotoSection("FOTOS DE PEÇAS / REPARO", repairPhotos);
 
-  // Footer page numbers
+  // Footer
   const pageCount = doc.getNumberOfPages();
   for (let i = 1; i <= pageCount; i++) {
     doc.setPage(i);
+    doc.setDrawColor(230, 230, 235);
+    doc.line(margin, pageH - 12, pageW - margin, pageH - 12);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(140, 140, 150);
     doc.text(`Página ${i} de ${pageCount}`, pageW - margin, pageH - 8, { align: "right" });
-    doc.text("FlightCore", margin, pageH - 8);
+    doc.text("Documento gerado eletronicamente por FlightCore Aviation System", margin, pageH - 8);
   }
 
   const blob = doc.output("blob");
 
-  // Track PDF generation as egress (download bandwidth). bytes=0 to avoid
-  // inflating the "Uploads" chart; real total is in metadata + cost.
   const totalEgressBytes = downloadedBytes + blob.size;
   await trackUsage({
     event_type: "db_write",

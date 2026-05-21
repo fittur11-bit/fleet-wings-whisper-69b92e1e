@@ -98,6 +98,13 @@ function ServicesPage() {
   const openEdit = (s: any) => {
     setEditing(s);
     setSelectedTypes(s.service_types?.length ? s.service_types : (s.service_type ? [s.service_type] : []));
+    
+    // Normalize photos to objects
+    const normalizePhotos = (photos: any) => {
+      if (!photos) return [];
+      return Array.isArray(photos) ? photos.map((p: any) => typeof p === 'string' ? { url: p, description: "" } : p) : [];
+    };
+
     setForm({
       aircraft_id: s.aircraft_id || "",
       supplier_id: s.supplier_id || "",
@@ -106,12 +113,13 @@ function ServicesPage() {
       technician: s.technician || "",
       location: s.location || "",
       description: s.description || "",
-      photos: s.photos || [],
-      repair_photos: s.repair_photos || [],
+      photos: normalizePhotos(s.photos),
+      repair_photos: normalizePhotos(s.repair_photos),
       cost: s.cost != null ? String(s.cost) : "",
     });
     setOpen(true);
   };
+
 
   const remove = async (id: string) => {
     if (!confirm("Excluir serviço?")) return;
@@ -202,12 +210,13 @@ function ServicesPage() {
                   <div><Label>Descrição</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} /></div>
                 </TabsContent>
                 <TabsContent value="photos" className="mt-4">
-                  <ImageUpload bucket="service-photos" multiple value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
+                  <ImageUpload bucket="service-photos" multiple withDescription value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
                 </TabsContent>
                 <TabsContent value="repair" className="mt-4 space-y-2">
                   <p className="text-sm text-muted-foreground">Fotos das peças que precisam de reparo. Aparecem em seção dedicada no relatório.</p>
-                  <ImageUpload bucket="part-photos" multiple value={form.repair_photos} onChange={(v) => setForm({...form, repair_photos: v})} />
+                  <ImageUpload bucket="part-photos" multiple withDescription value={form.repair_photos} onChange={(v) => setForm({...form, repair_photos: v})} />
                 </TabsContent>
+
               </Tabs>
               <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
                 <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
@@ -268,14 +277,17 @@ function ServicesPage() {
               <div className="mt-3 flex gap-2">
                 {s.photos?.length ? (
                   <div className="flex -space-x-2 overflow-hidden">
-                    {s.photos.slice(0, 3).map((url: string, i: number) => (
-                      <img 
-                        key={i} 
-                        src={url} 
-                        alt="" 
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background object-cover" 
-                      />
-                    ))}
+                    {s.photos.slice(0, 3).map((photo: any, i: number) => {
+                      const url = typeof photo === 'string' ? photo : photo.url;
+                      return (
+                        <img 
+                          key={i} 
+                          src={url} 
+                          alt="" 
+                          className="inline-block h-8 w-8 rounded-full ring-2 ring-background object-cover" 
+                        />
+                      );
+                    })}
                     {s.photos.length > 3 && (
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-background">
                         +{s.photos.length - 3}
@@ -285,14 +297,17 @@ function ServicesPage() {
                 ) : null}
                 {s.repair_photos?.length ? (
                   <div className="flex -space-x-2 overflow-hidden">
-                    {s.repair_photos.slice(0, 3).map((url: string, i: number) => (
-                      <img 
-                        key={i} 
-                        src={url} 
-                        alt="" 
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background border-2 border-destructive/30 object-cover" 
-                      />
-                    ))}
+                    {s.repair_photos.slice(0, 3).map((photo: any, i: number) => {
+                      const url = typeof photo === 'string' ? photo : photo.url;
+                      return (
+                        <img 
+                          key={i} 
+                          src={url} 
+                          alt="" 
+                          className="inline-block h-8 w-8 rounded-full ring-2 ring-background border-2 border-destructive/30 object-cover" 
+                        />
+                      );
+                    })}
                     {s.repair_photos.length > 3 && (
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-medium ring-2 ring-background text-destructive">
                         +{s.repair_photos.length - 3}
@@ -300,6 +315,7 @@ function ServicesPage() {
                     )}
                   </div>
                 ) : null}
+
               </div>
             </div>
           ))}
@@ -363,12 +379,19 @@ function ServicesPage() {
                     Fotos do Serviço
                   </h4>
                   {viewing.photos?.length ? (
-                    <div className="grid grid-cols-2 gap-2">
-                      {viewing.photos.map((url: string, i: number) => (
-                        <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-primary transition-all">
-                          <img src={url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
-                        </a>
-                      ))}
+                    <div className="grid grid-cols-2 gap-3">
+                      {viewing.photos.map((photo: any, i: number) => {
+                        const url = typeof photo === 'string' ? photo : photo.url;
+                        const desc = typeof photo === 'string' ? '' : photo.description;
+                        return (
+                          <div key={i} className="space-y-1">
+                            <a href={url} target="_blank" rel="noreferrer" className="block relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-primary transition-all">
+                              <img src={url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+                            </a>
+                            {desc && <p className="text-[10px] text-muted-foreground line-clamp-2 px-1">{desc}</p>}
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="h-32 flex flex-col items-center justify-center rounded-lg border border-dashed border-white/10 text-muted-foreground">
@@ -383,15 +406,23 @@ function ServicesPage() {
                         <ImageIcon className="h-4 w-4" />
                         Fotos de Reparo / Peças
                       </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {viewing.repair_photos.map((url: string, i: number) => (
-                          <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-destructive transition-all">
-                            <img src={url} alt={`Reparo ${i + 1}`} className="h-full w-full object-cover" />
-                          </a>
-                        ))}
+                      <div className="grid grid-cols-2 gap-3">
+                        {viewing.repair_photos.map((photo: any, i: number) => {
+                          const url = typeof photo === 'string' ? photo : photo.url;
+                          const desc = typeof photo === 'string' ? '' : photo.description;
+                          return (
+                            <div key={i} className="space-y-1">
+                              <a href={url} target="_blank" rel="noreferrer" className="block relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-destructive transition-all">
+                                <img src={url} alt={`Reparo ${i + 1}`} className="h-full w-full object-cover" />
+                              </a>
+                              {desc && <p className="text-[10px] text-muted-foreground line-clamp-2 px-1">{desc}</p>}
+                            </div>
+                          );
+                        })}
                       </div>
                     </>
                   )}
+
                 </div>
               </div>
             </div>
