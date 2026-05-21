@@ -131,7 +131,15 @@ function ServicesPage() {
     try {
       toast.loading("Gerando relatório...", { id: `rep-${s.id}` });
       const ac = aircraft.find((a) => a.id === s.aircraft_id);
-      await downloadServiceReport(s, ac);
+      
+      // Fetch parts sent for repair for this aircraft that are not yet received
+      const { data: shipments } = await supabase
+        .from("part_shipments")
+        .select("*, parts(photos)")
+        .eq("aircraft_id", s.aircraft_id)
+        .neq("status", "received");
+
+      await downloadServiceReport(s, ac, shipments || []);
       toast.success("Relatório gerado", { id: `rep-${s.id}` });
     } catch (err: any) {
       toast.error(err?.message || "Falha ao gerar relatório", { id: `rep-${s.id}` });
