@@ -138,7 +138,7 @@ function ServicesPage() {
         .from("part_shipments")
         .select("*, parts:part_id(photos)")
         .eq("aircraft_id", s.aircraft_id)
-        .neq("status", "received");
+        .not("status", "in", '("received","cancelled")');
 
       await downloadServiceReport(s, ac, shipments || []);
       toast.success("Relatório gerado", { id: `rep-${s.id}` });
