@@ -98,6 +98,13 @@ function ServicesPage() {
   const openEdit = (s: any) => {
     setEditing(s);
     setSelectedTypes(s.service_types?.length ? s.service_types : (s.service_type ? [s.service_type] : []));
+    
+    // Normalize photos to objects
+    const normalizePhotos = (photos: any) => {
+      if (!photos) return [];
+      return Array.isArray(photos) ? photos.map((p: any) => typeof p === 'string' ? { url: p, description: "" } : p) : [];
+    };
+
     setForm({
       aircraft_id: s.aircraft_id || "",
       supplier_id: s.supplier_id || "",
@@ -106,12 +113,13 @@ function ServicesPage() {
       technician: s.technician || "",
       location: s.location || "",
       description: s.description || "",
-      photos: s.photos || [],
-      repair_photos: s.repair_photos || [],
+      photos: normalizePhotos(s.photos),
+      repair_photos: normalizePhotos(s.repair_photos),
       cost: s.cost != null ? String(s.cost) : "",
     });
     setOpen(true);
   };
+
 
   const remove = async (id: string) => {
     if (!confirm("Excluir serviço?")) return;
