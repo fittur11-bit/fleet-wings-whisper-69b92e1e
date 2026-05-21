@@ -30,6 +30,7 @@ function ServicesPage() {
   const { data: services = [] } = useServices();
   const { data: aircraft = [] } = useAircraft();
   const { data: suppliers = [] } = useSuppliers();
+  const { data: allShipments = [] } = useShipments();
   const { user } = useAuth();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
