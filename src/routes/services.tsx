@@ -372,12 +372,19 @@ function ServicesPage() {
                     Fotos do Serviço
                   </h4>
                   {viewing.photos?.length ? (
-                    <div className="grid grid-cols-2 gap-2">
-                      {viewing.photos.map((url: string, i: number) => (
-                        <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-primary transition-all">
-                          <img src={url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
-                        </a>
-                      ))}
+                    <div className="grid grid-cols-2 gap-3">
+                      {viewing.photos.map((photo: any, i: number) => {
+                        const url = typeof photo === 'string' ? photo : photo.url;
+                        const desc = typeof photo === 'string' ? '' : photo.description;
+                        return (
+                          <div key={i} className="space-y-1">
+                            <a href={url} target="_blank" rel="noreferrer" className="block relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-primary transition-all">
+                              <img src={url} alt={`Foto ${i + 1}`} className="h-full w-full object-cover" />
+                            </a>
+                            {desc && <p className="text-[10px] text-muted-foreground line-clamp-2 px-1">{desc}</p>}
+                          </div>
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="h-32 flex flex-col items-center justify-center rounded-lg border border-dashed border-white/10 text-muted-foreground">
@@ -392,15 +399,23 @@ function ServicesPage() {
                         <ImageIcon className="h-4 w-4" />
                         Fotos de Reparo / Peças
                       </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        {viewing.repair_photos.map((url: string, i: number) => (
-                          <a key={i} href={url} target="_blank" rel="noreferrer" className="relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-destructive transition-all">
-                            <img src={url} alt={`Reparo ${i + 1}`} className="h-full w-full object-cover" />
-                          </a>
-                        ))}
+                      <div className="grid grid-cols-2 gap-3">
+                        {viewing.repair_photos.map((photo: any, i: number) => {
+                          const url = typeof photo === 'string' ? photo : photo.url;
+                          const desc = typeof photo === 'string' ? '' : photo.description;
+                          return (
+                            <div key={i} className="space-y-1">
+                              <a href={url} target="_blank" rel="noreferrer" className="block relative aspect-square overflow-hidden rounded-lg border border-white/10 hover:ring-2 ring-destructive transition-all">
+                                <img src={url} alt={`Reparo ${i + 1}`} className="h-full w-full object-cover" />
+                              </a>
+                              {desc && <p className="text-[10px] text-muted-foreground line-clamp-2 px-1">{desc}</p>}
+                            </div>
+                          );
+                        })}
                       </div>
                     </>
                   )}
+
                 </div>
               </div>
             </div>
