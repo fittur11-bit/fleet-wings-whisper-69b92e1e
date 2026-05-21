@@ -136,7 +136,7 @@ function ServicesPage() {
       // Fetch parts sent for repair for this aircraft that are not yet received
       const { data: shipments } = await supabase
         .from("part_shipments")
-        .select("*, parts(photos)")
+        .select("*, parts:part_id(photos)")
         .eq("aircraft_id", s.aircraft_id)
         .neq("status", "received");
 
