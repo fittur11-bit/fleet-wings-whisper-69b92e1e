@@ -210,12 +210,13 @@ function ServicesPage() {
                   <div><Label>Descrição</Label><Textarea rows={3} value={form.description} onChange={(e) => setForm({...form, description: e.target.value})} /></div>
                 </TabsContent>
                 <TabsContent value="photos" className="mt-4">
-                  <ImageUpload bucket="service-photos" multiple value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
+                  <ImageUpload bucket="service-photos" multiple withDescription value={form.photos} onChange={(v) => setForm({...form, photos: v})} />
                 </TabsContent>
                 <TabsContent value="repair" className="mt-4 space-y-2">
                   <p className="text-sm text-muted-foreground">Fotos das peças que precisam de reparo. Aparecem em seção dedicada no relatório.</p>
-                  <ImageUpload bucket="part-photos" multiple value={form.repair_photos} onChange={(v) => setForm({...form, repair_photos: v})} />
+                  <ImageUpload bucket="part-photos" multiple withDescription value={form.repair_photos} onChange={(v) => setForm({...form, repair_photos: v})} />
                 </TabsContent>
+
               </Tabs>
               <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
                 <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
