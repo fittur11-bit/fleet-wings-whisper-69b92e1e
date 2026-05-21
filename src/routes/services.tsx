@@ -277,14 +277,17 @@ function ServicesPage() {
               <div className="mt-3 flex gap-2">
                 {s.photos?.length ? (
                   <div className="flex -space-x-2 overflow-hidden">
-                    {s.photos.slice(0, 3).map((url: string, i: number) => (
-                      <img 
-                        key={i} 
-                        src={url} 
-                        alt="" 
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background object-cover" 
-                      />
-                    ))}
+                    {s.photos.slice(0, 3).map((photo: any, i: number) => {
+                      const url = typeof photo === 'string' ? photo : photo.url;
+                      return (
+                        <img 
+                          key={i} 
+                          src={url} 
+                          alt="" 
+                          className="inline-block h-8 w-8 rounded-full ring-2 ring-background object-cover" 
+                        />
+                      );
+                    })}
                     {s.photos.length > 3 && (
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-background">
                         +{s.photos.length - 3}
@@ -294,14 +297,17 @@ function ServicesPage() {
                 ) : null}
                 {s.repair_photos?.length ? (
                   <div className="flex -space-x-2 overflow-hidden">
-                    {s.repair_photos.slice(0, 3).map((url: string, i: number) => (
-                      <img 
-                        key={i} 
-                        src={url} 
-                        alt="" 
-                        className="inline-block h-8 w-8 rounded-full ring-2 ring-background border-2 border-destructive/30 object-cover" 
-                      />
-                    ))}
+                    {s.repair_photos.slice(0, 3).map((photo: any, i: number) => {
+                      const url = typeof photo === 'string' ? photo : photo.url;
+                      return (
+                        <img 
+                          key={i} 
+                          src={url} 
+                          alt="" 
+                          className="inline-block h-8 w-8 rounded-full ring-2 ring-background border-2 border-destructive/30 object-cover" 
+                        />
+                      );
+                    })}
                     {s.repair_photos.length > 3 && (
                       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/10 text-[10px] font-medium ring-2 ring-background text-destructive">
                         +{s.repair_photos.length - 3}
@@ -309,6 +315,7 @@ function ServicesPage() {
                     )}
                   </div>
                 ) : null}
+
               </div>
             </div>
           ))}
