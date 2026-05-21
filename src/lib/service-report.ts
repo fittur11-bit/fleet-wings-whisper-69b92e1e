@@ -315,7 +315,17 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
   };
 
   const photos = sortByUploadDate(service.photos || []);
-  const repairPhotos = sortByUploadDate(service.repair_photos || []);
+  
+  // Collect photos from service and from linked part shipments
+  const shipmentPhotos = partShipments.flatMap(s => {
+    const partPhotos = s.parts?.photos || [];
+    return partPhotos.map((p: any) => ({
+      ...p,
+      description: `[PEÇA: ${s.part_name}] ${p.description || ''}`
+    }));
+  });
+
+  const repairPhotos = sortByUploadDate([...(service.repair_photos || []), ...shipmentPhotos]);
   
   await renderPhotoSection("FOTOS DO SERVIÇO", photos);
   await renderPhotoSection("FOTOS DE PEÇAS / REPARO", repairPhotos);
