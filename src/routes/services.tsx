@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Wrench, Trash2, FileDown, Pencil, Eye, ImageIcon } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useServices, useAircraft, useSuppliers } from "@/lib/queries";
+import { useServices, useAircraft, useSuppliers, useShipments } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
