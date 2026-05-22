@@ -34,6 +34,7 @@ const emptyForm = {
   aircraft_id: "",
   assigned_to: "",
   location: "",
+  resolution_notes: "",
 };
 
 function DemandsPage() {
@@ -45,6 +46,9 @@ function DemandsPage() {
   const [editing, setEditing] = useState<Demand | null>(null);
   const [form, setForm] = useState<typeof emptyForm>(emptyForm);
   const [filter, setFilter] = useState<"active" | "all" | "done">("active");
+  const [resolveOpen, setResolveOpen] = useState(false);
+  const [resolving, setResolving] = useState<Demand | null>(null);
+  const [resolutionText, setResolutionText] = useState("");
 
   // Alert about urgent demands once on load
   useEffect(() => {
@@ -100,6 +104,7 @@ function DemandsPage() {
       aircraft_id: d.aircraft_id || "",
       assigned_to: d.assigned_to || "",
       location: d.location || "",
+      resolution_notes: d.resolution_notes || "",
     });
     setOpen(true);
   };
@@ -121,6 +126,7 @@ function DemandsPage() {
       location: form.location || null,
       user_id: user.id,
       completed_at: form.status === "done" ? new Date().toISOString() : null,
+      resolution_notes: form.resolution_notes?.trim() || null,
     };
     const { error } = editing
       ? await supabase.from("demands" as any).update(payload).eq("id", editing.id)
@@ -133,9 +139,32 @@ function DemandsPage() {
   };
 
   const quickStatus = async (d: Demand, status: Demand["status"]) => {
+    if (status === "done") {
+      setResolving(d);
+      setResolutionText(d.resolution_notes || "");
+      setResolveOpen(true);
+      return;
+    }
     const payload: any = { status, completed_at: status === "done" ? new Date().toISOString() : null };
     const { error } = await supabase.from("demands" as any).update(payload).eq("id", d.id);
     if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries({ queryKey: ["demands"] });
+    refetch();
+  };
+
+  const confirmResolve = async () => {
+    if (!resolving) return;
+    const payload: any = {
+      status: "done",
+      completed_at: new Date().toISOString(),
+      resolution_notes: resolutionText.trim() || null,
+    };
+    const { error } = await supabase.from("demands" as any).update(payload).eq("id", resolving.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Aviso concluído e informações salvas");
+    setResolveOpen(false);
+    setResolving(null);
+    setResolutionText("");
     qc.invalidateQueries({ queryKey: ["demands"] });
     refetch();
   };
