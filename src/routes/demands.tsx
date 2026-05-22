@@ -145,7 +145,7 @@ function DemandsPage() {
       setResolveOpen(true);
       return;
     }
-    const payload: any = { status, completed_at: status === "done" ? new Date().toISOString() : null };
+    const payload: any = { status, completed_at: null };
     const { error } = await supabase.from("demands" as any).update(payload).eq("id", d.id);
     if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["demands"] });
