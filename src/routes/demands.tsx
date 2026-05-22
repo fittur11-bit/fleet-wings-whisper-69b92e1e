@@ -406,6 +406,15 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
           {d.location && <span>📍 {d.location}</span>}
         </div>
 
+        {done && d.resolution_notes && (
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2">
+            <p className="text-[10px] uppercase tracking-wider text-emerald-300/80 font-semibold">
+              Resolução{d.completed_at ? ` · ${format(parseISO(d.completed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}` : ""}
+            </p>
+            <p className="mt-1 text-xs text-emerald-100/90 whitespace-pre-wrap">{d.resolution_notes}</p>
+          </div>
+        )}
+
         <div className="flex items-center gap-1 pt-2 border-t border-white/5">
           {d.status !== "done" && (
             <Button size="sm" variant="ghost" onClick={() => onStatus(d, "done")} className="text-emerald-400 hover:text-emerald-300">
