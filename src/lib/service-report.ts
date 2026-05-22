@@ -83,6 +83,9 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
   const rightColX = pageW / 2 + 5;
   const labelW = 35;
 
+  const colW = (pageW - margin * 2) / 2 - 5;
+  const valueMaxW = colW - labelW;
+
   const renderRow = (label: string, value: string, x: number, currentY: number) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
@@ -90,7 +93,9 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     doc.text(`${label}:`, x, currentY);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(20, 20, 30);
-    doc.text(String(value || "—"), x + labelW, currentY);
+    const text = String(value || "—");
+    const lines = doc.splitTextToSize(text, valueMaxW);
+    doc.text(lines, x + labelW, currentY);
   };
 
   // Aircraft Section Header
@@ -115,8 +120,19 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
   renderRow("N° Série", ac.serial_number, leftColX, y);
   renderRow("Técnico", service.technician, rightColX, y);
   y += 6;
-  renderRow("Proprietário", ac.owner, leftColX, y);
-  renderRow("Local", service.location, rightColX, y);
+  // Proprietário pode ser longo — ocupa a linha inteira
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 110);
+  doc.text("Proprietário:", leftColX, y);
+  doc.setFont("helvetica", "normal");
+  doc.setTextColor(20, 20, 30);
+  {
+    const ownerLines = doc.splitTextToSize(String(ac.owner || "—"), pageW - margin * 2 - labelW);
+    doc.text(ownerLines, leftColX + labelW, y);
+    y += 6 * Math.max(1, ownerLines.length);
+  }
+  renderRow("Local", service.location, leftColX, y);
   y += 6;
   renderRow("Tipo(s)", types, leftColX, y);
   renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
