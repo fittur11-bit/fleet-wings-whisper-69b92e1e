@@ -17,6 +17,7 @@ export type Demand = {
   completed_at: string | null;
   created_at: string;
   updated_at: string;
+  resolution_notes?: string | null;
 };
 
 export function useDemands() {

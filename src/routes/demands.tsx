@@ -34,6 +34,7 @@ const emptyForm = {
   aircraft_id: "",
   assigned_to: "",
   location: "",
+  resolution_notes: "",
 };
 
 function DemandsPage() {
@@ -45,6 +46,9 @@ function DemandsPage() {
   const [editing, setEditing] = useState<Demand | null>(null);
   const [form, setForm] = useState<typeof emptyForm>(emptyForm);
   const [filter, setFilter] = useState<"active" | "all" | "done">("active");
+  const [resolveOpen, setResolveOpen] = useState(false);
+  const [resolving, setResolving] = useState<Demand | null>(null);
+  const [resolutionText, setResolutionText] = useState("");
 
   // Alert about urgent demands once on load
   useEffect(() => {
@@ -100,6 +104,7 @@ function DemandsPage() {
       aircraft_id: d.aircraft_id || "",
       assigned_to: d.assigned_to || "",
       location: d.location || "",
+      resolution_notes: d.resolution_notes || "",
     });
     setOpen(true);
   };
@@ -121,6 +126,7 @@ function DemandsPage() {
       location: form.location || null,
       user_id: user.id,
       completed_at: form.status === "done" ? new Date().toISOString() : null,
+      resolution_notes: form.resolution_notes?.trim() || null,
     };
     const { error } = editing
       ? await supabase.from("demands" as any).update(payload).eq("id", editing.id)
@@ -133,9 +139,32 @@ function DemandsPage() {
   };
 
   const quickStatus = async (d: Demand, status: Demand["status"]) => {
-    const payload: any = { status, completed_at: status === "done" ? new Date().toISOString() : null };
+    if (status === "done") {
+      setResolving(d);
+      setResolutionText(d.resolution_notes || "");
+      setResolveOpen(true);
+      return;
+    }
+    const payload: any = { status, completed_at: null };
     const { error } = await supabase.from("demands" as any).update(payload).eq("id", d.id);
     if (error) { toast.error(error.message); return; }
+    qc.invalidateQueries({ queryKey: ["demands"] });
+    refetch();
+  };
+
+  const confirmResolve = async () => {
+    if (!resolving) return;
+    const payload: any = {
+      status: "done",
+      completed_at: new Date().toISOString(),
+      resolution_notes: resolutionText.trim() || null,
+    };
+    const { error } = await supabase.from("demands" as any).update(payload).eq("id", resolving.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Aviso concluído e informações salvas");
+    setResolveOpen(false);
+    setResolving(null);
+    setResolutionText("");
     qc.invalidateQueries({ queryKey: ["demands"] });
     refetch();
   };
@@ -221,6 +250,17 @@ function DemandsPage() {
                     <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
                   </div>
                 </div>
+                {(form.status === "done" || form.status === "cancelled") && (
+                  <div>
+                    <Label>Resolução / Observações finais</Label>
+                    <Textarea
+                      value={form.resolution_notes}
+                      onChange={(e) => setForm({ ...form, resolution_notes: e.target.value })}
+                      rows={3}
+                      placeholder="Descreva como o aviso foi resolvido, peças usadas, responsável, etc."
+                    />
+                  </div>
+                )}
                 <div className="flex justify-end gap-2 pt-2">
                   <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
                   <Button type="submit">{editing ? "Salvar" : "Criar"}</Button>
@@ -230,6 +270,39 @@ function DemandsPage() {
           </Dialog>
         }
       />
+
+      <Dialog open={resolveOpen} onOpenChange={setResolveOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Concluir aviso</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            {resolving && (
+              <div className="rounded-lg border border-white/10 bg-background/40 p-3">
+                <p className="text-sm font-semibold">{resolving.title}</p>
+                {resolving.description && <p className="mt-1 text-xs text-muted-foreground">{resolving.description}</p>}
+              </div>
+            )}
+            <div>
+              <Label>Como foi resolvido?</Label>
+              <Textarea
+                value={resolutionText}
+                onChange={(e) => setResolutionText(e.target.value)}
+                rows={4}
+                placeholder="Ex.: Pneu substituído pelo P/N XYZ. Serviço executado por João às 14h."
+                autoFocus
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">Esta informação ficará salva no histórico do aviso.</p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={() => setResolveOpen(false)}>Cancelar</Button>
+              <Button onClick={confirmResolve}>
+                <CheckCircle2 className="mr-1 h-4 w-4" /> Concluir e salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard icon={Megaphone} label="Ativas" value={counts.active} tone="text-foreground" />
@@ -332,6 +405,15 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
           {d.assigned_to && <span>👤 {d.assigned_to}</span>}
           {d.location && <span>📍 {d.location}</span>}
         </div>
+
+        {done && d.resolution_notes && (
+          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2">
+            <p className="text-[10px] uppercase tracking-wider text-emerald-300/80 font-semibold">
+              Resolução{d.completed_at ? ` · ${format(parseISO(d.completed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}` : ""}
+            </p>
+            <p className="mt-1 text-xs text-emerald-100/90 whitespace-pre-wrap">{d.resolution_notes}</p>
+          </div>
+        )}
 
         <div className="flex items-center gap-1 pt-2 border-t border-white/5">
           {d.status !== "done" && (
