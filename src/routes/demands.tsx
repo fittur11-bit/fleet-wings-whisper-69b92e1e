@@ -250,6 +250,17 @@ function DemandsPage() {
                     <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
                   </div>
                 </div>
+                {(form.status === "done" || form.status === "cancelled") && (
+                  <div>
+                    <Label>Resolução / Observações finais</Label>
+                    <Textarea
+                      value={form.resolution_notes}
+                      onChange={(e) => setForm({ ...form, resolution_notes: e.target.value })}
+                      rows={3}
+                      placeholder="Descreva como o aviso foi resolvido, peças usadas, responsável, etc."
+                    />
+                  </div>
+                )}
                 <div className="flex justify-end gap-2 pt-2">
                   <Button type="button" variant="ghost" onClick={() => setOpen(false)}>Cancelar</Button>
                   <Button type="submit">{editing ? "Salvar" : "Criar"}</Button>
@@ -259,6 +270,39 @@ function DemandsPage() {
           </Dialog>
         }
       />
+
+      <Dialog open={resolveOpen} onOpenChange={setResolveOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Concluir aviso</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            {resolving && (
+              <div className="rounded-lg border border-white/10 bg-background/40 p-3">
+                <p className="text-sm font-semibold">{resolving.title}</p>
+                {resolving.description && <p className="mt-1 text-xs text-muted-foreground">{resolving.description}</p>}
+              </div>
+            )}
+            <div>
+              <Label>Como foi resolvido?</Label>
+              <Textarea
+                value={resolutionText}
+                onChange={(e) => setResolutionText(e.target.value)}
+                rows={4}
+                placeholder="Ex.: Pneu substituído pelo P/N XYZ. Serviço executado por João às 14h."
+                autoFocus
+              />
+              <p className="mt-1 text-[11px] text-muted-foreground">Esta informação ficará salva no histórico do aviso.</p>
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={() => setResolveOpen(false)}>Cancelar</Button>
+              <Button onClick={confirmResolve}>
+                <CheckCircle2 className="mr-1 h-4 w-4" /> Concluir e salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard icon={Megaphone} label="Ativas" value={counts.active} tone="text-foreground" />
