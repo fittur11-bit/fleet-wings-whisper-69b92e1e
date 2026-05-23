@@ -36,7 +36,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Mobile header */}
          <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-white/5 bg-background/60 backdrop-blur-xl px-4 py-3">
            <div className="lg:hidden flex items-center gap-2">
-             <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)}>
+             <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}>
                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
              </Button>
            </div>
@@ -70,7 +70,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
         </header>
 
-        <main className="px-4 py-6 lg:px-8 lg:py-8">{children}</main>
+        <main id="main-content" className="px-4 py-6 lg:px-8 lg:py-8">{children}</main>
       </div>
     </div>
   );

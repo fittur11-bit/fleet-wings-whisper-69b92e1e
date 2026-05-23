@@ -83,6 +83,28 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "512x512", href: "/icon-512.png" },
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              name: "FlightCore",
+              url: "https://coreflight.studioonze11.com.br",
+              logo: "https://coreflight.studioonze11.com.br/icon-512.png",
+            },
+            {
+              "@type": "WebSite",
+              name: "FlightCore",
+              url: "https://coreflight.studioonze11.com.br",
+              inLanguage: "pt-BR",
+            },
+          ],
+        }),
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -108,16 +130,18 @@ function RootShell({ children }: { children: React.ReactNode }) {
      defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
    }));
    const [showSplash, setShowSplash] = useState(true);
-   const [theme, setTheme] = useState<Theme>(() => {
-     const saved = localStorage.getItem("flightcore-theme");
-     return (saved as Theme) || "dark";
-   });
+   const [theme, setTheme] = useState<Theme>("dark");
 
    useEffect(() => {
+     const saved = typeof window !== "undefined" ? (localStorage.getItem("flightcore-theme") as Theme | null) : null;
+     if (saved && saved !== theme) {
+       setTheme(saved);
+       return;
+     }
      const root = window.document.documentElement;
      root.classList.remove("light", "dark");
      root.classList.add(theme);
-     localStorage.setItem("flightcore-theme", theme);
+     try { localStorage.setItem("flightcore-theme", theme); } catch {}
    }, [theme]);
 
    const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));

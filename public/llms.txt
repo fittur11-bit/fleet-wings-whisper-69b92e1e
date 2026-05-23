@@ -1,0 +1,10 @@
+# FlightCore
+
+> Plataforma profissional para gestão de frotas aeronáuticas: aeronaves, manutenção, conformidade CVA e biblioteca técnica.
+
+FlightCore é um sistema privado de gestão para operadores aeronáuticos. O acesso a dados de aeronaves, manutenção e documentos exige autenticação.
+
+## Pages
+
+- [Início](/): apresentação da plataforma e ponto de entrada.
+- [Entrar](/auth): tela de login e criação de conta.

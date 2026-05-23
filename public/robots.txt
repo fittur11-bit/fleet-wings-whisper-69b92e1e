@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /auth
+Disallow: /aircraft
+Disallow: /services
+Disallow: /parts
+Disallow: /shipments
+Disallow: /suppliers
+Disallow: /library
+Disallow: /pending
+Disallow: /demands
+Disallow: /timeline
+Disallow: /applicability
+Disallow: /rab
+Disallow: /service-prices
+Disallow: /flight-logs
+Disallow: /backup
+Disallow: /usage
+
+Sitemap: https://coreflight.studioonze11.com.br/sitemap.xml
