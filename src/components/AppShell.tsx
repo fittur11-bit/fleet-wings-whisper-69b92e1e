@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
- import { Menu, X, ArrowLeft, Search, LayoutPanelLeft } from "lucide-react";
+ import { Menu, X, ArrowLeft, Search, LayoutPanelLeft, Plane } from "lucide-react";
 import { useRouter, useRouterState, Link } from "@tanstack/react-router";
  import { AppSidebar } from "./AppSidebar";
  import { CommandMenu } from "./CommandMenu";
