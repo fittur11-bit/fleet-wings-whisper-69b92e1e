@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, Package, Building2, ListChecks, GitBranch, Megaphone, DollarSign } from "lucide-react";
+  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, Package, Building2, ListChecks, GitBranch, Megaphone, DollarSign, Sun, Moon } from "lucide-react";
+import { useTheme } from "@/routes/__root";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,7 @@ const items = [
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
@@ -69,6 +71,21 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             <p className="truncate text-sm font-medium">{user?.user_metadata?.full_name || "Operador"}</p>
             <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
           </div>
+        </div>
+        <div className="flex gap-2 mb-2">
+          <Button 
+            onClick={toggleTheme} 
+            variant="ghost" 
+            size="sm" 
+            className="flex-1 justify-start text-muted-foreground hover:text-foreground"
+          >
+            {theme === "dark" ? (
+              <Sun className="mr-2 h-4 w-4" />
+            ) : (
+              <Moon className="mr-2 h-4 w-4" />
+            )}
+            Modo {theme === "dark" ? "Claro" : "Escuro"}
+          </Button>
         </div>
         <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-muted-foreground hover:text-foreground">
           <LogOut className="mr-2 h-4 w-4" /> Sair

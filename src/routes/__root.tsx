@@ -1,6 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
- import { useState, useEffect } from "react";
+ import { useState, useEffect, createContext, useContext } from "react";
 import { AuthProvider } from "@/lib/auth";
 import { Toaster } from "@/components/ui/sonner";
  import { SplashScreen } from "@/components/SplashScreen";
@@ -28,6 +28,22 @@ function NotFoundComponent() {
     </div>
   );
 }
+
+type Theme = "dark" | "light";
+
+interface ThemeContextType {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useTheme must be used within a ThemeProvider");
+  return context;
+};
 
 export const Route = createRootRoute({
   head: () => ({
@@ -92,16 +108,31 @@ function RootShell({ children }: { children: React.ReactNode }) {
      defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } },
    }));
    const [showSplash, setShowSplash] = useState(true);
+   const [theme, setTheme] = useState<Theme>(() => {
+     const saved = localStorage.getItem("flightcore-theme");
+     return (saved as Theme) || "dark";
+   });
+
+   useEffect(() => {
+     const root = window.document.documentElement;
+     root.classList.remove("light", "dark");
+     root.classList.add(theme);
+     localStorage.setItem("flightcore-theme", theme);
+   }, [theme]);
+
+   const toggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
  
    return (
      <QueryClientProvider client={queryClient}>
-       <AuthProvider>
-         {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
-         <div className={showSplash ? "hidden" : "block"}>
-           <Outlet />
-         </div>
-         <Toaster position="top-right" theme="dark" />
-       </AuthProvider>
+       <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+         <AuthProvider>
+           {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+           <div className={showSplash ? "hidden" : "block"}>
+             <Outlet />
+           </div>
+           <Toaster position="top-right" theme={theme} />
+         </AuthProvider>
+       </ThemeContext.Provider>
      </QueryClientProvider>
    );
  }
