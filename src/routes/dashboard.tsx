@@ -195,11 +195,11 @@ function DashboardContent() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 mb-8">
-        <h1 className="font-display text-4xl font-extrabold tracking-tight gold-text">Dashboard</h1>
-        <p className="text-muted-foreground max-w-2xl">
-          Bem-vindo ao centro de comando do <span className="text-foreground font-semibold">FlightCore</span>. 
-          Acompanhe o status da sua frota e alertas operacionais em tempo real.
+      <div className="flex flex-col gap-2 mb-10 animate-in fade-in slide-in-from-top-4 duration-1000">
+        <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-6xl">Painel de Controle</h1>
+        <p className="text-muted-foreground/80 max-w-2xl text-lg font-medium">
+          Bem-vindo ao centro de comando do <span className="text-primary font-bold tracking-tight">FlightCore</span>. 
+          Acompanhe o status da sua frota e alertas operacionais com precisão.
         </p>
       </div>
 
