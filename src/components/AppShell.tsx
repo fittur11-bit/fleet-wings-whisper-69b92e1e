@@ -94,6 +94,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                   FlightCore
                 </span>
               </Link>
+              
+              <div className="hidden md:flex items-center gap-2">
+                <Button variant="ghost" size="sm" className="text-[10px] font-black tracking-widest uppercase text-muted-foreground/50 hover:text-primary transition-colors">
+                  Suporte
+                </Button>
+                <Button variant="ghost" size="sm" className="text-[10px] font-black tracking-widest uppercase text-muted-foreground/50 hover:text-primary transition-colors">
+                  Docs
+                </Button>
+              </div>
             </div>
           </header>
 
