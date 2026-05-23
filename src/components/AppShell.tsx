@@ -40,7 +40,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <div className="flex-1 lg:pl-64 flex flex-col min-h-screen">
           {/* Top header */}
-          <header className="sticky top-0 z-20 flex h-20 items-center gap-4 border-b border-white/[0.03] bg-[#080c14]/40 backdrop-blur-3xl px-4 lg:px-8 shadow-[0_4px_30px_rgba(0,0,0,0.3)] transition-all">
+          <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-white/[0.05] bg-background/40 backdrop-blur-2xl px-4 lg:px-8">
             <div className="lg:hidden flex items-center gap-2">
               <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="hover:bg-white/5 rounded-full">
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -91,8 +91,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
           </header>
 
-          <main className="flex-1 px-4 py-8 lg:px-12 lg:py-12 max-w-[1800px] mx-auto w-full aviation-grid relative">
-            <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
+          <main className="flex-1 px-4 py-6 lg:px-8 lg:py-10 max-w-[1600px] mx-auto w-full aviation-grid">
             {children}
           </main>
         </div>
