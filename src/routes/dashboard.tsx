@@ -205,15 +205,42 @@ function DashboardContent() {
  
 
   return (
-    <div className="space-y-10">
-      <div className="relative">
-        <div className="absolute -left-4 top-0 h-full w-1 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50" />
-        <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-left-4 duration-1000">
-          <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-7xl">Painel de Controle</h1>
+    <div className="space-y-12 pb-10">
+      <div className="relative p-10 lg:p-16 rounded-[2.5rem] border border-white/5 bg-gradient-to-br from-white/[0.03] to-transparent overflow-hidden group">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-primary/5 to-transparent opacity-30 pointer-events-none" />
+        <div className="absolute -right-20 -top-20 w-80 h-80 bg-primary/10 rounded-full blur-[100px] group-hover:bg-primary/20 transition-all duration-1000" />
+        
+        <div className="relative z-10 flex flex-col gap-6 animate-in fade-in slide-in-from-left-4 duration-1000">
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 px-3 py-1 text-[10px] font-black tracking-[0.2em] uppercase">
+              Operação em Tempo Real
+            </Badge>
+            <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
+            <span className="text-[10px] font-black tracking-[0.2em] uppercase text-emerald-500/70">Sistemas Ativos</span>
+          </div>
+          
+          <div className="space-y-2">
+            <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-7xl lg:text-8xl">
+              FlightCore
+            </h1>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground/90">
+              Gestão Estratégica de Frotas
+            </h2>
+          </div>
+          
           <p className="text-muted-foreground/60 max-w-2xl text-lg font-medium leading-relaxed">
-            Bem-vindo ao centro de comando estratégico <span className="text-primary/80 font-bold tracking-tight">FlightCore</span>. 
-            Monitore sua frota global com precisão militar e inteligência preditiva.
+            Bem-vindo ao centro de comando. Monitore sua frota global com 
+            precisão técnica e inteligência preditiva de nível aeroespacial.
           </p>
+
+          <div className="flex flex-wrap gap-4 mt-4">
+            <Button size="lg" className="rounded-full px-8 shadow-xl shadow-primary/20" asChild>
+              <Link to="/aircraft">Explorar Frota</Link>
+            </Button>
+            <Button variant="outline" size="lg" className="rounded-full px-8 border-white/10" asChild>
+              <Link to="/services">Ordens de Serviço</Link>
+            </Button>
+          </div>
         </div>
       </div>
 
