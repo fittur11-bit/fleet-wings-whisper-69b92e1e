@@ -247,36 +247,41 @@ function DashboardContent() {
 
        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* CVA Alerts */}
-        <Card className="glass-card border-white/5">
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
-            <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-              <AlertTriangle className="h-4 w-4 text-amber-500" /> Alertas de CVA
+        <Card className="glass-card border-white/5 overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <AlertTriangle className="h-20 w-20" />
+          </div>
+          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-white/[0.03]">
+            <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+              <AlertTriangle className="h-4 w-4 text-amber-500" /> Alertas Críticos (CVA)
             </CardTitle>
-            <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] uppercase font-bold px-2 py-0">
-              {cvaAlerts.length} Alertas
+            <Badge variant="destructive" className="font-mono">
+              {cvaAlerts.length} PENDENTE
             </Badge>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             {cvaAlerts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-center bg-white/[0.02] rounded-xl border border-dashed border-white/5">
-                <CheckCircle2 className="h-10 w-10 text-emerald-500/40" />
-                <p className="mt-3 text-xs font-medium text-muted-foreground">Tudo em conformidade.</p>
+              <div className="flex flex-col items-center justify-center py-12 text-center bg-white/[0.01] rounded-2xl border border-dashed border-white/5">
+                <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                  <CheckCircle2 className="h-8 w-8 text-emerald-500/50" />
+                </div>
+                <p className="text-sm font-bold text-foreground/80 uppercase tracking-widest">Frota Segura</p>
+                <p className="mt-1 text-xs text-muted-foreground/60 font-medium">Todos os certificados estão em dia.</p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {cvaAlerts.slice(0, 5).map((a: any) => (
-                  <div key={a.id} className="flex items-center gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.04]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 font-mono text-sm font-bold text-primary">
+                  <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.05] hover:translate-x-1 group/item">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-transparent font-mono text-sm font-black text-primary border border-white/5 group-hover/item:border-primary/30 transition-colors">
                       {a.prefix.split('-')[1] || a.prefix}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm truncate">{a.prefix}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-tighter">{a.model || "Aeronave"}</p>
+                      <p className="font-black text-sm tracking-tight text-foreground uppercase">{a.prefix}</p>
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">{a.model || "Aeronave"}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-tighter">Vence em</p>
-                      <Badge variant={a.daysLeft <= 15 ? "destructive" : "outline"} className="text-[10px] font-bold font-mono py-0 px-2">
-                        {a.daysLeft < 0 ? `VENCIDO (${Math.abs(a.daysLeft)}d)` : `${a.daysLeft} DIAS`}
+                      <Badge variant={a.daysLeft <= 15 ? "destructive" : "outline"} className="font-mono text-[11px]">
+                        {a.daysLeft < 0 ? `VENCIDO` : `${a.daysLeft} DIAS`}
                       </Badge>
                     </div>
                   </div>
@@ -286,14 +291,16 @@ function DashboardContent() {
           </CardContent>
         </Card>
 
-        {/* Upcoming maintenance */}
-        <Card className="glass-card border-white/5">
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
-            <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
+        <Card className="glass-card border-white/5 overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Wrench className="h-20 w-20" />
+          </div>
+          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-white/[0.03]">
+            <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
               <Wrench className="h-4 w-4 text-primary" /> Manutenção Preditiva
             </CardTitle>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-[10px] uppercase font-bold px-2 py-0">
-              {upcomingMx.length} Itens
+            <Badge variant="outline" className="border-primary/20 text-primary font-mono">
+              {upcomingMx.length} ITENS
             </Badge>
           </CardHeader>
           <CardContent>
