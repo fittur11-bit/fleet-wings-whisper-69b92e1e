@@ -94,12 +94,12 @@ function DashboardContent() {
      return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
    }).length;
 
-   const kpis = [
-     { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
-     { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
-     { label: "Valor em Estoque", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stockValue), icon: TrendingUp, to: "/parts" },
-     { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
-   ];
+    const kpis = [
+      { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft", color: "text-blue-400" },
+      { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft", color: "text-primary" },
+      { label: "Valor em Estoque", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(stockValue), icon: TrendingUp, to: "/parts", color: "text-emerald-400" },
+      { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft", color: "text-amber-400" },
+    ];
        {/* Charts Section */}
        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
          <Card className="lg:col-span-2 border-white/5 bg-card/60 backdrop-blur">
@@ -178,27 +178,32 @@ function DashboardContent() {
 
   return (
     <>
-      <PageHeader
-        title="Painel"
-        description="Visão geral da operação e alertas de conformidade."
-      />
+      <div className="flex flex-col gap-2 mb-8">
+        <h1 className="font-display text-4xl font-extrabold tracking-tight gold-text">Dashboard</h1>
+        <p className="text-muted-foreground max-w-2xl">
+          Bem-vindo ao centro de comando do <span className="text-foreground font-semibold">FlightCore</span>. 
+          Acompanhe o status da sua frota e alertas operacionais em tempo real.
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k) => (
           <Link key={k.label} to={k.to} className="group">
-            <Card className="border-white/5 bg-card/60 backdrop-blur transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">{k.label}</p>
-                    <p className="mt-2 font-display text-3xl font-bold tracking-tight">{k.value}</p>
-                    {k.total !== undefined && (
-                      <p className="mt-1 text-xs text-muted-foreground">de {k.total} no total</p>
-                    )}
+            <Card className="glass-card glass-card-hover border-white/5 h-full">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-transform duration-500 group-hover:rotate-12", k.color)}>
+                    <k.icon className="h-6 w-6" />
                   </div>
-                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <k.icon className="h-5 w-5" />
-                  </div>
+                  {k.total !== undefined && (
+                    <Badge variant="outline" className="bg-white/5 border-white/10 text-[10px] uppercase tracking-wider">
+                      {k.total} Total
+                    </Badge>
+                  )}
+                </div>
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{k.label}</p>
+                  <p className="mt-1 font-display text-2xl font-bold tracking-tight">{k.value}</p>
                 </div>
               </CardContent>
             </Card>
