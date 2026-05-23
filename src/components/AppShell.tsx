@@ -16,7 +16,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="bg-mesh-gradient pointer-events-none">
           <div className="mesh-orb-1 opacity-40" />
           <div className="mesh-orb-2 opacity-30" />
-          <div className="absolute inset-0 aviation-blueprint opacity-5" />
+          <div className="absolute inset-0 aviation-blueprint opacity-10" />
         </div>
         
         <CommandMenu />
@@ -100,6 +100,27 @@ export function AppShell({ children }: { children: ReactNode }) {
           <main className="flex-1 px-4 py-8 lg:px-12 lg:py-12 max-w-[1800px] mx-auto w-full aviation-grid relative">
             <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
             {children}
+            
+            <footer className="mt-20 border-t border-white/[0.03] pt-12 pb-12">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+                    <Plane className="h-4 w-4 text-primary" />
+                  </div>
+                  <span className="font-display font-black tracking-tighter text-xl gold-text">
+                    FlightCore
+                  </span>
+                </div>
+                <div className="flex justify-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
+                  <a href="#" className="hover:text-primary transition-colors">Termos</a>
+                  <a href="#" className="hover:text-primary transition-colors">Privacidade</a>
+                  <a href="#" className="hover:text-primary transition-colors">Suporte Técnico</a>
+                </div>
+                <div className="text-right text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">
+                  © 2026 FlightCore Technologies. Todos os direitos reservados.
+                </div>
+              </div>
+            </footer>
           </main>
         </div>
       </div>
