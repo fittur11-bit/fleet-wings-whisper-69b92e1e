@@ -337,46 +337,69 @@ function DashboardContent() {
         </CardContent>
       </Card>
 
-      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="h-4 w-4 text-primary" /> Serviços recentes
+      <Card className="mt-8 glass-card border-white/5">
+        <CardHeader className="flex flex-row items-center justify-between pb-4">
+          <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
+            <TrendingUp className="h-4 w-4 text-primary" /> Atividade de Manutenção Recente
           </CardTitle>
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/services">Ver todos</Link>
+          <Button variant="ghost" size="sm" asChild className="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary/80 hover:bg-primary/5">
+            <Link to="/services">Relatório Completo</Link>
           </Button>
         </CardHeader>
         <CardContent>
           {recentServices.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Nenhum serviço registrado ainda.</p>
+            <div className="py-12 text-center text-xs font-medium text-muted-foreground bg-white/[0.02] rounded-xl border border-dashed border-white/5">
+              Nenhum serviço registrado recentemente.
+            </div>
           ) : (
-            <ul className="divide-y divide-white/5">
-              {recentServices.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between py-3">
-                  <div>
-                    <p className="text-sm font-medium">{s.service_type}</p>
-                    <p className="text-xs text-muted-foreground">
-                      <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
-                      {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
-                    </p>
+            <div className="relative space-y-0 before:absolute before:inset-y-0 before:left-[19px] before:w-[2px] before:bg-white/5">
+              {recentServices.map((s: any, idx: number) => (
+                <div key={s.id} className="relative flex items-center gap-6 py-4 transition-all hover:bg-white/[0.02] rounded-xl px-2">
+                  <div className={cn(
+                    "relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-sidebar bg-card text-primary shadow-lg",
+                    s.status === "completed" ? "text-emerald-500 border-emerald-500/20" : "text-primary border-primary/20"
+                  )}>
+                    {s.status === "completed" ? <CheckCircle2 className="h-5 w-5" /> : <Wrench className="h-5 w-5" />}
                   </div>
-                  <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px]">
-                    {s.status}
-                  </Badge>
-                </li>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="font-bold text-sm text-foreground truncate">{s.service_type}</p>
+                      <Badge variant={s.status === "completed" ? "default" : "outline"} className={cn(
+                        "text-[9px] font-black uppercase tracking-widest px-1.5 py-0 h-4 shrink-0",
+                        s.status === "completed" ? "bg-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20" : "bg-primary/10 text-primary"
+                      )}>
+                        {s.status === "completed" ? "Concluído" : "Em Aberto"}
+                      </Badge>
+                    </div>
+                    <div className="mt-1 flex items-center gap-2 text-[11px] text-muted-foreground font-medium">
+                      <span className="font-mono bg-white/5 px-1.5 rounded text-[10px] text-primary/80 uppercase tracking-tighter">
+                        {s.aircraft?.prefix || s.aircraft_prefix || "—"}
+                      </span>
+                      {s.performed_at && (
+                        <>
+                          <span className="h-1 w-1 rounded-full bg-white/10" />
+                          <span>{format(parseISO(s.performed_at), "PPP", { locale: ptBR })}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </CardContent>
       </Card>
 
-      {/* Quick links */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <QuickLink to="/aircraft" icon={Plane} label="Frota" />
-        <QuickLink to="/flight-logs" icon={History} label="Diário" />
-        <QuickLink to="/services" icon={Wrench} label="Manutenção" />
-        <QuickLink to="/parts" icon={Cog} label="Estoque" />
-        <QuickLink to="/library" icon={BookMarked} label="Biblioteca" />
+      {/* Quick Actions Footer */}
+      <div className="mt-12 mb-8">
+        <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50 mb-4 px-1">Atalhos do Sistema</h3>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+          <QuickLink to="/aircraft" icon={Plane} label="Gestão de Frota" />
+          <QuickLink to="/flight-logs" icon={History} label="Diário Digital" />
+          <QuickLink to="/services" icon={Wrench} label="Engenharia" />
+          <QuickLink to="/parts" icon={Cog} label="Almoxarifado" />
+          <QuickLink to="/library" icon={BookMarked} label="Documentação" />
+        </div>
       </div>
     </>
   );
@@ -384,11 +407,11 @@ function DashboardContent() {
 
 function QuickLink({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
   return (
-    <Link to={to as any} className="group flex items-center gap-3 rounded-xl border border-white/5 bg-card/40 p-4 transition hover:border-primary/40 hover:bg-card/70">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-        <Icon className="h-4 w-4" />
+    <Link to={to as any} className="group flex flex-col items-center gap-3 rounded-2xl border border-white/5 bg-white/[0.02] p-6 transition-all duration-300 hover:border-primary/40 hover:bg-white/[0.05] hover:-translate-y-1">
+      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform group-hover:scale-110">
+        <Icon className="h-6 w-6" />
       </div>
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground group-hover:text-foreground">{label}</span>
     </Link>
   );
 }
