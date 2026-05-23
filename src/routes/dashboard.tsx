@@ -205,13 +205,16 @@ function DashboardContent() {
  
 
   return (
-    <>
-      <div className="flex flex-col gap-2 mb-10 animate-in fade-in slide-in-from-top-4 duration-1000">
-        <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-6xl">Painel de Controle</h1>
-        <p className="text-muted-foreground/80 max-w-2xl text-lg font-medium">
-          Bem-vindo ao centro de comando do <span className="text-primary font-bold tracking-tight">FlightCore</span>. 
-          Acompanhe o status da sua frota e alertas operacionais com precisão.
-        </p>
+    <div className="space-y-10">
+      <div className="relative">
+        <div className="absolute -left-4 top-0 h-full w-1 bg-gradient-to-b from-primary to-transparent rounded-full opacity-50" />
+        <div className="flex flex-col gap-2 animate-in fade-in slide-in-from-left-4 duration-1000">
+          <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-7xl">Painel de Controle</h1>
+          <p className="text-muted-foreground/60 max-w-2xl text-lg font-medium leading-relaxed">
+            Bem-vindo ao centro de comando estratégico <span className="text-primary/80 font-bold tracking-tight">FlightCore</span>. 
+            Monitore sua frota global com precisão militar e inteligência preditiva.
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
