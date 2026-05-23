@@ -29,7 +29,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/80 backdrop-blur-xl">
-       <div className="flex items-center gap-3 px-6 py-6 border-b border-white/5">
+       <div className="flex items-center gap-3 px-6 py-6 border-b border-border/5">
          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg">
            <Plane className="h-5 w-5 text-primary-foreground" />
          </div>
@@ -52,7 +52,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 active
                   ? "bg-gradient-to-r from-primary/20 to-transparent text-primary border-l-2 border-primary"
-                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-white/5",
+                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-primary/5",
               )}
             >
               <Icon className={cn("h-4 w-4", active && "text-primary")} />
@@ -62,7 +62,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="border-t border-white/5 p-4">
+      <div className="border-t border-border/5 p-4">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/20 text-primary text-sm font-semibold">
             {(user?.email?.[0] || "?").toUpperCase()}

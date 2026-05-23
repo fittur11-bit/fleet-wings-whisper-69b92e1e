@@ -111,26 +111,28 @@ function DashboardContent() {
            <CardContent className="h-[240px] pl-0">
              <ResponsiveContainer width="100%" height="100%">
                <BarChart data={last6Months}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                 <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="opacity-10" vertical={false} />
                  <XAxis 
                    dataKey="month" 
-                   stroke="#94a3b8" 
+                   stroke="currentColor" 
+                   className="text-muted-foreground"
                    fontSize={12} 
                    tickLine={false} 
                    axisLine={false} 
                  />
                  <YAxis 
-                   stroke="#94a3b8" 
+                   stroke="currentColor" 
+                   className="text-muted-foreground"
                    fontSize={12} 
                    tickLine={false} 
                    axisLine={false}
                    allowDecimals={false}
                  />
                  <Tooltip 
-                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
-                   itemStyle={{ color: "#38bdf8" }}
+                   contentStyle={{ backgroundColor: "var(--popover)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--popover-foreground)" }}
+                   itemStyle={{ color: "var(--primary)" }}
                  />
-                 <Bar dataKey="count" fill="#0ea5e9" radius={[4, 4, 0, 0]} barSize={32} />
+                 <Bar dataKey="count" fill="var(--primary)" radius={[4, 4, 0, 0]} barSize={32} />
                </BarChart>
              </ResponsiveContainer>
            </CardContent>
@@ -159,7 +161,7 @@ function DashboardContent() {
                    ))}
                  </Pie>
                  <Tooltip 
-                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
+                   contentStyle={{ backgroundColor: "var(--popover)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--popover-foreground)" }}
                  />
                </PieChart>
              </ResponsiveContainer>
