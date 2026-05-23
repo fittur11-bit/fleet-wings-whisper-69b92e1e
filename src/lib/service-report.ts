@@ -136,10 +136,11 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     doc.text(ownerLines, leftColX + labelW, y);
     y += 6 * Math.max(1, ownerLines.length);
   }
-  renderRow("Local", service.location, leftColX, y);
-  y += 6;
-  renderRow("Tipo(s)", types, leftColX, y);
-  renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
+  const h9 = renderRow("Local", service.location, leftColX, y);
+  y += 6 * h9;
+  const h10 = renderRow("Tipo(s)", types, leftColX, y);
+  const h11 = renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
+  y += 6 * Math.max(h10, h11);
   
   y += 10;
 
