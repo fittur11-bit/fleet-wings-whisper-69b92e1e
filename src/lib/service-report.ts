@@ -96,6 +96,7 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     const text = String(value || "—");
     const lines = doc.splitTextToSize(text, valueMaxW);
     doc.text(lines, x + labelW, currentY);
+    return lines.length;
   };
 
   // Aircraft Section Header
