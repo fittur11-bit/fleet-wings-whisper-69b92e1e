@@ -103,52 +103,63 @@ function DashboardContent() {
     ];
         {/* Charts Section */}
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 glass-card border-white/5">
+          <Card className="lg:col-span-2 glass-card border-white/5 group relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <BarChart3 className="h-24 w-24" />
+            </div>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-                <BarChart3 className="h-4 w-4 text-primary" /> Histórico de Manutenção
+              <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+                <BarChart3 className="h-4 w-4" /> Histórico de Manutenção
               </CardTitle>
             </CardHeader>
-            <CardContent className="h-[280px] pt-4">
+            <CardContent className="h-[300px] pt-6">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={last6Months}>
                   <defs>
                     <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.8} />
-                      <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.2} />
+                      <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={1} />
+                      <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.1} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff03" vertical={false} />
                   <XAxis 
                     dataKey="month" 
-                    stroke="#94a3b8" 
-                    fontSize={11} 
+                    stroke="#ffffff20" 
+                    fontSize={10} 
+                    fontWeight={700}
                     tickLine={false} 
                     axisLine={false} 
                     dy={10}
                   />
                   <YAxis 
-                    stroke="#94a3b8" 
-                    fontSize={11} 
+                    stroke="#ffffff20" 
+                    fontSize={10} 
+                    fontWeight={700}
                     tickLine={false} 
                     axisLine={false}
                     allowDecimals={false}
                   />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                    contentStyle={{ backgroundColor: "#0c111d", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", boxShadow: "0 10px 15px -3px rgba(0,0,0,0.5)" }}
-                    itemStyle={{ color: "oklch(0.74 0.142 78)", fontSize: "12px", fontWeight: "bold" }}
+                    cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                    contentStyle={{ 
+                      backgroundColor: "rgba(15, 20, 35, 0.9)", 
+                      backdropFilter: "blur(12px)",
+                      border: "1px solid rgba(255,255,255,0.1)", 
+                      borderRadius: "16px", 
+                      boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5)" 
+                    }}
+                    itemStyle={{ color: "oklch(0.74 0.142 78)", fontSize: "12px", fontWeight: "800" }}
                   />
-                  <Bar dataKey="count" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={40} />
+                  <Bar dataKey="count" fill="url(#barGradient)" radius={[8, 8, 2, 2]} barSize={36} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
   
-          <Card className="glass-card border-white/5">
+          <Card className="glass-card border-white/5 group">
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-                <PieChartIcon className="h-4 w-4 text-primary" /> Categorias de Peças
+              <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+                <PieChartIcon className="h-4 w-4" /> Categorias de Peças
               </CardTitle>
             </CardHeader>
             <CardContent className="h-[280px] flex flex-col items-center justify-center">
@@ -195,32 +206,38 @@ function DashboardContent() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 mb-8">
-        <h1 className="font-display text-4xl font-extrabold tracking-tight gold-text">Dashboard</h1>
-        <p className="text-muted-foreground max-w-2xl">
-          Bem-vindo ao centro de comando do <span className="text-foreground font-semibold">FlightCore</span>. 
-          Acompanhe o status da sua frota e alertas operacionais em tempo real.
+      <div className="flex flex-col gap-2 mb-10 animate-in fade-in slide-in-from-top-4 duration-1000">
+        <h1 className="font-display text-5xl font-black tracking-tighter gold-text sm:text-6xl">Painel de Controle</h1>
+        <p className="text-muted-foreground/80 max-w-2xl text-lg font-medium">
+          Bem-vindo ao centro de comando do <span className="text-primary font-bold tracking-tight">FlightCore</span>. 
+          Acompanhe o status da sua frota e alertas operacionais com precisão.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((k) => (
-          <Link key={k.label} to={k.to} className="group">
-            <Card className="glass-card glass-card-hover border-white/5 h-full">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-transform duration-500 group-hover:rotate-12", k.color)}>
-                    <k.icon className="h-6 w-6" />
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {kpis.map((k, i) => (
+          <Link 
+            key={k.label} 
+            to={k.to} 
+            className="group animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+            style={{ animationDelay: `${i * 100}ms` }}
+          >
+            <Card className="glass-card glass-card-hover border-white/5 h-full overflow-hidden">
+              <CardContent className="p-7 relative">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-3xl group-hover:bg-primary/10 transition-colors duration-700" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className={cn("flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 transition-all duration-700 group-hover:scale-110 group-hover:rotate-3 shadow-inner", k.color)}>
+                    <k.icon className="h-7 w-7" />
                   </div>
                   {k.total !== undefined && (
-                    <Badge variant="outline" className="bg-white/5 border-white/10 text-[10px] uppercase tracking-wider">
-                      {k.total} Total
+                    <Badge variant="outline" className="border-primary/20 text-primary shadow-[0_0_15px_oklch(var(--primary)/0.1)]">
+                      {k.total} TOTAL
                     </Badge>
                   )}
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{k.label}</p>
-                  <p className="mt-1 font-display text-2xl font-bold tracking-tight">{k.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/50 mb-1.5">{k.label}</p>
+                  <p className="font-display text-3xl font-bold tracking-tight text-foreground">{k.value}</p>
                 </div>
               </CardContent>
             </Card>
@@ -230,36 +247,41 @@ function DashboardContent() {
 
        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* CVA Alerts */}
-        <Card className="glass-card border-white/5">
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
-            <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-              <AlertTriangle className="h-4 w-4 text-amber-500" /> Alertas de CVA
+        <Card className="glass-card border-white/5 overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <AlertTriangle className="h-20 w-20" />
+          </div>
+          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-white/[0.03]">
+            <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+              <AlertTriangle className="h-4 w-4 text-amber-500" /> Alertas Críticos (CVA)
             </CardTitle>
-            <Badge variant="outline" className="bg-amber-500/10 text-amber-500 border-amber-500/20 text-[10px] uppercase font-bold px-2 py-0">
-              {cvaAlerts.length} Alertas
+            <Badge variant="destructive" className="font-mono">
+              {cvaAlerts.length} PENDENTE
             </Badge>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-6">
             {cvaAlerts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-10 text-center bg-white/[0.02] rounded-xl border border-dashed border-white/5">
-                <CheckCircle2 className="h-10 w-10 text-emerald-500/40" />
-                <p className="mt-3 text-xs font-medium text-muted-foreground">Tudo em conformidade.</p>
+              <div className="flex flex-col items-center justify-center py-12 text-center bg-white/[0.01] rounded-2xl border border-dashed border-white/5">
+                <div className="h-16 w-16 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                  <CheckCircle2 className="h-8 w-8 text-emerald-500/50" />
+                </div>
+                <p className="text-sm font-bold text-foreground/80 uppercase tracking-widest">Frota Segura</p>
+                <p className="mt-1 text-xs text-muted-foreground/60 font-medium">Todos os certificados estão em dia.</p>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {cvaAlerts.slice(0, 5).map((a: any) => (
-                  <div key={a.id} className="flex items-center gap-4 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.04]">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 font-mono text-sm font-bold text-primary">
+                  <div key={a.id} className="flex items-center gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-4 transition-all hover:bg-white/[0.05] hover:translate-x-1 group/item">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-white/10 to-transparent font-mono text-sm font-black text-primary border border-white/5 group-hover/item:border-primary/30 transition-colors">
                       {a.prefix.split('-')[1] || a.prefix}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm truncate">{a.prefix}</p>
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-tighter">{a.model || "Aeronave"}</p>
+                      <p className="font-black text-sm tracking-tight text-foreground uppercase">{a.prefix}</p>
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">{a.model || "Aeronave"}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] font-bold text-muted-foreground mb-1 uppercase tracking-tighter">Vence em</p>
-                      <Badge variant={a.daysLeft <= 15 ? "destructive" : "outline"} className="text-[10px] font-bold font-mono py-0 px-2">
-                        {a.daysLeft < 0 ? `VENCIDO (${Math.abs(a.daysLeft)}d)` : `${a.daysLeft} DIAS`}
+                      <Badge variant={a.daysLeft <= 15 ? "destructive" : "outline"} className="font-mono text-[11px]">
+                        {a.daysLeft < 0 ? `VENCIDO` : `${a.daysLeft} DIAS`}
                       </Badge>
                     </div>
                   </div>
@@ -269,14 +291,16 @@ function DashboardContent() {
           </CardContent>
         </Card>
 
-        {/* Upcoming maintenance */}
-        <Card className="glass-card border-white/5">
-          <CardHeader className="flex flex-row items-center justify-between pb-4">
-            <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
+        <Card className="glass-card border-white/5 overflow-hidden group">
+          <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+            <Wrench className="h-20 w-20" />
+          </div>
+          <CardHeader className="flex flex-row items-center justify-between pb-6 border-b border-white/[0.03]">
+            <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
               <Wrench className="h-4 w-4 text-primary" /> Manutenção Preditiva
             </CardTitle>
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 text-[10px] uppercase font-bold px-2 py-0">
-              {upcomingMx.length} Itens
+            <Badge variant="outline" className="border-primary/20 text-primary font-mono">
+              {upcomingMx.length} ITENS
             </Badge>
           </CardHeader>
           <CardContent>
