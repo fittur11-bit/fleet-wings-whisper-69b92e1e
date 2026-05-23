@@ -103,52 +103,63 @@ function DashboardContent() {
     ];
         {/* Charts Section */}
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <Card className="lg:col-span-2 glass-card border-white/5">
+          <Card className="lg:col-span-2 glass-card border-white/5 group relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <BarChart3 className="h-24 w-24" />
+            </div>
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-                <BarChart3 className="h-4 w-4 text-primary" /> Histórico de Manutenção
+              <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+                <BarChart3 className="h-4 w-4" /> Histórico de Manutenção
               </CardTitle>
             </CardHeader>
-            <CardContent className="h-[280px] pt-4">
+            <CardContent className="h-[300px] pt-6">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={last6Months}>
                   <defs>
                     <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.8} />
-                      <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.2} />
+                      <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={1} />
+                      <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.1} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff03" vertical={false} />
                   <XAxis 
                     dataKey="month" 
-                    stroke="#94a3b8" 
-                    fontSize={11} 
+                    stroke="#ffffff20" 
+                    fontSize={10} 
+                    fontWeight={700}
                     tickLine={false} 
                     axisLine={false} 
                     dy={10}
                   />
                   <YAxis 
-                    stroke="#94a3b8" 
-                    fontSize={11} 
+                    stroke="#ffffff20" 
+                    fontSize={10} 
+                    fontWeight={700}
                     tickLine={false} 
                     axisLine={false}
                     allowDecimals={false}
                   />
                   <Tooltip 
-                    cursor={{ fill: 'rgba(255,255,255,0.03)' }}
-                    contentStyle={{ backgroundColor: "#0c111d", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", boxShadow: "0 10px 15px -3px rgba(0,0,0,0.5)" }}
-                    itemStyle={{ color: "oklch(0.74 0.142 78)", fontSize: "12px", fontWeight: "bold" }}
+                    cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                    contentStyle={{ 
+                      backgroundColor: "rgba(15, 20, 35, 0.9)", 
+                      backdropFilter: "blur(12px)",
+                      border: "1px solid rgba(255,255,255,0.1)", 
+                      borderRadius: "16px", 
+                      boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5)" 
+                    }}
+                    itemStyle={{ color: "oklch(0.74 0.142 78)", fontSize: "12px", fontWeight: "800" }}
                   />
-                  <Bar dataKey="count" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={40} />
+                  <Bar dataKey="count" fill="url(#barGradient)" radius={[8, 8, 2, 2]} barSize={36} />
                 </BarChart>
               </ResponsiveContainer>
             </CardContent>
           </Card>
   
-          <Card className="glass-card border-white/5">
+          <Card className="glass-card border-white/5 group">
             <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
-                <PieChartIcon className="h-4 w-4 text-primary" /> Categorias de Peças
+              <CardTitle className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary/70">
+                <PieChartIcon className="h-4 w-4" /> Categorias de Peças
               </CardTitle>
             </CardHeader>
             <CardContent className="h-[280px] flex flex-col items-center justify-center">
