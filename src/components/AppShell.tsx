@@ -46,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                  variant="ghost"
                  size="sm"
                  onClick={() => router.navigate({ to: "/dashboard" })}
-                 className="gap-1 px-2 hover:bg-white/10"
+                 className="gap-1 px-2 hover:bg-primary/10"
                >
                  <ArrowLeft className="h-4 w-4" />
                  Início
@@ -55,7 +55,7 @@ export function AppShell({ children }: { children: ReactNode }) {
              <Button
                variant="ghost"
                size="sm"
-               className="hidden sm:flex items-center gap-2 px-3 py-1.5 h-auto text-muted-foreground bg-white/5 border border-white/5 hover:bg-white/10"
+               className="hidden sm:flex items-center gap-2 px-3 py-1.5 h-auto text-muted-foreground bg-primary/5 border border-border/5 hover:bg-primary/10"
                onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))}
              >
                <Search className="h-3.5 w-3.5" />
