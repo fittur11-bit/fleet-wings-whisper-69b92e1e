@@ -4,22 +4,42 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 
-const items = [
-  { to: "/dashboard", label: "Painel", icon: LayoutDashboard },
-  { to: "/pending", label: "Pendências", icon: ListChecks },
-  { to: "/demands", label: "Quadro de Avisos", icon: Megaphone },
-  { to: "/timeline", label: "Histórico", icon: GitBranch },
-  { to: "/aircraft", label: "Aeronaves", icon: Plane },
-  { to: "/rab", label: "Consulta RAB", icon: Search },
-   { to: "/parts", label: "Peças", icon: Cog },
-   { to: "/applicability", label: "Aplicabilidade", icon: ShieldCheck },
-  { to: "/services", label: "Manutenção", icon: Wrench },
-  { to: "/service-prices", label: "Tabela de Preços", icon: DollarSign },
-  { to: "/shipments", label: "Componentes Externos", icon: Package },
-  { to: "/suppliers", label: "Fornecedores", icon: Building2 },
-   { to: "/library", label: "Biblioteca", icon: BookMarked },
-  { to: "/admin", label: "Administrador", icon: ShieldCheck },
-] as const;
+const menuGroups = [
+  {
+    label: "Operacional",
+    items: [
+      { to: "/dashboard", label: "Painel", icon: LayoutDashboard },
+      { to: "/pending", label: "Pendências", icon: ListChecks },
+      { to: "/demands", label: "Quadro de Avisos", icon: Megaphone },
+      { to: "/timeline", label: "Histórico", icon: GitBranch },
+    ]
+  },
+  {
+    label: "Ativos & Frota",
+    items: [
+      { to: "/aircraft", label: "Aeronaves", icon: Plane },
+      { to: "/rab", label: "Consulta RAB", icon: Search },
+      { to: "/parts", label: "Peças & Estoque", icon: Cog },
+      { to: "/applicability", label: "Aplicabilidade", icon: ShieldCheck },
+    ]
+  },
+  {
+    label: "Manutenção & Logística",
+    items: [
+      { to: "/services", label: "Ordens de Serviço", icon: Wrench },
+      { to: "/service-prices", label: "Tabela de Preços", icon: DollarSign },
+      { to: "/shipments", label: "Componentes Externos", icon: Package },
+      { to: "/suppliers", label: "Fornecedores", icon: Building2 },
+    ]
+  },
+  {
+    label: "Sistema",
+    items: [
+      { to: "/library", label: "Biblioteca", icon: BookMarked },
+      { to: "/admin", label: "Administrador", icon: ShieldCheck },
+    ]
+  }
+];
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
@@ -37,27 +57,37 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-1">
-        {items.map((item) => {
-          const active = pathname === item.to || pathname.startsWith(item.to + "/");
-          const Icon = item.icon;
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
-                active
-                  ? "bg-gradient-to-r from-primary/20 to-transparent text-primary border-l-2 border-primary"
-                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-white/5",
-              )}
-            >
-              <Icon className={cn("h-4 w-4", active && "text-primary")} />
-              <span>{item.label}</span>
-            </Link>
-          );
-        })}
+      <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-8 scrollbar-hide">
+        {menuGroups.map((group) => (
+          <div key={group.label} className="space-y-2">
+            <h3 className="px-3 text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">
+              {group.label}
+            </h3>
+            <div className="space-y-1">
+              {group.items.map((item) => {
+                const active = pathname === item.to || pathname.startsWith(item.to + "/");
+                const Icon = item.icon;
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={onNavigate}
+                    className={cn(
+                      "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
+                      active
+                        ? "bg-primary/10 text-primary shadow-[inset_0_0_12px_rgba(var(--primary),0.05)]"
+                        : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-white/5",
+                    )}
+                  >
+                    <Icon className={cn("h-4 w-4 shrink-0 transition-transform group-hover:scale-110", active && "text-primary")} />
+                    <span className="truncate">{item.label}</span>
+                    {active && <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_var(--primary)]" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       <div className="border-t border-white/5 p-4">
