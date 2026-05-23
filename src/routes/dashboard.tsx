@@ -12,6 +12,15 @@ import { differenceInDays, format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/dashboard")({
+  head: () => ({
+    meta: [
+      { title: "Painel — FlightCore" },
+      { name: "description", content: "Visão geral da frota: aeronaves ativas, manutenções pendentes, peças instaladas e métricas operacionais." },
+      { property: "og:title", content: "Painel — FlightCore" },
+      { property: "og:description", content: "Visão geral da frota: aeronaves ativas, manutenções pendentes, peças instaladas e métricas operacionais." },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+  }),
   component: Page,
 });
 

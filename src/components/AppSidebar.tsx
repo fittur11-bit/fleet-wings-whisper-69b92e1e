@@ -34,7 +34,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
            <Plane className="h-5 w-5 text-primary-foreground" />
          </div>
          <div>
-          <h1 className="font-display text-lg font-bold leading-none tracking-tight">FlightCore</h1>
+          <div className="font-display text-lg font-bold leading-none tracking-tight">FlightCore</div>
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1">Aviation</p>
         </div>
       </div>

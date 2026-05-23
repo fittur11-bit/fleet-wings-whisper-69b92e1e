@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsageRouteImport } from './routes/usage'
 import { Route as TimelineRouteImport } from './routes/timeline'
 import { Route as SuppliersRouteImport } from './routes/suppliers'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ShipmentsRouteImport } from './routes/shipments'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ServicePricesRouteImport } from './routes/service-prices'
@@ -42,6 +43,11 @@ const TimelineRoute = TimelineRouteImport.update({
 const SuppliersRoute = SuppliersRouteImport.update({
   id: '/suppliers',
   path: '/suppliers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ShipmentsRoute = ShipmentsRouteImport.update({
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
@@ -163,6 +170,7 @@ export interface FileRoutesByTo {
   '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
@@ -185,6 +193,7 @@ export interface FileRoutesById {
   '/service-prices': typeof ServicePricesRoute
   '/services': typeof ServicesRoute
   '/shipments': typeof ShipmentsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/service-prices'
     | '/services'
     | '/shipments'
+    | '/sitemap.xml'
     | '/suppliers'
     | '/timeline'
     | '/usage'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/service-prices'
     | '/services'
     | '/shipments'
+    | '/sitemap.xml'
     | '/suppliers'
     | '/timeline'
     | '/usage'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/service-prices'
     | '/services'
     | '/shipments'
+    | '/sitemap.xml'
     | '/suppliers'
     | '/timeline'
     | '/usage'
@@ -272,6 +284,7 @@ export interface RootRouteChildren {
   ServicePricesRoute: typeof ServicePricesRoute
   ServicesRoute: typeof ServicesRoute
   ShipmentsRoute: typeof ShipmentsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SuppliersRoute: typeof SuppliersRoute
   TimelineRoute: typeof TimelineRoute
   UsageRoute: typeof UsageRoute
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/suppliers'
       fullPath: '/suppliers'
       preLoaderRoute: typeof SuppliersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/shipments': {
@@ -432,6 +452,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicePricesRoute: ServicePricesRoute,
   ServicesRoute: ServicesRoute,
   ShipmentsRoute: ShipmentsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SuppliersRoute: SuppliersRoute,
   TimelineRoute: TimelineRoute,
   UsageRoute: UsageRoute,

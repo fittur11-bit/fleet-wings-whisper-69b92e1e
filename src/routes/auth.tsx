@@ -12,6 +12,16 @@ import { toast } from "sonner";
 import { SECURITY_QUESTIONS } from "@/lib/constants";
 
 export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "Entrar — FlightCore" },
+      { name: "description", content: "Acesse o FlightCore para gerenciar sua frota aeronáutica, manutenção e conformidade CVA." },
+      { property: "og:title", content: "Entrar — FlightCore" },
+      { property: "og:description", content: "Acesse o FlightCore para gerenciar sua frota aeronáutica, manutenção e conformidade CVA." },
+      { name: "robots", content: "noindex,nofollow" },
+    ],
+    links: [{ rel: "canonical", href: "https://coreflight.studioonze11.com.br/auth" }],
+  }),
   component: AuthPage,
 });
 
@@ -88,7 +98,7 @@ function AuthPage() {
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-[oklch(0.86_0.11_86)] shadow-[0_0_40px_-10px] shadow-primary/60">
             <ShieldCheck className="h-7 w-7 text-primary-foreground" />
           </div>
-          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">FlightCore</h1>
+          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Entrar no FlightCore</h1>
           <p className="mt-1 text-sm text-muted-foreground">Acesso ao centro de comando</p>
         </div>
 
