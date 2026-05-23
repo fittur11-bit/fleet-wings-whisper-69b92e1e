@@ -13,9 +13,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
     return (
       <div className="flex min-h-screen w-full selection:bg-primary/30 selection:text-primary-foreground">
-        <div className="bg-mesh-gradient">
-          <div className="mesh-orb-1" />
-          <div className="mesh-orb-2" />
+        <div className="bg-mesh-gradient pointer-events-none">
+          <div className="mesh-orb-1 opacity-40" />
+          <div className="mesh-orb-2 opacity-30" />
+          <div className="absolute inset-0 aviation-blueprint opacity-5" />
         </div>
         
         <CommandMenu />
@@ -40,7 +41,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         <div className="flex-1 lg:pl-64 flex flex-col min-h-screen">
           {/* Top header */}
-          <header className="sticky top-0 z-20 flex h-20 items-center gap-4 border-b border-white/[0.03] bg-[#080c14]/40 backdrop-blur-3xl px-4 lg:px-8 shadow-[0_4px_30px_rgba(0,0,0,0.3)] transition-all">
+          <header className="sticky top-0 z-20 flex h-20 items-center gap-4 border-b border-white/[0.03] bg-[#080c14]/60 backdrop-blur-3xl px-4 lg:px-8 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all">
             <div className="lg:hidden flex items-center gap-2">
               <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} className="hover:bg-white/5 rounded-full">
                 {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -85,8 +86,13 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
 
             <div className="flex items-center gap-4">
-              <Link to="/dashboard" className="font-display font-black tracking-tighter text-2xl gold-text hover:opacity-80 transition-all hover:scale-105 active:scale-95">
-                FlightCore
+              <Link to="/dashboard" className="flex items-center gap-3 group">
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:scale-110 transition-transform">
+                  <Plane className="h-4 w-4 text-primary" />
+                </div>
+                <span className="font-display font-black tracking-tighter text-2xl gold-text transition-all">
+                  FlightCore
+                </span>
               </Link>
             </div>
           </header>
