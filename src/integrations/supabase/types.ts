@@ -91,7 +91,7 @@ export type Database = {
           license_number: string | null
           type_ratings: string[] | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           cma_expiration?: string | null
@@ -103,7 +103,7 @@ export type Database = {
           license_number?: string | null
           type_ratings?: string[] | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           cma_expiration?: string | null
@@ -115,7 +115,7 @@ export type Database = {
           license_number?: string | null
           type_ratings?: string[] | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -250,7 +250,7 @@ export type Database = {
           pilot_id: string | null
           takeoff_time: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           aircraft_id: string
@@ -272,7 +272,7 @@ export type Database = {
           pilot_id?: string | null
           takeoff_time?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           aircraft_id?: string
@@ -294,7 +294,7 @@ export type Database = {
           pilot_id?: string | null
           takeoff_time?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -567,6 +567,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          security_answer_hash: string | null
+          security_question: string | null
           updated_at: string
         }
         Insert: {
@@ -575,6 +577,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          security_answer_hash?: string | null
+          security_question?: string | null
           updated_at?: string
         }
         Update: {
@@ -583,6 +587,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          security_answer_hash?: string | null
+          security_question?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -856,27 +862,6 @@ export type Database = {
           id?: string
           metadata?: Json | null
           units?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_security: {
-        Row: {
-          security_answer_hash: string | null
-          security_question: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          security_answer_hash?: string | null
-          security_question?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          security_answer_hash?: string | null
-          security_question?: string | null
-          updated_at?: string
           user_id?: string
         }
         Relationships: []
