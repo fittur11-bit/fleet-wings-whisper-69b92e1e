@@ -96,6 +96,7 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     const text = String(value || "—");
     const lines = doc.splitTextToSize(text, valueMaxW);
     doc.text(lines, x + labelW, currentY);
+    return lines.length;
   };
 
   // Aircraft Section Header
@@ -108,18 +109,21 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
   y += 10;
 
   // Grid Layout
-  renderRow("Prefixo", ac.prefix || service.aircraft_prefix, leftColX, y);
-  renderRow("Status", service.status, rightColX, y);
-  y += 6;
-  renderRow("Modelo", ac.model, leftColX, y);
-  renderRow("Data", service.performed_at ? format(parseISO(service.performed_at), "dd/MM/yyyy", { locale: ptBR }) : "", rightColX, y);
-  y += 6;
-  renderRow("Fabricante", ac.manufacturer, leftColX, y);
-  renderRow("Horas Totais", ac.total_hours != null ? String(ac.total_hours) : "", rightColX, y);
-  y += 6;
-  renderRow("N° Série", ac.serial_number, leftColX, y);
-  renderRow("Técnico", service.technician, rightColX, y);
-  y += 6;
+  const h1 = renderRow("Prefixo", ac.prefix || service.aircraft_prefix, leftColX, y);
+  const h2 = renderRow("Status", service.status, rightColX, y);
+  y += 6 * Math.max(h1, h2);
+
+  const h3 = renderRow("Modelo", ac.model, leftColX, y);
+  const h4 = renderRow("Data", service.performed_at ? format(parseISO(service.performed_at), "dd/MM/yyyy", { locale: ptBR }) : "", rightColX, y);
+  y += 6 * Math.max(h3, h4);
+
+  const h5 = renderRow("Fabricante", ac.manufacturer, leftColX, y);
+  const h6 = renderRow("Horas Totais", ac.total_hours != null ? String(ac.total_hours) : "", rightColX, y);
+  y += 6 * Math.max(h5, h6);
+
+  const h7 = renderRow("N° Série", ac.serial_number, leftColX, y);
+  const h8 = renderRow("Técnico", service.technician, rightColX, y);
+  y += 6 * Math.max(h7, h8);
   // Proprietário pode ser longo — ocupa a linha inteira
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
@@ -132,10 +136,11 @@ export async function generateServiceReport(service: any, aircraft?: any, partSh
     doc.text(ownerLines, leftColX + labelW, y);
     y += 6 * Math.max(1, ownerLines.length);
   }
-  renderRow("Local", service.location, leftColX, y);
-  y += 6;
-  renderRow("Tipo(s)", types, leftColX, y);
-  renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
+  const h9 = renderRow("Local", service.location, leftColX, y);
+  y += 6 * h9;
+  const h10 = renderRow("Tipo(s)", types, leftColX, y);
+  const h11 = renderRow("Custo", service.cost != null ? `R$ ${Number(service.cost).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "", rightColX, y);
+  y += 6 * Math.max(h10, h11);
   
   y += 10;
 
