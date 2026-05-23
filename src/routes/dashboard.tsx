@@ -428,7 +428,7 @@ function DashboardContent() {
           <QuickLink to="/library" icon={BookMarked} label="Documentação" />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
