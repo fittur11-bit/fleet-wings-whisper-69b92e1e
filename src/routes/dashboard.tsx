@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
- import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History, BarChart3, PieChart as PieChartIcon } from "lucide-react";
+ import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History, BarChart3, PieChart as PieChartIcon, LayoutPanelLeft } from "lucide-react";
  import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from "recharts";
+import { cn } from "@/lib/utils";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs, useShipments } from "@/lib/queries";
@@ -100,80 +101,96 @@ function DashboardContent() {
       { label: "Valor em Estoque", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(stockValue), icon: TrendingUp, to: "/parts", color: "text-emerald-400" },
       { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft", color: "text-amber-400" },
     ];
-       {/* Charts Section */}
-       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-         <Card className="lg:col-span-2 border-white/5 bg-card/60 backdrop-blur">
-           <CardHeader>
-             <CardTitle className="flex items-center gap-2 text-base">
-               <BarChart3 className="h-4 w-4 text-primary" /> Tendência de Manutenção (6 meses)
-             </CardTitle>
-           </CardHeader>
-           <CardContent className="h-[240px] pl-0">
-             <ResponsiveContainer width="100%" height="100%">
-               <BarChart data={last6Months}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                 <XAxis 
-                   dataKey="month" 
-                   stroke="#94a3b8" 
-                   fontSize={12} 
-                   tickLine={false} 
-                   axisLine={false} 
-                 />
-                 <YAxis 
-                   stroke="#94a3b8" 
-                   fontSize={12} 
-                   tickLine={false} 
-                   axisLine={false}
-                   allowDecimals={false}
-                 />
-                 <Tooltip 
-                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
-                   itemStyle={{ color: "#38bdf8" }}
-                 />
-                 <Bar dataKey="count" fill="#0ea5e9" radius={[4, 4, 0, 0]} barSize={32} />
-               </BarChart>
-             </ResponsiveContainer>
-           </CardContent>
-         </Card>
- 
-         <Card className="border-white/5 bg-card/60 backdrop-blur">
-           <CardHeader>
-             <CardTitle className="flex items-center gap-2 text-base">
-               <PieChartIcon className="h-4 w-4 text-primary" /> Distribuição de Estoque
-             </CardTitle>
-           </CardHeader>
-           <CardContent className="h-[240px]">
-             <ResponsiveContainer width="100%" height="100%">
-               <PieChart>
-                 <Pie
-                   data={conditionData}
-                   cx="50%"
-                   cy="50%"
-                   innerRadius={60}
-                   outerRadius={80}
-                   paddingAngle={5}
-                   dataKey="value"
-                 >
-                   {conditionData.map((entry, index) => (
-                     <Cell key={`cell-${index}`} fill={entry.color} />
-                   ))}
-                 </Pie>
-                 <Tooltip 
-                   contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b", borderRadius: "8px" }}
-                 />
-               </PieChart>
-             </ResponsiveContainer>
-             <div className="mt-2 flex flex-wrap justify-center gap-4">
-               {conditionData.map((d) => (
-                 <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                   <div className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
-                   {d.name} ({d.value})
-                 </div>
-               ))}
-             </div>
-           </CardContent>
-         </Card>
-       </div>
+        {/* Charts Section */}
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          <Card className="lg:col-span-2 glass-card border-white/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
+                <BarChart3 className="h-4 w-4 text-primary" /> Histórico de Manutenção
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="h-[280px] pt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={last6Months}>
+                  <defs>
+                    <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.8} />
+                      <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                  <XAxis 
+                    dataKey="month" 
+                    stroke="#94a3b8" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false} 
+                    dy={10}
+                  />
+                  <YAxis 
+                    stroke="#94a3b8" 
+                    fontSize={11} 
+                    tickLine={false} 
+                    axisLine={false}
+                    allowDecimals={false}
+                  />
+                  <Tooltip 
+                    cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                    contentStyle={{ backgroundColor: "#0c111d", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px", boxShadow: "0 10px 15px -3px rgba(0,0,0,0.5)" }}
+                    itemStyle={{ color: "oklch(0.74 0.142 78)", fontSize: "12px", fontWeight: "bold" }}
+                  />
+                  <Bar dataKey="count" fill="url(#barGradient)" radius={[6, 6, 0, 0]} barSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+  
+          <Card className="glass-card border-white/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-muted-foreground/80">
+                <PieChartIcon className="h-4 w-4 text-primary" /> Categorias de Peças
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="h-[280px] flex flex-col items-center justify-center">
+              <div className="relative h-[180px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={conditionData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={65}
+                      outerRadius={85}
+                      paddingAngle={8}
+                      dataKey="value"
+                      stroke="none"
+                    >
+                      {conditionData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: "#0c111d", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                  <span className="text-2xl font-bold tracking-tight">{parts.length}</span>
+                  <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Itens</span>
+                </div>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 w-full px-2">
+                {conditionData.map((d) => (
+                  <div key={d.name} className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: d.color }} />
+                    <span className="text-[10px] text-muted-foreground truncate font-medium uppercase tracking-tighter">{d.name}</span>
+                    <span className="ml-auto text-[10px] font-bold text-foreground/80">{d.value}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
  
 
   return (
