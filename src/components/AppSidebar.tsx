@@ -46,15 +46,16 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/40 backdrop-blur-3xl">
-       <div className="flex items-center gap-4 px-6 py-8 border-b border-white/[0.03]">
-         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary shadow-[0_0_20px_rgba(var(--primary),0.3)] group relative overflow-hidden">
-           <Plane className="h-6 w-6 text-primary-foreground relative z-10" />
-           <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+    <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-[#080c14]/60 backdrop-blur-3xl">
+       <div className="flex flex-col items-center gap-4 px-6 py-10 border-b border-white/[0.03] relative overflow-hidden group">
+         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#0c121d] border border-white/10 shadow-[0_0_30px_rgba(var(--primary),0.1)] group-hover:shadow-[0_0_40px_rgba(var(--primary),0.2)] transition-all duration-700 relative overflow-hidden">
+           <Plane className="h-8 w-8 text-primary relative z-10 animate-float" />
+           <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
          </div>
-         <div>
-          <h1 className="font-display text-xl font-bold leading-none tracking-tight">FlightCore</h1>
-          <p className="text-[10px] uppercase tracking-[0.4em] text-primary mt-1.5 font-bold">Aviation</p>
+         <div className="text-center">
+          <h1 className="font-display text-2xl font-black leading-none tracking-tighter gold-text">FlightCore</h1>
+          <p className="text-[9px] uppercase tracking-[0.5em] text-primary/60 mt-2 font-black">Strategic Aviation</p>
         </div>
       </div>
 
