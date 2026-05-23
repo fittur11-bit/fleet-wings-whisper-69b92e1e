@@ -203,24 +203,30 @@ function DashboardContent() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((k) => (
-          <Link key={k.label} to={k.to} className="group">
-            <Card className="glass-card glass-card-hover border-white/5 h-full">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 transition-transform duration-500 group-hover:rotate-12", k.color)}>
-                    <k.icon className="h-6 w-6" />
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {kpis.map((k, i) => (
+          <Link 
+            key={k.label} 
+            to={k.to} 
+            className="group animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-both"
+            style={{ animationDelay: `${i * 100}ms` }}
+          >
+            <Card className="glass-card glass-card-hover border-white/5 h-full overflow-hidden">
+              <CardContent className="p-7 relative">
+                <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-3xl group-hover:bg-primary/10 transition-colors duration-700" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className={cn("flex h-14 w-14 items-center justify-center rounded-2xl bg-white/[0.03] border border-white/5 transition-all duration-700 group-hover:scale-110 group-hover:rotate-3 shadow-inner", k.color)}>
+                    <k.icon className="h-7 w-7" />
                   </div>
                   {k.total !== undefined && (
-                    <Badge variant="outline" className="bg-white/5 border-white/10 text-[10px] uppercase tracking-wider">
-                      {k.total} Total
+                    <Badge variant="outline" className="border-primary/20 text-primary shadow-[0_0_15px_oklch(var(--primary)/0.1)]">
+                      {k.total} TOTAL
                     </Badge>
                   )}
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{k.label}</p>
-                  <p className="mt-1 font-display text-2xl font-bold tracking-tight">{k.value}</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/50 mb-1.5">{k.label}</p>
+                  <p className="font-display text-3xl font-bold tracking-tight text-foreground">{k.value}</p>
                 </div>
               </CardContent>
             </Card>
