@@ -135,9 +135,35 @@
 }
 
 .dark {
-  /* App is dark-only — keep .dark mirror in case shadcn checks it */
   --background: oklch(0.16 0.04 255);
   --foreground: oklch(0.96 0.012 90);
+  --gradient-bg: linear-gradient(140deg, #081020 0%, #0F2139 100%);
+}
+
+.light {
+  --background: oklch(0.98 0.005 255);
+  --foreground: oklch(0.18 0.045 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.045 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.045 255);
+  --primary: oklch(0.26 0.055 252);
+  --primary-foreground: oklch(0.96 0.012 90);
+  --secondary: oklch(0.94 0.01 255);
+  --secondary-foreground: oklch(0.18 0.045 255);
+  --muted: oklch(0.96 0.005 255);
+  --muted-foreground: oklch(0.45 0.02 255);
+  --accent: oklch(0.92 0.015 255);
+  --accent-foreground: oklch(0.26 0.055 252);
+  --border: oklch(0.26 0.055 252 / 12%);
+  --input: oklch(0.26 0.055 252 / 8%);
+  --ring: oklch(0.26 0.055 252 / 60%);
+  --sidebar: oklch(0.98 0.005 255);
+  --sidebar-foreground: oklch(0.18 0.045 255);
+  --sidebar-border: oklch(0.26 0.055 252 / 8%);
+  --gradient-bg: linear-gradient(140deg, #F8FAFC 0%, #E2E8F0 100%);
+  --gradient-card: linear-gradient(145deg, oklch(1 0 0 / 0.8) 0%, oklch(0.98 0.005 255 / 0.5) 100%);
+  --shadow-card: 0 8px 32px -8px oklch(0.18 0.045 255 / 0.1);
 }
 
 @layer base {
