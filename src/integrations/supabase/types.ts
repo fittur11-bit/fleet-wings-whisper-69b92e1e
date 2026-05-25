@@ -91,7 +91,7 @@ export type Database = {
           license_number: string | null
           type_ratings: string[] | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           cma_expiration?: string | null
@@ -103,7 +103,7 @@ export type Database = {
           license_number?: string | null
           type_ratings?: string[] | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           cma_expiration?: string | null
@@ -115,7 +115,7 @@ export type Database = {
           license_number?: string | null
           type_ratings?: string[] | null
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -250,7 +250,7 @@ export type Database = {
           pilot_id: string | null
           takeoff_time: string | null
           updated_at: string
-          user_id: string | null
+          user_id: string
         }
         Insert: {
           aircraft_id: string
@@ -272,7 +272,7 @@ export type Database = {
           pilot_id?: string | null
           takeoff_time?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id: string
         }
         Update: {
           aircraft_id?: string
@@ -294,7 +294,7 @@ export type Database = {
           pilot_id?: string | null
           takeoff_time?: string | null
           updated_at?: string
-          user_id?: string | null
+          user_id?: string
         }
         Relationships: [
           {
