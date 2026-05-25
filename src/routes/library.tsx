@@ -55,7 +55,8 @@ function LibraryPage() {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop();
-      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      if (!user) throw new Error("Sessão expirada");
+      const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error } = await supabase.storage.from("documents").upload(path, file);
       if (error) throw error;
       const { data } = supabase.storage.from("documents").getPublicUrl(path);
