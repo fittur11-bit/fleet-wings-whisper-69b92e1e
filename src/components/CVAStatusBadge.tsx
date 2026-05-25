@@ -13,11 +13,11 @@ export function getCVAStatus(expiration: string | null | undefined) {
 }
 
 const colors = {
-  success: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  warning: "bg-yellow-500/15 text-yellow-300 border-yellow-500/30",
-  orange: "bg-orange-500/15 text-orange-300 border-orange-500/30",
-  danger: "bg-red-500/15 text-red-300 border-red-500/30",
-  muted: "bg-white/5 text-muted-foreground border-white/10",
+  success: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-600/40 dark:border-emerald-500/30",
+  warning: "bg-yellow-500/20 text-yellow-800 dark:text-yellow-300 border-yellow-600/40 dark:border-yellow-500/30",
+  orange: "bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-600/40 dark:border-orange-500/30",
+  danger: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-600/40 dark:border-red-500/30",
+  muted: "bg-foreground/5 text-muted-foreground border-foreground/10",
 };
 
 export function CVAStatusBadge({ expiration, className }: { expiration: string | null | undefined; className?: string }) {
