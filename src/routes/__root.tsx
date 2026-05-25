@@ -133,11 +133,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
    const [theme, setTheme] = useState<Theme>("dark");
 
    useEffect(() => {
-     const saved = typeof window !== "undefined" ? (localStorage.getItem("flightcore-theme") as Theme | null) : null;
-     if (saved && saved !== theme) {
-       setTheme(saved);
-       return;
-     }
+     if (typeof window === "undefined") return;
+     const saved = localStorage.getItem("flightcore-theme") as Theme | null;
+     if (saved === "light" || saved === "dark") setTheme(saved);
+   }, []);
+
+   useEffect(() => {
+     if (typeof window === "undefined") return;
      const root = window.document.documentElement;
      root.classList.remove("light", "dark");
      root.classList.add(theme);
