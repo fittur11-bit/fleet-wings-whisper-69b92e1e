@@ -15,6 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AircraftForm } from "@/components/AircraftForm";
 import { trackUsage, COSTS, bytesToGB } from "@/lib/usage-tracking";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/rab")({
   component: () => <AuthGuard><RabPage /></AuthGuard>,
@@ -33,6 +34,7 @@ type Extracted = {
 
 function RabPage() {
   const [prefix, setPrefix] = useState("");
+  const { user } = useAuth();
   const { data: aircraft = [] } = useAircraft();
   const [importUrl, setImportUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -81,7 +83,8 @@ function RabPage() {
     setLoading(true);
     try {
       const ext = file.name.split(".").pop() || "bin";
-      const path = `rab-import/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      if (!user) throw new Error("Sessão expirada");
+      const path = `${user.id}/rab-import/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
       const { error: upErr } = await supabase.storage.from("documents").upload(path, file);
       if (upErr) throw upErr;
       trackUsage({
