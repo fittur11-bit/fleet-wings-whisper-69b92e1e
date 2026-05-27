@@ -16,7 +16,7 @@ export const Route = createFileRoute("/timeline")({
 type Event = {
   id: string;
   date: string;
-  type: "flight" | "service" | "shipment" | "part_install" | "part_remove" | "document";
+  type: "service" | "shipment" | "part_install" | "part_remove" | "document";
   title: string;
   subtitle?: string;
   aircraft_id?: string | null;
