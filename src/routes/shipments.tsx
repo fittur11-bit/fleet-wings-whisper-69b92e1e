@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { ImageUpload } from "@/components/ImageUpload";
 import { SHIPMENT_STATUS } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -50,6 +51,7 @@ function ShipmentsPage() {
     overhaul_threshold: "",
     status: "sent",
     notes: "",
+    photos: [],
   });
 
   const filtered = shipments.filter((s: any) => filterStatus === "all" || s.status === filterStatus);
@@ -69,6 +71,7 @@ function ShipmentsPage() {
       budget_amount: form.budget_amount ? Number(form.budget_amount) : 0,
       estimated_return_date: form.estimated_return_date || null,
       actual_return_date: form.actual_return_date || null,
+      photos: form.photos || [],
     };
 
     let error;
@@ -114,6 +117,7 @@ function ShipmentsPage() {
       overhaul_threshold: "",
       status: "sent",
       notes: "",
+      photos: [],
     });
   };
 
@@ -135,6 +139,7 @@ function ShipmentsPage() {
       overhaul_threshold: s.overhaul_threshold || "",
       status: s.status || "sent",
       notes: s.notes || "",
+      photos: Array.isArray(s.photos) ? s.photos : [],
     });
     setOpen(true);
   };
@@ -388,6 +393,24 @@ function ShipmentsPage() {
                     placeholder="Detalhes adicionais sobre o serviço..."
                     value={form.notes} 
                     onChange={(e) => setForm({ ...form, notes: e.target.value })} 
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-primary" />
+                    Fotos da Peça
+                  </Label>
+                  <p className="text-[11px] text-muted-foreground">
+                    Anexe imagens da peça (antes do envio, dano, etiqueta, etc.) com descrição.
+                  </p>
+                  <ImageUpload
+                    bucket="part-photos"
+                    multiple
+                    withDescription
+                    value={form.photos}
+                    onChange={(photos) => setForm({ ...form, photos })}
+                    label="Adicionar foto"
                   />
                 </div>
 

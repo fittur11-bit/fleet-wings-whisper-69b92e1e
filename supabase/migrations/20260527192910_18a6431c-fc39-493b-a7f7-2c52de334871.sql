@@ -1,0 +1,1 @@
+ALTER TABLE public.part_shipments ADD COLUMN IF NOT EXISTS photos jsonb NOT NULL DEFAULT '[]'::jsonb;
