@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ShieldCheck, Lock, BarChart3, Archive, History, LogOut } from "lucide-react";
+import { ShieldCheck, Lock, BarChart3, Archive, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin")({
@@ -120,7 +120,6 @@ function AdminPage() {
   const modules = [
     { to: "/usage", label: "Custos e Uso", desc: "Métricas de uso, IA e custos estimados", icon: BarChart3 },
     { to: "/backup", label: "Backup & Limpeza", desc: "Exportar, restaurar e limpar dados", icon: Archive },
-    { to: "/flight-logs", label: "Diário de Bordo", desc: "Registro de voos e horas das aeronaves", icon: History },
   ];
 
   return (

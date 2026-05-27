@@ -1,7 +1,7 @@
  import * as React from "react";
  import { useNavigate } from "@tanstack/react-router";
  import { Command } from "cmdk";
- import { Plane, History, Wrench, Cog, BookMarked, Users, Settings, Search, Package, Plus, ShieldCheck } from "lucide-react";
+import { Plane, Wrench, Cog, BookMarked, Users, Settings, Search, Package, Plus, ShieldCheck } from "lucide-react";
  
  export function CommandMenu() {
    const [open, setOpen] = React.useState(false);
@@ -65,10 +65,6 @@
                  <ShieldCheck className="mr-2 h-4 w-4" />
                  <span>Aplicabilidade</span>
                </CommandItem>
-               <CommandItem onSelect={() => runCommand(() => navigate({ to: "/flight-logs" }))}>
-                 <History className="mr-2 h-4 w-4" />
-                 <span>Diário de Bordo</span>
-               </CommandItem>
                <CommandItem onSelect={() => runCommand(() => navigate({ to: "/services" }))}>
                  <Wrench className="mr-2 h-4 w-4" />
                  <span>Manutenção</span>
@@ -79,10 +75,6 @@
                <CommandItem onSelect={() => runCommand(() => navigate({ to: "/parts" }))}>
                  <Plus className="mr-2 h-4 w-4 text-emerald-400" />
                  <span>Cadastrar Peça</span>
-               </CommandItem>
-               <CommandItem onSelect={() => runCommand(() => navigate({ to: "/flight-logs" }))}>
-                 <Plus className="mr-2 h-4 w-4 text-sky-400" />
-                 <span>Registrar Voo</span>
                </CommandItem>
              </Command.Group>
  

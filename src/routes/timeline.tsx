@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Plane, Wrench, Package, Cog, History as HistoryIcon, FileText } from "lucide-react";
+import { Wrench, Package, Cog, History as HistoryIcon, FileText } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useAircraft, useServices, useShipments, useFlightLogs, useParts, useDocuments } from "@/lib/queries";
+import { useAircraft, useServices, useShipments, useParts, useDocuments } from "@/lib/queries";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { format, parseISO } from "date-fns";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/timeline")({
 type Event = {
   id: string;
   date: string;
-  type: "flight" | "service" | "shipment" | "part_install" | "part_remove" | "document";
+  type: "service" | "shipment" | "part_install" | "part_remove" | "document";
   title: string;
   subtitle?: string;
   aircraft_id?: string | null;
@@ -25,7 +25,6 @@ type Event = {
 };
 
 const typeConfig: Record<Event["type"], { icon: any; color: string; label: string }> = {
-  flight: { icon: Plane, color: "text-sky-400 bg-sky-500/10 border-sky-500/20", label: "Voo" },
   service: { icon: Wrench, color: "text-primary bg-primary/10 border-primary/20", label: "Serviço" },
   shipment: { icon: Package, color: "text-orange-400 bg-orange-500/10 border-orange-500/20", label: "Envio" },
   part_install: { icon: Cog, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", label: "Peça instalada" },
@@ -37,7 +36,6 @@ function TimelinePage() {
   const { data: aircraft = [] } = useAircraft();
   const { data: services = [] } = useServices();
   const { data: shipments = [] } = useShipments();
-  const { data: logs = [] } = useFlightLogs();
   const { data: parts = [] } = useParts();
   const { data: documents = [] } = useDocuments();
   const [filterAc, setFilterAc] = useState("all");
@@ -45,18 +43,6 @@ function TimelinePage() {
 
   const events: Event[] = useMemo(() => {
     const all: Event[] = [];
-
-    logs.forEach((l: any) => {
-      all.push({
-        id: `log-${l.id}`,
-        date: l.date,
-        type: "flight",
-        title: `${l.departure_airport || "—"} → ${l.arrival_airport || "—"}`,
-        subtitle: `${l.flight_time}h · ${l.cycles} ciclo(s)${l.pilot?.full_name ? ` · ${l.pilot.full_name}` : ""}`,
-        aircraft_id: l.aircraft_id,
-        aircraft_prefix: l.aircraft?.prefix,
-      });
-    });
 
     services.forEach((s: any) => {
       if (!s.performed_at && !s.created_at) return;
@@ -140,7 +126,7 @@ function TimelinePage() {
       .filter((e) => filterAc === "all" || e.aircraft_id === filterAc)
       .filter((e) => filterType === "all" || e.type === filterType)
       .sort((a, b) => (a.date > b.date ? -1 : 1));
-  }, [logs, services, shipments, parts, documents, aircraft, filterAc, filterType]);
+  }, [services, shipments, parts, documents, aircraft, filterAc, filterType]);
 
   // Group by month
   const grouped = useMemo(() => {

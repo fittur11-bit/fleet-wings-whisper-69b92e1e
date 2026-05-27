@@ -60,28 +60,6 @@ export function useCrew() {
   });
 }
 
-export function useFlightLogs() {
-  const { user } = useAuth();
-  return useQuery({
-    queryKey: ["flight_logs", user?.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("flight_logs")
-        .select(`
-          *,
-          aircraft:aircraft_id(prefix, model),
-          pilot:pilot_id(full_name),
-          copilot:copilot_id(full_name)
-        `)
-        .order("date", { ascending: false })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data || [];
-    },
-    staleTime: 2 * 60 * 1000,
-  });
-}
-
 export function useParts() {
   const { user } = useAuth();
   return useQuery({
