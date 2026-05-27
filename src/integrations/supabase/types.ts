@@ -410,6 +410,7 @@ export type Database = {
           part_id: string | null
           part_name: string
           part_number: string | null
+          photos: Json
           serial_number: string | null
           shipping_date: string
           status: string
@@ -431,6 +432,7 @@ export type Database = {
           part_id?: string | null
           part_name: string
           part_number?: string | null
+          photos?: Json
           serial_number?: string | null
           shipping_date?: string
           status?: string
@@ -452,6 +454,7 @@ export type Database = {
           part_id?: string | null
           part_name?: string
           part_number?: string | null
+          photos?: Json
           serial_number?: string | null
           shipping_date?: string
           status?: string
