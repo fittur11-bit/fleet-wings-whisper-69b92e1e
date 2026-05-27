@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
- import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, History, BarChart3, PieChart as PieChartIcon } from "lucide-react";
+ import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, BarChart3, PieChart as PieChartIcon } from "lucide-react";
  import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from "recharts";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
-import { useAircraft, useServices, useParts, useMaintenanceItems, useFlightLogs, useShipments } from "@/lib/queries";
+import { useAircraft, useServices, useParts, useMaintenanceItems, useShipments } from "@/lib/queries";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,6 @@ function DashboardContent() {
   const { data: services = [] } = useServices();
   const { data: parts = [] } = useParts();
   const { data: mx = [] } = useMaintenanceItems();
-  const { data: logs = [] } = useFlightLogs();
   const { data: shipments = [] } = useShipments();
 
   const activeAircraft = aircraft.filter((a: any) => a.status === "active").length;
@@ -97,12 +96,6 @@ function DashboardContent() {
       { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#64748b" },
    ].filter(d => d.value > 0);
  
-   const monthlyFlights = logs.filter((l: any) => {
-     if (!l.date) return false;
-     const d = parseISO(l.date);
-     return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
-   }).length;
-
    const kpis = [
      { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
      { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
@@ -348,7 +341,6 @@ function DashboardContent() {
       {/* Quick links */}
       <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
         <QuickLink to="/aircraft" icon={Plane} label="Frota" />
-        <QuickLink to="/flight-logs" icon={History} label="Diário" />
         <QuickLink to="/services" icon={Wrench} label="Manutenção" />
         <QuickLink to="/parts" icon={Cog} label="Estoque" />
         <QuickLink to="/library" icon={BookMarked} label="Biblioteca" />
