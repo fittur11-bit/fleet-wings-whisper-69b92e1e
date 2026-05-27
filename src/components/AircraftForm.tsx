@@ -48,6 +48,7 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
       total_hours: form.total_hours ? Number(form.total_hours) : 0,
       cva_expiration: form.cva_expiration || null,
       last_inspection_date: form.last_inspection_date || null,
+      category: form.category || null,
     };
     const op = initial?.id
       ? supabase.from("aircraft").update(payload).eq("id", initial.id)
