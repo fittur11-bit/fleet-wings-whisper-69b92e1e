@@ -1,15 +1,29 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Link } from "@tanstack/react-router";
- import { Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp, BookMarked, BarChart3, PieChart as PieChartIcon } from "lucide-react";
- import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from "recharts";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp,
+  BookMarked, BarChart3, PieChart as PieChartIcon, ArrowUpRight, Activity,
+  Package, ShieldCheck,
+} from "lucide-react";
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, Cell, PieChart, Pie,
+} from "recharts";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useAircraft, useServices, useParts, useMaintenanceItems, useShipments } from "@/lib/queries";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { differenceInDays, format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+
+/**
+ * Dashboard com layout Bento Grid.
+ * Paleta local: Charcoal & Ember (#1a1a1a / #2d2d2d / #4a4a4a / #e85d3a).
+ * Tipografia: Sora (display) + Manrope (body), já carregadas globalmente.
+ */
+
+const EMBER = "#e85d3a";
+const EMBER_SOFT = "#f5c0a8";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -34,6 +48,72 @@ function Page() {
   );
 }
 
+// ─── Bento primitives ──────────────────────────────────────────────────
+
+function BentoCard({
+  className,
+  to,
+  children,
+  accent = false,
+}: {
+  className?: string;
+  to?: string;
+  children: React.ReactNode;
+  accent?: boolean;
+}) {
+  const base = cn(
+    "group relative overflow-hidden rounded-2xl border bg-[#1a1a1a] p-5 transition-all duration-300",
+    accent
+      ? "border-[#e85d3a]/40 shadow-[0_0_0_1px_rgba(232,93,58,0.08),0_20px_60px_-30px_rgba(232,93,58,0.6)]"
+      : "border-white/[0.06] hover:border-[#e85d3a]/30 hover:shadow-[0_20px_60px_-30px_rgba(232,93,58,0.4)]",
+    className,
+  );
+  const content = (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+      <div className="relative">{children}</div>
+    </>
+  );
+  if (to) {
+    return (
+      <Link to={to as any} className={base}>
+        {content}
+      </Link>
+    );
+  }
+  return <div className={base}>{content}</div>;
+}
+
+function SectionLabel({ icon: Icon, children, tone = "default", count }: { icon: any; children: React.ReactNode; tone?: "default" | "ember" | "warn" | "ok"; count?: number }) {
+  const toneClass = {
+    default: "text-[#a8a29e]",
+    ember: "text-[#e85d3a]",
+    warn: "text-amber-400",
+    ok: "text-emerald-400",
+  }[tone];
+  return (
+    <div className="mb-4 flex items-center justify-between">
+      <div className={cn("flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em]", toneClass)}>
+        <Icon className="h-3.5 w-3.5" />
+        {children}
+      </div>
+      {typeof count === "number" && (
+        <span className="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[10px] text-[#a8a29e]">{count}</span>
+      )}
+    </div>
+  );
+}
+
+// ─── Dashboard ─────────────────────────────────────────────────────────
+
 function DashboardContent() {
   const { data: aircraft = [] } = useAircraft();
   const { data: services = [] } = useServices();
@@ -43,10 +123,9 @@ function DashboardContent() {
 
   const activeAircraft = aircraft.filter((a: any) => a.status === "active").length;
   const inMaintenance = aircraft.filter((a: any) => a.status === "maintenance").length;
-  const pendingServices = services.filter((s: any) => s.status === "pending" || s.status === "in_progress").length;
   const installedParts = parts.filter((p: any) => p.status === "installed").length;
+  const pendingServices = services.filter((s: any) => s.status === "pending" || s.status === "in_progress").length;
 
-  // CVA alerts: vencidas ou a vencer em 30 dias
   const today = new Date();
   const cvaAlerts = aircraft
     .filter((a: any) => a.cva_expiration)
@@ -59,274 +138,267 @@ function DashboardContent() {
     .map((m: any) => ({ ...m, daysLeft: differenceInDays(parseISO(m.due_date), today) }))
     .filter((m: any) => m.daysLeft <= 60)
     .sort((a: any, b: any) => a.daysLeft - b.daysLeft)
-    .slice(0, 6);
+    .slice(0, 5);
 
   const lateShipments = shipments
     .filter((s: any) => s.status !== "received" && s.status !== "cancelled" && s.estimated_return_date)
     .map((s: any) => ({ ...s, daysLate: differenceInDays(today, parseISO(s.estimated_return_date)) }))
     .filter((s: any) => s.daysLate > 0)
     .sort((a: any, b: any) => b.daysLate - a.daysLate)
-    .slice(0, 6);
+    .slice(0, 4);
 
   const recentServices = services.slice(0, 5);
+  const totalFlightHours = aircraft.reduce((sum: number, a: any) => sum + Number(a.total_hours || 0), 0);
+  const stockValue = parts.reduce((sum: number, p: any) => sum + (Number(p.unit_price) || 0), 0);
 
-   const totalFlightHours = aircraft.reduce((sum: number, a: any) => sum + Number(a.total_hours || 0), 0);
-   const stockValue = parts.reduce((sum: number, p: any) => sum + (Number(p.unit_price) || 0), 0);
- 
-   // Chart Data: Services by month
-   const last6Months = [...Array(6)].map((_, i) => {
-     const d = new Date();
-     d.setMonth(d.getMonth() - i);
-     return {
-       month: format(d, "MMM", { locale: ptBR }),
-        count: services.filter(s => {
-          if (!s.performed_at) return false;
-          const sd = parseISO(s.performed_at);
-          return sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
-        }).length,
-       rawDate: d
-     };
-   }).reverse();
- 
-   // Chart Data: Parts by condition
-   const conditionData = [
-     { name: "Novo", value: parts.filter(p => p.condition === "new").length, color: "#10b981" },
-     { name: "Serviçável", value: parts.filter(p => p.condition === "serviceable").length, color: "#0ea5e9" },
-     { name: "Reparo", value: parts.filter(p => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#f59e0b" },
-      { name: "Outros", value: parts.filter(p => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#64748b" },
-   ].filter(d => d.value > 0);
- 
-   const kpis = [
-     { label: "Frota Ativa", value: activeAircraft, total: aircraft.length, icon: Plane, to: "/aircraft" },
-     { label: "Horas Totais", value: `${totalFlightHours.toFixed(1)}h`, icon: Clock, to: "/aircraft" },
-     { label: "Valor em Estoque", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(stockValue), icon: TrendingUp, to: "/parts" },
-     { label: "Manutenção", value: inMaintenance, icon: Wrench, to: "/aircraft" },
-   ];
-       {/* Charts Section */}
-       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
-         <Card className="lg:col-span-2 border-white/5 bg-card/60 backdrop-blur">
-           <CardHeader>
-             <CardTitle className="flex items-center gap-2 text-base">
-               <BarChart3 className="h-4 w-4 text-primary" /> Tendência de Manutenção (6 meses)
-             </CardTitle>
-           </CardHeader>
-           <CardContent className="h-[240px] pl-0">
-             <ResponsiveContainer width="100%" height="100%">
-               <BarChart data={last6Months}>
-                 <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="opacity-10" vertical={false} />
-                 <XAxis 
-                   dataKey="month" 
-                   stroke="currentColor" 
-                   className="text-muted-foreground"
-                   fontSize={12} 
-                   tickLine={false} 
-                   axisLine={false} 
-                 />
-                 <YAxis 
-                   stroke="currentColor" 
-                   className="text-muted-foreground"
-                   fontSize={12} 
-                   tickLine={false} 
-                   axisLine={false}
-                   allowDecimals={false}
-                 />
-                 <Tooltip 
-                   contentStyle={{ backgroundColor: "var(--popover)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--popover-foreground)" }}
-                   itemStyle={{ color: "var(--primary)" }}
-                 />
-                 <Bar dataKey="count" fill="var(--primary)" radius={[4, 4, 0, 0]} barSize={32} />
-               </BarChart>
-             </ResponsiveContainer>
-           </CardContent>
-         </Card>
- 
-         <Card className="border-white/5 bg-card/60 backdrop-blur">
-           <CardHeader>
-             <CardTitle className="flex items-center gap-2 text-base">
-               <PieChartIcon className="h-4 w-4 text-primary" /> Distribuição de Estoque
-             </CardTitle>
-           </CardHeader>
-           <CardContent className="h-[240px]">
-             <ResponsiveContainer width="100%" height="100%">
-               <PieChart>
-                 <Pie
-                   data={conditionData}
-                   cx="50%"
-                   cy="50%"
-                   innerRadius={60}
-                   outerRadius={80}
-                   paddingAngle={5}
-                   dataKey="value"
-                 >
-                   {conditionData.map((entry, index) => (
-                     <Cell key={`cell-${index}`} fill={entry.color} />
-                   ))}
-                 </Pie>
-                 <Tooltip 
-                   contentStyle={{ backgroundColor: "var(--popover)", border: "1px solid var(--border)", borderRadius: "8px", color: "var(--popover-foreground)" }}
-                 />
-               </PieChart>
-             </ResponsiveContainer>
-             <div className="mt-2 flex flex-wrap justify-center gap-4">
-               {conditionData.map((d) => (
-                 <div key={d.name} className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
-                   <div className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
-                   {d.name} ({d.value})
-                 </div>
-               ))}
-             </div>
-           </CardContent>
-         </Card>
-       </div>
- 
+  const last6Months = [...Array(6)].map((_, i) => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    return {
+      month: format(d, "MMM", { locale: ptBR }),
+      count: services.filter((s: any) => {
+        if (!s.performed_at) return false;
+        const sd = parseISO(s.performed_at);
+        return sd.getMonth() === d.getMonth() && sd.getFullYear() === d.getFullYear();
+      }).length,
+    };
+  }).reverse();
+
+  const conditionData = [
+    { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#e85d3a" },
+    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#f5c0a8" },
+    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#a8a29e" },
+    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#4a4a4a" },
+  ].filter((d) => d.value > 0);
+
+  const totalAlerts = cvaAlerts.length + upcomingMx.length + lateShipments.length;
+  const criticalAlerts = cvaAlerts.filter((a: any) => a.daysLeft <= 15).length + lateShipments.length;
 
   return (
     <>
       <PageHeader
         title="Painel"
-        description="Visão geral da operação e alertas de conformidade."
+        description="Centro de comando da operação · monitoramento em tempo real."
       />
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {kpis.map((k) => (
-          <Link key={k.label} to={k.to} className="group">
-            <Card className="border-white/5 bg-card/60 backdrop-blur transition-all hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">{k.label}</p>
-                    <p className="mt-2 font-display text-3xl font-bold tracking-tight">{k.value}</p>
-                    {k.total !== undefined && (
-                      <p className="mt-1 text-xs text-muted-foreground">de {k.total} no total</p>
-                    )}
-                  </div>
-                     <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-                    <k.icon className="h-5 w-5" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      {/* ─── ROW 1 — Hero KPI + KPIs secundários + Alertas ─────────── */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-6">
+        {/* Hero KPI — Frota Ativa (3 cols) */}
+        <BentoCard to="/aircraft" className="md:col-span-3 md:row-span-2">
+          <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="font-display text-7xl font-bold tracking-tighter text-white tabular-nums">
+                {String(activeAircraft).padStart(2, "0")}
+              </p>
+              <p className="mt-2 text-sm text-[#a8a29e]">
+                de <span className="font-mono text-white">{aircraft.length}</span> aeronaves operacionais
+              </p>
+            </div>
+            <div className="hidden h-14 w-14 items-center justify-center rounded-2xl bg-[#e85d3a]/10 text-[#e85d3a] sm:flex">
+              <Plane className="h-7 w-7" />
+            </div>
+          </div>
+          <div className="mt-6 grid grid-cols-3 gap-3 border-t border-white/[0.06] pt-5">
+            <MiniStat label="Em manutenção" value={inMaintenance} />
+            <MiniStat label="Peças instaladas" value={installedParts} />
+            <MiniStat label="Serviços ativos" value={pendingServices} />
+          </div>
+          <div className="mt-5 flex items-center justify-between text-xs">
+            <span className="text-[#a8a29e]">Ver detalhes da frota</span>
+            <ArrowUpRight className="h-4 w-4 text-[#e85d3a] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
+        </BentoCard>
+
+        {/* Horas Totais (2 cols) */}
+        <BentoCard to="/aircraft" className="md:col-span-2">
+          <SectionLabel icon={Clock}>Horas Totais</SectionLabel>
+          <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
+            {totalFlightHours.toFixed(1)}<span className="text-xl text-[#a8a29e]">h</span>
+          </p>
+          <p className="mt-1 text-xs text-[#a8a29e]">consolidado da frota</p>
+        </BentoCard>
+
+        {/* Alertas críticos (1 col) — destaque ember */}
+        <BentoCard accent className="md:col-span-1">
+          <SectionLabel icon={AlertTriangle} tone="ember">Alertas</SectionLabel>
+          <p className="font-display text-4xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
+            {totalAlerts}
+          </p>
+          <p className="mt-1 text-xs text-[#f5c0a8]">
+            <span className="font-semibold">{criticalAlerts}</span> crítico(s)
+          </p>
+        </BentoCard>
+
+        {/* Valor estoque (2 cols) */}
+        <BentoCard to="/parts" className="md:col-span-2">
+          <SectionLabel icon={TrendingUp}>Valor em Estoque</SectionLabel>
+          <p className="font-display text-3xl font-bold tracking-tight text-white tabular-nums">
+            {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(stockValue)}
+          </p>
+          <p className="mt-1 text-xs text-[#a8a29e]">{parts.length} itens cadastrados</p>
+        </BentoCard>
+
+        {/* Saúde geral (1 col) */}
+        <BentoCard className="md:col-span-1">
+          <SectionLabel icon={ShieldCheck} tone={criticalAlerts === 0 ? "ok" : "warn"}>Saúde</SectionLabel>
+          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-white">
+            {Math.max(0, Math.round(100 - (criticalAlerts * 12 + (totalAlerts - criticalAlerts) * 4))).toString()}
+            <span className="text-base text-[#a8a29e]">%</span>
+          </p>
+          <p className="mt-1 text-xs text-[#a8a29e]">índice operacional</p>
+        </BentoCard>
       </div>
 
-       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* CVA Alerts */}
-        <Card className="border-white/5 bg-card/60 backdrop-blur">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <AlertTriangle className="h-4 w-4 text-amber-400" /> Alertas CVA
-            </CardTitle>
-            <Badge variant="outline" className="text-xs">{cvaAlerts.length}</Badge>
-          </CardHeader>
-          <CardContent>
-            {cvaAlerts.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-8 text-center">
-                <CheckCircle2 className="h-8 w-8 text-emerald-400" />
-                <p className="mt-2 text-sm text-muted-foreground">Nenhuma CVA próxima do vencimento.</p>
+      {/* ─── ROW 2 — Gráficos ──────────────────────────────────────── */}
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
+        <BentoCard className="md:col-span-4">
+          <SectionLabel icon={BarChart3} tone="ember">Tendência de Manutenção · 6 meses</SectionLabel>
+          <div className="h-[220px] -ml-2">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={last6Months} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" className="opacity-[0.05]" vertical={false} />
+                <XAxis dataKey="month" stroke="#a8a29e" fontSize={11} tickLine={false} axisLine={false} />
+                <YAxis stroke="#a8a29e" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                <Tooltip
+                  cursor={{ fill: "rgba(232,93,58,0.06)" }}
+                  contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid rgba(232,93,58,0.3)", borderRadius: "10px", color: "#fafaf9", fontSize: "12px" }}
+                  itemStyle={{ color: EMBER }}
+                />
+                <Bar dataKey="count" fill={EMBER} radius={[6, 6, 0, 0]} barSize={28} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </BentoCard>
+
+        <BentoCard className="md:col-span-2">
+          <SectionLabel icon={PieChartIcon}>Estoque por Condição</SectionLabel>
+          {conditionData.length === 0 ? (
+            <div className="flex h-[220px] items-center justify-center text-xs text-[#a8a29e]">Sem dados</div>
+          ) : (
+            <>
+              <div className="h-[160px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={conditionData} cx="50%" cy="50%" innerRadius={50} outerRadius={72} paddingAngle={3} dataKey="value" stroke="none">
+                      {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid rgba(232,93,58,0.3)", borderRadius: "10px", color: "#fafaf9", fontSize: "12px" }} />
+                  </PieChart>
+                </ResponsiveContainer>
               </div>
-            ) : (
-              <ul className="space-y-2">
-                {cvaAlerts.slice(0, 6).map((a: any) => (
-                  <li key={a.id} className="flex items-center justify-between rounded-lg border border-white/5 bg-background/40 px-3 py-2">
-                    <div>
-                      <p className="font-mono text-sm font-semibold">{a.prefix}</p>
-                      <p className="text-xs text-muted-foreground">{a.model || "—"}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs text-muted-foreground">{format(parseISO(a.cva_expiration), "dd/MM/yyyy", { locale: ptBR })}</p>
-                      <Badge variant={a.daysLeft < 0 ? "destructive" : a.daysLeft <= 15 ? "destructive" : "outline"} className="mt-1 text-[10px]">
-                        {a.daysLeft < 0 ? `${Math.abs(a.daysLeft)}d vencida` : `${a.daysLeft}d restantes`}
-                      </Badge>
-                    </div>
-                  </li>
+              <div className="mt-3 space-y-1.5">
+                {conditionData.map((d) => (
+                  <div key={d.name} className="flex items-center justify-between text-[11px]">
+                    <span className="flex items-center gap-2 text-[#a8a29e]">
+                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+                      {d.name}
+                    </span>
+                    <span className="font-mono text-white">{d.value}</span>
+                  </div>
                 ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Upcoming maintenance */}
-        <Card className="border-white/5 bg-card/60 backdrop-blur">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-base">
-              <Wrench className="h-4 w-4 text-primary" /> Manutenções próximas
-            </CardTitle>
-            <Badge variant="outline" className="text-xs">{upcomingMx.length}</Badge>
-          </CardHeader>
-          <CardContent>
-            {upcomingMx.length === 0 ? (
-              <p className="py-8 text-center text-sm text-muted-foreground">Nenhum item próximo do vencimento.</p>
-            ) : (
-              <ul className="space-y-2">
-                {upcomingMx.map((m: any) => (
-                  <li key={m.id} className="flex items-center justify-between rounded-lg border border-white/5 bg-background/40 px-3 py-2">
-                    <div>
-                      <p className="text-sm font-medium">{m.description || m.item_type}</p>
-                      <p className="text-xs text-muted-foreground font-mono">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
-                    </div>
-                    <Badge variant={m.daysLeft < 0 ? "destructive" : m.daysLeft <= 15 ? "destructive" : "outline"} className="text-[10px]">
-                      {m.daysLeft < 0 ? `${Math.abs(m.daysLeft)}d vencido` : `${m.daysLeft}d`}
-                    </Badge>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+              </div>
+            </>
+          )}
+        </BentoCard>
       </div>
 
-      {/* Recent services */}
-      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <AlertTriangle className="h-4 w-4 text-red-400" /> Peças com retorno atrasado
-          </CardTitle>
-          <Badge variant={lateShipments.length ? "destructive" : "outline"} className="text-xs">{lateShipments.length}</Badge>
-        </CardHeader>
-        <CardContent>
-          {lateShipments.length === 0 ? (
-            <p className="py-4 text-center text-sm text-muted-foreground">Nenhuma peça atrasada.</p>
+      {/* ─── ROW 3 — CVA + Manutenções + Envios atrasados ──────────── */}
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
+        {/* CVA Alerts */}
+        <BentoCard className="md:col-span-2">
+          <SectionLabel icon={AlertTriangle} tone="warn" count={cvaAlerts.length}>CVA</SectionLabel>
+          {cvaAlerts.length === 0 ? (
+            <EmptyState icon={CheckCircle2} label="Nenhuma CVA próxima do vencimento." />
           ) : (
             <ul className="space-y-2">
-              {lateShipments.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between rounded-lg border border-red-500/10 bg-red-500/5 px-3 py-2">
+              {cvaAlerts.slice(0, 4).map((a: any) => (
+                <li key={a.id} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#2d2d2d]/40 px-3 py-2">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium truncate">{s.part_name}</p>
-                    <p className="text-xs text-muted-foreground font-mono">
-                      {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
-                    </p>
+                    <p className="font-mono text-sm font-semibold text-white">{a.prefix}</p>
+                    <p className="truncate text-[11px] text-[#a8a29e]">{a.model || "—"}</p>
                   </div>
-                  <Badge variant="destructive" className="text-[10px] shrink-0 ml-2">{s.daysLate}d atrasado</Badge>
+                  <UrgencyChip days={a.daysLeft} />
                 </li>
               ))}
             </ul>
           )}
-        </CardContent>
-      </Card>
+        </BentoCard>
 
-      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="h-4 w-4 text-primary" /> Serviços recentes
-          </CardTitle>
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/services">Ver todos</Link>
-          </Button>
-        </CardHeader>
-        <CardContent>
-          {recentServices.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Nenhum serviço registrado ainda.</p>
+        {/* Upcoming maintenance */}
+        <BentoCard className="md:col-span-2">
+          <SectionLabel icon={Wrench} tone="ember" count={upcomingMx.length}>Manutenções</SectionLabel>
+          {upcomingMx.length === 0 ? (
+            <EmptyState icon={CheckCircle2} label="Nenhum item próximo do vencimento." />
           ) : (
-            <ul className="divide-y divide-white/5">
-              {recentServices.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between py-3">
-                  <div>
-                    <p className="text-sm font-medium">{s.service_type}</p>
-                    <p className="text-xs text-muted-foreground">
-                      <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
-                      {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
+            <ul className="space-y-2">
+              {upcomingMx.map((m: any) => (
+                <li key={m.id} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#2d2d2d]/40 px-3 py-2">
+                  <div className="min-w-0 pr-2">
+                    <p className="truncate text-sm font-medium text-white">{m.description || m.item_type}</p>
+                    <p className="font-mono text-[11px] text-[#a8a29e]">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
+                  </div>
+                  <UrgencyChip days={m.daysLeft} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </BentoCard>
+
+        {/* Late shipments */}
+        <BentoCard className="md:col-span-2">
+          <SectionLabel icon={Package} tone="ember" count={lateShipments.length}>Envios atrasados</SectionLabel>
+          {lateShipments.length === 0 ? (
+            <EmptyState icon={CheckCircle2} label="Nenhuma peça atrasada." />
+          ) : (
+            <ul className="space-y-2">
+              {lateShipments.map((s: any) => (
+                <li key={s.id} className="flex items-center justify-between rounded-lg border border-[#e85d3a]/20 bg-[#e85d3a]/[0.06] px-3 py-2">
+                  <div className="min-w-0 pr-2">
+                    <p className="truncate text-sm font-medium text-white">{s.part_name}</p>
+                    <p className="truncate font-mono text-[11px] text-[#a8a29e]">
+                      {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
                     </p>
+                  </div>
+                  <span className="shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold text-white" style={{ backgroundColor: EMBER }}>
+                    {s.daysLate}d
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </BentoCard>
+      </div>
+
+      {/* ─── ROW 4 — Atividade recente + Atalhos ───────────────────── */}
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
+        <BentoCard className="md:col-span-4">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#a8a29e]">
+              <Activity className="h-3.5 w-3.5" />
+              Atividade recente
+            </div>
+            <Link to="/services" className="text-[11px] font-medium text-[#e85d3a] hover:underline">
+              Ver todos →
+            </Link>
+          </div>
+          {recentServices.length === 0 ? (
+            <EmptyState icon={Activity} label="Nenhum serviço registrado ainda." />
+          ) : (
+            <ul className="divide-y divide-white/[0.06]">
+              {recentServices.map((s: any) => (
+                <li key={s.id} className="flex items-center justify-between py-2.5">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e85d3a]/10 text-[#e85d3a]">
+                      <Wrench className="h-3.5 w-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-white">{s.service_type}</p>
+                      <p className="text-[11px] text-[#a8a29e]">
+                        <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
+                        {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
+                      </p>
+                    </div>
                   </div>
                   <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px]">
                     {s.status}
@@ -335,27 +407,64 @@ function DashboardContent() {
               ))}
             </ul>
           )}
-        </CardContent>
-      </Card>
+        </BentoCard>
 
-      {/* Quick links */}
-      <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <QuickLink to="/aircraft" icon={Plane} label="Frota" />
-        <QuickLink to="/services" icon={Wrench} label="Manutenção" />
-        <QuickLink to="/parts" icon={Cog} label="Estoque" />
-        <QuickLink to="/library" icon={BookMarked} label="Biblioteca" />
+        <BentoCard className="md:col-span-2">
+          <SectionLabel icon={ArrowUpRight}>Atalhos</SectionLabel>
+          <div className="grid grid-cols-2 gap-2">
+            <QuickLink to="/aircraft" icon={Plane} label="Frota" />
+            <QuickLink to="/services" icon={Wrench} label="Manutenção" />
+            <QuickLink to="/parts" icon={Cog} label="Estoque" />
+            <QuickLink to="/library" icon={BookMarked} label="Biblioteca" />
+          </div>
+        </BentoCard>
       </div>
     </>
   );
 }
 
+// ─── Small atoms ───────────────────────────────────────────────────────
+
+function MiniStat({ label, value }: { label: string; value: number | string }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-wider text-[#a8a29e]">{label}</p>
+      <p className="mt-1 font-display text-xl font-semibold tabular-nums text-white">{value}</p>
+    </div>
+  );
+}
+
+function EmptyState({ icon: Icon, label }: { icon: any; label: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-6 text-center">
+      <Icon className="h-7 w-7 text-emerald-400/70" />
+      <p className="mt-2 text-xs text-[#a8a29e]">{label}</p>
+    </div>
+  );
+}
+
+function UrgencyChip({ days }: { days: number }) {
+  const critical = days <= 15;
+  const overdue = days < 0;
+  const bg = overdue || critical ? "bg-[#e85d3a]" : "bg-white/10";
+  const fg = overdue || critical ? "text-white" : "text-[#a8a29e]";
+  return (
+    <span className={cn("shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold", bg, fg)}>
+      {overdue ? `${Math.abs(days)}d↑` : `${days}d`}
+    </span>
+  );
+}
+
 function QuickLink({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
   return (
-    <Link to={to as any} className="group flex items-center gap-3 rounded-xl border border-white/5 bg-card/40 p-4 transition hover:border-primary/40 hover:bg-card/70">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-        <Icon className="h-4 w-4" />
+    <Link
+      to={to as any}
+      className="group/q flex items-center gap-2 rounded-xl border border-white/[0.06] bg-[#2d2d2d]/50 p-3 transition-all hover:border-[#e85d3a]/40 hover:bg-[#e85d3a]/[0.06]"
+    >
+      <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#e85d3a]/10 text-[#e85d3a] transition-all group-hover/q:bg-[#e85d3a] group-hover/q:text-white">
+        <Icon className="h-3.5 w-3.5" />
       </div>
-      <span className="text-sm font-medium">{label}</span>
+      <span className="text-xs font-medium text-white">{label}</span>
     </Link>
   );
 }
