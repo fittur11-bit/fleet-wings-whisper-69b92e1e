@@ -12,6 +12,7 @@ import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { useAircraft, useServices, useParts, useMaintenanceItems, useShipments } from "@/lib/queries";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { differenceInDays, format, parseISO } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
