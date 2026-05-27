@@ -396,6 +396,24 @@ function ShipmentsPage() {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <Package className="h-4 w-4 text-primary" />
+                    Fotos da Peça
+                  </Label>
+                  <p className="text-[11px] text-muted-foreground">
+                    Anexe imagens da peça (antes do envio, dano, etiqueta, etc.) com descrição.
+                  </p>
+                  <ImageUpload
+                    bucket="part-photos"
+                    multiple
+                    withDescription
+                    value={form.photos}
+                    onChange={(photos) => setForm({ ...form, photos })}
+                    label="Adicionar foto"
+                  />
+                </div>
+
                 <div className="flex justify-end gap-2 pt-4 border-t border-white/5">
                   <Button type="button" variant="ghost" onClick={closeDialog}>Cancelar</Button>
                    <Button type="submit" className="bg-primary text-primary-foreground shadow-lg">
