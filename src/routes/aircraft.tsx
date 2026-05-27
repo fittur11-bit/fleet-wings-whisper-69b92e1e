@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AircraftForm } from "@/components/AircraftForm";
 import { CVAStatusBadge } from "@/components/CVAStatusBadge";
-import { AIRCRAFT_STATUS } from "@/lib/constants";
+import { AIRCRAFT_STATUS, AIRCRAFT_CATEGORIES } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -35,6 +35,7 @@ function AircraftPage() {
   const [viewing, setViewing] = useState<any>(null);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [categoryFilter, setCategoryFilter] = useState("all");
 
   const filtered = useMemo(() => {
     return aircraft.filter((a: any) => {
@@ -43,9 +44,12 @@ function AircraftPage() {
         a.model?.toLowerCase().includes(search.toLowerCase()) ||
         a.manufacturer?.toLowerCase().includes(search.toLowerCase());
       const matchStatus = statusFilter === "all" || a.status === statusFilter;
-      return matchSearch && matchStatus;
+      const matchCategory =
+        categoryFilter === "all" ||
+        (categoryFilter === "none" ? !a.category : a.category === categoryFilter);
+      return matchSearch && matchStatus && matchCategory;
     });
-  }, [aircraft, search, statusFilter]);
+  }, [aircraft, search, statusFilter, categoryFilter]);
 
   const remove = async (id: string) => {
     if (!confirm("Excluir aeronave? Esta ação não pode ser desfeita.")) return;
@@ -102,6 +106,18 @@ function AircraftPage() {
             {AIRCRAFT_STATUS.map((s) => (
               <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-full sm:w-[200px] bg-card/50 border-white/10">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todas as categorias</SelectItem>
+            {AIRCRAFT_CATEGORIES.map((c) => (
+              <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+            ))}
+            <SelectItem value="none">Sem categoria</SelectItem>
           </SelectContent>
         </Select>
       </div>
