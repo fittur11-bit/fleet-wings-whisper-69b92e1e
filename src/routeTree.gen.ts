@@ -20,7 +20,6 @@ import { Route as RabRouteImport } from './routes/rab'
 import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as LibraryRouteImport } from './routes/library'
-import { Route as FlightLogsRouteImport } from './routes/flight-logs'
 import { Route as DemandsRouteImport } from './routes/demands'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BackupRouteImport } from './routes/backup'
@@ -85,11 +84,6 @@ const LibraryRoute = LibraryRouteImport.update({
   path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FlightLogsRoute = FlightLogsRouteImport.update({
-  id: '/flight-logs',
-  path: '/flight-logs',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DemandsRoute = DemandsRouteImport.update({
   id: '/demands',
   path: '/demands',
@@ -140,7 +134,6 @@ export interface FileRoutesByFullPath {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
-  '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
@@ -162,7 +155,6 @@ export interface FileRoutesByTo {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
-  '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
@@ -185,7 +177,6 @@ export interface FileRoutesById {
   '/backup': typeof BackupRoute
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
-  '/flight-logs': typeof FlightLogsRoute
   '/library': typeof LibraryRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
@@ -209,7 +200,6 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/demands'
-    | '/flight-logs'
     | '/library'
     | '/parts'
     | '/pending'
@@ -231,7 +221,6 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/demands'
-    | '/flight-logs'
     | '/library'
     | '/parts'
     | '/pending'
@@ -253,7 +242,6 @@ export interface FileRouteTypes {
     | '/backup'
     | '/dashboard'
     | '/demands'
-    | '/flight-logs'
     | '/library'
     | '/parts'
     | '/pending'
@@ -276,7 +264,6 @@ export interface RootRouteChildren {
   BackupRoute: typeof BackupRoute
   DashboardRoute: typeof DashboardRoute
   DemandsRoute: typeof DemandsRoute
-  FlightLogsRoute: typeof FlightLogsRoute
   LibraryRoute: typeof LibraryRoute
   PartsRoute: typeof PartsRoute
   PendingRoute: typeof PendingRoute
@@ -369,13 +356,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/flight-logs': {
-      id: '/flight-logs'
-      path: '/flight-logs'
-      fullPath: '/flight-logs'
-      preLoaderRoute: typeof FlightLogsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/demands': {
       id: '/demands'
       path: '/demands'
@@ -444,7 +424,6 @@ const rootRouteChildren: RootRouteChildren = {
   BackupRoute: BackupRoute,
   DashboardRoute: DashboardRoute,
   DemandsRoute: DemandsRoute,
-  FlightLogsRoute: FlightLogsRoute,
   LibraryRoute: LibraryRoute,
   PartsRoute: PartsRoute,
   PendingRoute: PendingRoute,
