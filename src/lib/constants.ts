@@ -115,6 +115,18 @@ export const AIRCRAFT_STATUS = [
   { value: "non_conform", label: "Não Conforme" },
 ] as const;
 
+export const AIRCRAFT_CATEGORIES = [
+  { value: "agricultural", label: "Agrícola" },
+  { value: "executive", label: "Executiva" },
+  { value: "instruction", label: "Instrução" },
+  { value: "air_taxi", label: "Táxi Aéreo" },
+  { value: "cargo", label: "Carga" },
+  { value: "private", label: "Particular" },
+  { value: "experimental", label: "Experimental" },
+  { value: "helicopter", label: "Helicóptero" },
+  { value: "other", label: "Outra" },
+] as const;
+
 export const SERVICE_STATUS = [
   { value: "pending", label: "Pendente" },
   { value: "in_progress", label: "Em Andamento" },
