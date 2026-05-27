@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUpload } from "@/components/ImageUpload";
-import { AIRCRAFT_STATUS } from "@/lib/constants";
+import { AIRCRAFT_STATUS, AIRCRAFT_CATEGORIES } from "@/lib/constants";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -22,6 +22,7 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
     year: initial?.year || "",
     total_hours: initial?.total_hours || "",
     owner: initial?.owner || "",
+    category: initial?.category || "",
     cva_expiration: initial?.cva_expiration || "",
     last_inspection_date: initial?.last_inspection_date || "",
     status: initial?.status || "active",
@@ -47,6 +48,7 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
       total_hours: form.total_hours ? Number(form.total_hours) : 0,
       cva_expiration: form.cva_expiration || null,
       last_inspection_date: form.last_inspection_date || null,
+      category: form.category || null,
     };
     const op = initial?.id
       ? supabase.from("aircraft").update(payload).eq("id", initial.id)
@@ -98,6 +100,16 @@ export function AircraftForm({ initial, onDone }: { initial?: any; onDone?: () =
         <div>
           <Label>Proprietário</Label>
           <Input value={form.owner} onChange={(e) => update("owner", e.target.value)} />
+        </div>
+        <div>
+          <Label>Categoria</Label>
+          <Select value={form.category || "unset"} onValueChange={(v) => update("category", v === "unset" ? "" : v)}>
+            <SelectTrigger><SelectValue placeholder="Selecione..." /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="unset">Não definida</SelectItem>
+              {AIRCRAFT_CATEGORIES.map((c) => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label>Vencimento CVA</Label>

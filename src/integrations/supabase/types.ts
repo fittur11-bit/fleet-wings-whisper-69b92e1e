@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       aircraft: {
         Row: {
+          category: string | null
           created_at: string
           cva_data: Json | null
           cva_expiration: string | null
@@ -37,6 +38,7 @@ export type Database = {
           year: number | null
         }
         Insert: {
+          category?: string | null
           created_at?: string
           cva_data?: Json | null
           cva_expiration?: string | null
@@ -58,6 +60,7 @@ export type Database = {
           year?: number | null
         }
         Update: {
+          category?: string | null
           created_at?: string
           cva_data?: Json | null
           cva_expiration?: string | null
