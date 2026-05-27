@@ -148,6 +148,7 @@ function AircraftPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((a: any, i: number) => {
             const statusLabel = AIRCRAFT_STATUS.find(s => s.value === a.status)?.label || a.status;
+            const categoryLabel = AIRCRAFT_CATEGORIES.find(c => c.value === a.category)?.label;
             return (
               <motion.div
                 key={a.id}
@@ -179,6 +180,11 @@ function AircraftPage() {
                   <h3 className="font-display font-semibold mt-1 truncate">
                     {a.manufacturer} {a.model}
                   </h3>
+                  {categoryLabel && (
+                    <span className="mt-2 inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
+                      {categoryLabel}
+                    </span>
+                  )}
                   <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                     <div>
                       <p className="text-[10px] uppercase tracking-wider opacity-70">Horas</p>
