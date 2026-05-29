@@ -281,48 +281,86 @@ function DashboardContent() {
       {/* ─── ROW 2 — Gráficos ──────────────────────────────────────── */}
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
         <BentoCard className="md:col-span-4">
-          <SectionLabel icon={BarChart3} tone="ember">Tendência de Manutenção · 6 meses</SectionLabel>
-          <div className="h-[220px] -ml-2">
+          <SectionLabel icon={BarChart3} tone="ember">Frequência de Manutenção</SectionLabel>
+          <div className="h-[220px] -ml-6">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={last6Months} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" className="opacity-[0.05]" vertical={false} />
-                <XAxis dataKey="month" stroke="#a8a29e" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="#a8a29e" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
-                <Tooltip
-                  cursor={{ fill: "rgba(232,93,58,0.06)" }}
-                  contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid rgba(232,93,58,0.3)", borderRadius: "10px", color: "#fafaf9", fontSize: "12px" }}
-                  itemStyle={{ color: EMBER }}
+              <BarChart data={last6Months} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" className="opacity-[0.03]" vertical={false} />
+                <XAxis 
+                  dataKey="month" 
+                  stroke="#525252" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false}
+                  tick={{ dy: 10 }}
                 />
-                <Bar dataKey="count" fill={EMBER} radius={[6, 6, 0, 0]} barSize={28} />
+                <YAxis 
+                  stroke="#525252" 
+                  fontSize={10} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  allowDecimals={false}
+                  tick={{ dx: -10 }}
+                />
+                <Tooltip
+                  cursor={{ fill: "rgba(255,255,255,0.02)" }}
+                  contentStyle={{ 
+                    backgroundColor: "#171717", 
+                    border: "1px solid rgba(255,255,255,0.05)", 
+                    borderRadius: "12px", 
+                    color: "#fafaf9", 
+                    fontSize: "11px",
+                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)"
+                  }}
+                  itemStyle={{ color: EMBER, fontWeight: "bold" }}
+                />
+                <Bar dataKey="count" fill={EMBER} radius={[4, 4, 0, 0]} barSize={32} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </BentoCard>
 
         <BentoCard className="md:col-span-2">
-          <SectionLabel icon={PieChartIcon}>Estoque por Condição</SectionLabel>
+          <SectionLabel icon={PieChartIcon}>Inventário</SectionLabel>
           {conditionData.length === 0 ? (
-            <div className="flex h-[220px] items-center justify-center text-xs text-[#a8a29e]">Sem dados</div>
+            <div className="flex h-[220px] items-center justify-center text-xs text-neutral-500 italic">Sem dados disponíveis</div>
           ) : (
             <>
-              <div className="h-[160px]">
+              <div className="h-[140px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={conditionData} cx="50%" cy="50%" innerRadius={50} outerRadius={72} paddingAngle={3} dataKey="value" stroke="none">
+                    <Pie 
+                      data={conditionData} 
+                      cx="50%" 
+                      cy="50%" 
+                      innerRadius={45} 
+                      outerRadius={65} 
+                      paddingAngle={4} 
+                      dataKey="value" 
+                      stroke="none"
+                    >
                       {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     </Pie>
-                    <Tooltip contentStyle={{ backgroundColor: "#1a1a1a", border: "1px solid rgba(232,93,58,0.3)", borderRadius: "10px", color: "#fafaf9", fontSize: "12px" }} />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: "#171717", 
+                        border: "1px solid rgba(255,255,255,0.05)", 
+                        borderRadius: "12px", 
+                        color: "#fafaf9", 
+                        fontSize: "11px"
+                      }} 
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="mt-3 space-y-1.5">
+              <div className="mt-4 space-y-2">
                 {conditionData.map((d) => (
-                  <div key={d.name} className="flex items-center justify-between text-[11px]">
-                    <span className="flex items-center gap-2 text-[#a8a29e]">
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: d.color }} />
+                  <div key={d.name} className="flex items-center justify-between text-[10px] font-medium uppercase tracking-wider">
+                    <span className="flex items-center gap-2 text-neutral-500">
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
-                    <span className="font-mono text-white">{d.value}</span>
+                    <span className="text-white">{d.value}</span>
                   </div>
                 ))}
               </div>
@@ -335,16 +373,16 @@ function DashboardContent() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
         {/* CVA Alerts */}
         <BentoCard className="md:col-span-2">
-          <SectionLabel icon={AlertTriangle} tone="warn" count={cvaAlerts.length}>CVA</SectionLabel>
+          <SectionLabel icon={AlertTriangle} tone="warn" count={cvaAlerts.length}>Documentação CVA</SectionLabel>
           {cvaAlerts.length === 0 ? (
-            <EmptyState icon={CheckCircle2} label="Nenhuma CVA próxima do vencimento." />
+            <EmptyState icon={CheckCircle2} label="Tudo em dia com as CVAs." />
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {cvaAlerts.slice(0, 4).map((a: any) => (
-                <li key={a.id} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#2d2d2d]/40 px-3 py-2">
+                <li key={a.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
                   <div className="min-w-0">
-                    <p className="font-mono text-sm font-semibold text-white">{a.prefix}</p>
-                    <p className="truncate text-[11px] text-[#a8a29e]">{a.model || "—"}</p>
+                    <p className="font-mono text-sm font-bold text-white">{a.prefix}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
                 </li>
@@ -355,16 +393,16 @@ function DashboardContent() {
 
         {/* Upcoming maintenance */}
         <BentoCard className="md:col-span-2">
-          <SectionLabel icon={Wrench} tone="ember" count={upcomingMx.length}>Manutenções</SectionLabel>
+          <SectionLabel icon={Wrench} tone="ember" count={upcomingMx.length}>Cronograma de MX</SectionLabel>
           {upcomingMx.length === 0 ? (
-            <EmptyState icon={CheckCircle2} label="Nenhum item próximo do vencimento." />
+            <EmptyState icon={CheckCircle2} label="Nenhuma manutenção pendente." />
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {upcomingMx.map((m: any) => (
-                <li key={m.id} className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-[#2d2d2d]/40 px-3 py-2">
+                <li key={m.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
                   <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-medium text-white">{m.description || m.item_type}</p>
-                    <p className="font-mono text-[11px] text-[#a8a29e]">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
+                    <p className="truncate text-sm font-semibold text-white">{m.description || m.item_type}</p>
+                    <p className="font-mono text-[10px] uppercase text-[#e85d3a]">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
@@ -375,22 +413,22 @@ function DashboardContent() {
 
         {/* Late shipments */}
         <BentoCard className="md:col-span-2">
-          <SectionLabel icon={Package} tone="ember" count={lateShipments.length}>Envios atrasados</SectionLabel>
+          <SectionLabel icon={Package} tone="ember" count={lateShipments.length}>Logística Reversa</SectionLabel>
           {lateShipments.length === 0 ? (
-            <EmptyState icon={CheckCircle2} label="Nenhuma peça atrasada." />
+            <EmptyState icon={CheckCircle2} label="Logística de envios regularizada." />
           ) : (
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {lateShipments.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between rounded-lg border border-[#e85d3a]/20 bg-[#e85d3a]/[0.06] px-3 py-2">
+                <li key={s.id} className="flex items-center justify-between rounded-xl border border-[#e85d3a]/10 bg-[#e85d3a]/[0.03] p-3 transition-colors hover:bg-[#e85d3a]/[0.05]">
                   <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-medium text-white">{s.part_name}</p>
-                    <p className="truncate font-mono text-[11px] text-[#a8a29e]">
+                    <p className="truncate text-sm font-semibold text-white">{s.part_name}</p>
+                    <p className="truncate font-mono text-[10px] uppercase text-neutral-500">
                       {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
                     </p>
                   </div>
-                  <span className="shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold text-white" style={{ backgroundColor: EMBER }}>
+                  <div className="flex h-8 w-12 items-center justify-center rounded-lg bg-[#e85d3a] text-[10px] font-bold text-white shadow-[0_0_15px_-5px_#e85d3a]">
                     {s.daysLate}d
-                  </span>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -402,12 +440,14 @@ function DashboardContent() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
         <BentoCard className="md:col-span-4">
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#a8a29e]">
-              <Activity className="h-3.5 w-3.5" />
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">
+              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-neutral-500/10">
+                <Activity className="h-3.5 w-3.5" />
+              </div>
               Atividade recente
             </div>
-            <Link to="/services" className="text-[11px] font-medium text-[#e85d3a] hover:underline">
-              Ver todos →
+            <Link to="/services" className="text-[10px] font-bold uppercase tracking-wider text-[#e85d3a] hover:underline">
+              Ver histórico →
             </Link>
           </div>
           {recentServices.length === 0 ? (
