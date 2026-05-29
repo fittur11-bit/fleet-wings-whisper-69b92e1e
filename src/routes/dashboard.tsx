@@ -63,24 +63,29 @@ function BentoCard({
   accent?: boolean;
 }) {
   const base = cn(
-    "group relative overflow-hidden rounded-2xl border bg-[#1a1a1a] p-5 transition-all duration-300",
+    "group relative overflow-hidden rounded-2xl border transition-all duration-500",
+    "bg-neutral-900/50 backdrop-blur-sm",
     accent
-      ? "border-[#e85d3a]/40 shadow-[0_0_0_1px_rgba(232,93,58,0.08),0_20px_60px_-30px_rgba(232,93,58,0.6)]"
-      : "border-white/[0.06] hover:border-[#e85d3a]/30 hover:shadow-[0_20px_60px_-30px_rgba(232,93,58,0.4)]",
+      ? "border-[#e85d3a]/30 shadow-[0_0_40px_-15px_rgba(232,93,58,0.3)]"
+      : "border-white/[0.05] hover:border-[#e85d3a]/20",
+    to && "hover:bg-neutral-900/80 hover:-translate-y-0.5",
     className,
   );
   const content = (
     <>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        className="pointer-events-none absolute inset-0 opacity-[0.03] transition-opacity group-hover:opacity-[0.06]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+            "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
           backgroundSize: "24px 24px",
         }}
       />
-      <div className="relative">{children}</div>
+      {accent && (
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#e85d3a]/10 blur-[80px]" />
+      )}
+      <div className="relative p-6">{children}</div>
     </>
   );
   if (to) {
@@ -93,21 +98,36 @@ function BentoCard({
   return <div className={base}>{content}</div>;
 }
 
-function SectionLabel({ icon: Icon, children, tone = "default", count }: { icon: any; children: React.ReactNode; tone?: "default" | "ember" | "warn" | "ok"; count?: number }) {
+function SectionLabel({ 
+  icon: Icon, 
+  children, 
+  tone = "default", 
+  count 
+}: { 
+  icon: any; 
+  children: React.ReactNode; 
+  tone?: "default" | "ember" | "warn" | "ok"; 
+  count?: number 
+}) {
   const toneClass = {
-    default: "text-[#a8a29e]",
+    default: "text-neutral-500",
     ember: "text-[#e85d3a]",
-    warn: "text-amber-400",
-    ok: "text-emerald-400",
+    warn: "text-amber-500/80",
+    ok: "text-emerald-500/80",
   }[tone];
+  
   return (
-    <div className="mb-4 flex items-center justify-between">
-      <div className={cn("flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em]", toneClass)}>
-        <Icon className="h-3.5 w-3.5" />
+    <div className="mb-6 flex items-center justify-between">
+      <div className={cn("flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em]", toneClass)}>
+        <div className={cn("flex h-6 w-6 items-center justify-center rounded-lg bg-current/10")}>
+          <Icon className="h-3.5 w-3.5" />
+        </div>
         {children}
       </div>
-      {typeof count === "number" && (
-        <span className="rounded-full border border-white/10 px-2 py-0.5 font-mono text-[10px] text-[#a8a29e]">{count}</span>
+      {typeof count === "number" && count > 0 && (
+        <span className="flex h-5 items-center rounded-full bg-white/[0.03] px-2 font-mono text-[10px] text-neutral-500 ring-1 ring-inset ring-white/10">
+          {count}
+        </span>
       )}
     </div>
   );
