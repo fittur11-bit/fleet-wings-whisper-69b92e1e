@@ -211,13 +211,13 @@ function DashboardContent() {
           </div>
         </BentoCard>
 
-        {/* Horas Totais (2 cols) */}
+        {/* Diário de Bordo (2 cols) */}
         <BentoCard to="/aircraft" className="md:col-span-2">
-          <SectionLabel icon={Clock}>Horas Totais</SectionLabel>
+          <SectionLabel icon={BookMarked}>Diário de Bordo</SectionLabel>
           <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
             {totalFlightHours.toFixed(1)}<span className="text-xl text-[#a8a29e]">h</span>
           </p>
-          <p className="mt-1 text-xs text-[#a8a29e]">consolidado da frota</p>
+          <p className="mt-1 text-xs text-[#a8a29e]">horas totais da frota</p>
         </BentoCard>
 
         {/* Alertas críticos (1 col) — destaque ember */}
@@ -231,8 +231,8 @@ function DashboardContent() {
           </p>
         </BentoCard>
 
-        {/* Valor estoque (2 cols) */}
-        <BentoCard to="/parts" className="md:col-span-2">
+        {/* Valor estoque (3 cols) */}
+        <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Valor em Estoque</SectionLabel>
           <p className="font-display text-3xl font-bold tracking-tight text-white tabular-nums">
             {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(stockValue)}
@@ -240,15 +240,6 @@ function DashboardContent() {
           <p className="mt-1 text-xs text-[#a8a29e]">{parts.length} itens cadastrados</p>
         </BentoCard>
 
-        {/* Saúde geral (1 col) */}
-        <BentoCard className="md:col-span-1">
-          <SectionLabel icon={ShieldCheck} tone={criticalAlerts === 0 ? "ok" : "warn"}>Saúde</SectionLabel>
-          <p className="font-display text-3xl font-bold tracking-tight tabular-nums text-white">
-            {Math.max(0, Math.round(100 - (criticalAlerts * 12 + (totalAlerts - criticalAlerts) * 4))).toString()}
-            <span className="text-base text-[#a8a29e]">%</span>
-          </p>
-          <p className="mt-1 text-xs text-[#a8a29e]">índice operacional</p>
-        </BentoCard>
       </div>
 
       {/* ─── ROW 2 — Gráficos ──────────────────────────────────────── */}
