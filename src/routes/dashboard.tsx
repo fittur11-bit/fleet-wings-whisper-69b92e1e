@@ -211,17 +211,8 @@ function DashboardContent() {
           </div>
         </BentoCard>
 
-        {/* Diário de Bordo (2 cols) */}
-        <BentoCard to="/aircraft" className="md:col-span-2">
-          <SectionLabel icon={BookMarked}>Diário de Bordo</SectionLabel>
-          <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
-            {totalFlightHours.toFixed(1)}<span className="text-xl text-[#a8a29e]">h</span>
-          </p>
-          <p className="mt-1 text-xs text-[#a8a29e]">horas totais da frota</p>
-        </BentoCard>
-
-        {/* Alertas críticos (1 col) — destaque ember */}
-        <BentoCard accent className="md:col-span-1">
+        {/* Alertas críticos (3 cols) — destaque ember */}
+        <BentoCard accent className="md:col-span-3">
           <SectionLabel icon={AlertTriangle} tone="ember">Alertas</SectionLabel>
           <p className="font-display text-4xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
             {totalAlerts}
