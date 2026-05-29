@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
  import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X, Download, Maximize2, Minimize2 } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DOC_TYPES } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveStorageUrl } from "@/lib/storage-urls";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -33,6 +34,7 @@ function LibraryPage() {
    const [editing, setEditing] = useState<any | null>(null);
    const [previewDoc, setPreviewDoc] = useState<any | null>(null);
    const [fullscreen, setFullscreen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
@@ -145,7 +147,8 @@ function LibraryPage() {
   const downloadFile = async (doc: any) => {
     if (!doc?.file_url) return;
     try {
-      const res = await fetch(doc.file_url);
+      const url = await resolveStorageUrl(doc.file_url);
+      const res = await fetch(url);
       const blob = await res.blob();
       const ext = getFileExt(doc.file_url) || "bin";
       const safeTitle = (doc.title || "documento").replace(/[^\w\-. ]+/g, "_");
@@ -163,6 +166,26 @@ function LibraryPage() {
       toast.error("Falha no download: " + e.message);
     }
   };
+
+  const openExternal = async (url?: string) => {
+    if (!url) return;
+    const resolved = await resolveStorageUrl(url);
+    window.open(resolved, "_blank", "noopener,noreferrer");
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!previewDoc?.file_url) {
+      setPreviewUrl("");
+      return;
+    }
+    resolveStorageUrl(previewDoc.file_url).then((u) => {
+      if (!cancelled) setPreviewUrl(u);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [previewDoc]);
 
   // Group counts by type
   const counts = DOC_TYPES.reduce((acc: any, t) => {
@@ -359,10 +382,14 @@ function LibraryPage() {
                     >
                       <Download className="h-3.5 w-3.5" />
                     </Button>
-                    <Button asChild size="icon" variant="outline" className="h-9 w-9 rounded-xl shrink-0">
-                      <a href={d.file_url} target="_blank" rel="noreferrer" title="Abrir em nova aba">
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="h-9 w-9 rounded-xl shrink-0"
+                      title="Abrir em nova aba"
+                      onClick={() => openExternal(d.file_url)}
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
                     </Button>
                   </div>
                 ) : (
@@ -399,10 +426,14 @@ function LibraryPage() {
               <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => downloadFile(previewDoc)} title="Baixar">
                 <Download className="h-4 w-4" />
               </Button>
-              <Button asChild variant="ghost" size="icon" className="h-8 w-8" title="Abrir em nova aba">
-                <a href={previewDoc?.file_url} target="_blank" rel="noreferrer">
-                  <ExternalLink className="h-4 w-4" />
-                </a>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                title="Abrir em nova aba"
+                onClick={() => openExternal(previewDoc?.file_url)}
+              >
+                <ExternalLink className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" className="hidden sm:inline-flex h-8 w-8" onClick={() => setFullscreen((f) => !f)} title={fullscreen ? "Sair de tela cheia" : "Tela cheia"}>
                 {fullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
@@ -413,24 +444,24 @@ function LibraryPage() {
             </div>
           </div>
           <div className="flex-1 w-full bg-neutral-900 relative overflow-auto">
-            {previewDoc?.file_url ? (
+            {previewDoc?.file_url && previewUrl ? (
               isImage(previewDoc.file_url) ? (
                 <div className="flex h-full w-full items-center justify-center p-2">
                   <img
-                    src={previewDoc.file_url}
+                    src={previewUrl}
                     alt={previewDoc.title}
                     className="max-w-full max-h-full object-contain"
                   />
                 </div>
               ) : isPdf(previewDoc.file_url) ? (
                 <iframe
-                  src={`https://docs.google.com/gview?url=${encodeURIComponent(previewDoc.file_url)}&embedded=true`}
+                  src={`https://docs.google.com/gview?url=${encodeURIComponent(previewUrl)}&embedded=true`}
                   className="w-full h-full border-none bg-white"
                   title={previewDoc.title}
                 />
               ) : (
                 <iframe
-                  src={previewDoc.file_url}
+                  src={previewUrl}
                   className="w-full h-full border-none bg-white"
                   title={previewDoc.title}
                 />
