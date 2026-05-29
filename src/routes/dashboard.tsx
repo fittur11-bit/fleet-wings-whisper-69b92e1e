@@ -208,47 +208,72 @@ function DashboardContent() {
         <BentoCard to="/aircraft" className="md:col-span-3 md:row-span-2">
           <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
           <div className="flex items-end justify-between">
-            <div>
-              <p className="font-display text-7xl font-bold tracking-tighter text-white tabular-nums">
+            <div className="relative">
+              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-[#e85d3a]/20 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
+              <p className="font-display text-8xl font-bold tracking-tighter text-white tabular-nums">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-sm text-[#a8a29e]">
-                de <span className="font-mono text-white">{aircraft.length}</span> aeronaves operacionais
+              <p className="mt-2 text-sm text-neutral-400">
+                de <span className="font-mono text-white/90">{aircraft.length}</span> aeronaves operacionais
               </p>
             </div>
-            <div className="hidden h-14 w-14 items-center justify-center rounded-2xl bg-[#e85d3a]/10 text-[#e85d3a] sm:flex">
-              <Plane className="h-7 w-7" />
+            <div className="hidden h-20 w-20 items-center justify-center rounded-2xl bg-white/[0.03] text-[#e85d3a] ring-1 ring-inset ring-white/10 sm:flex">
+              <Plane className="h-10 w-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
             </div>
           </div>
-          <div className="mt-6 grid grid-cols-3 gap-3 border-t border-white/[0.06] pt-5">
-            <MiniStat label="Em manutenção" value={inMaintenance} />
-            <MiniStat label="Peças instaladas" value={installedParts} />
-            <MiniStat label="Serviços ativos" value={pendingServices} />
+          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-white/[0.06] pt-8">
+            <MiniStat label="Manutenção" value={inMaintenance} />
+            <MiniStat label="Instaladas" value={installedParts} />
+            <MiniStat label="Serviços" value={pendingServices} />
           </div>
-          <div className="mt-5 flex items-center justify-between text-xs">
-            <span className="text-[#a8a29e]">Ver detalhes da frota</span>
-            <ArrowUpRight className="h-4 w-4 text-[#e85d3a] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <div className="mt-8 flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#e85d3a] opacity-0 transition-all duration-300 group-hover:opacity-100">
+            <span>EXPLORAR FROTA COMPLETA</span>
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </BentoCard>
 
         {/* Alertas críticos (3 cols) — destaque ember */}
         <BentoCard accent className="md:col-span-3">
-          <SectionLabel icon={AlertTriangle} tone="ember">Alertas</SectionLabel>
-          <p className="font-display text-4xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
-            {totalAlerts}
-          </p>
-          <p className="mt-1 text-xs text-[#f5c0a8]">
-            <span className="font-semibold">{criticalAlerts}</span> crítico(s)
-          </p>
+          <SectionLabel icon={AlertTriangle} tone="ember">Status de Atenção</SectionLabel>
+          <div className="flex items-center gap-8">
+            <div className="relative">
+              <div className="absolute inset-0 animate-pulse rounded-full bg-[#e85d3a]/20 blur-2xl" />
+              <p className="relative font-display text-7xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
+                {totalAlerts}
+              </p>
+            </div>
+            <div className="space-y-1">
+              <p className="text-2xl font-bold text-white tabular-nums">
+                {criticalAlerts} <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Críticos</span>
+              </p>
+              <p className="text-xs text-neutral-500">Ações imediatas recomendadas</p>
+            </div>
+          </div>
+          <div className="mt-8 grid grid-cols-2 gap-4">
+            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+              <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
+              <p className="mt-1 text-lg font-bold text-white">{cvaAlerts.length}</p>
+            </div>
+            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+              <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
+              <p className="mt-1 text-lg font-bold text-white">{lateShipments.length}</p>
+            </div>
+          </div>
         </BentoCard>
 
         {/* Valor estoque (3 cols) */}
         <BentoCard to="/parts" className="md:col-span-3">
-          <SectionLabel icon={TrendingUp}>Valor em Estoque</SectionLabel>
-          <p className="font-display text-3xl font-bold tracking-tight text-white tabular-nums">
-            {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(stockValue)}
-          </p>
-          <p className="mt-1 text-xs text-[#a8a29e]">{parts.length} itens cadastrados</p>
+          <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
+          <div className="flex items-baseline gap-2">
+            <span className="text-sm font-bold text-[#e85d3a]">R$</span>
+            <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
+              {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
+            </p>
+          </div>
+          <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/[0.03]">
+            <div className="h-full bg-gradient-to-r from-[#e85d3a] to-[#f5c0a8]" style={{ width: "65%" }} />
+          </div>
         </BentoCard>
 
       </div>
