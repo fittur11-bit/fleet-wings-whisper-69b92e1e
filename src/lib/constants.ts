@@ -116,7 +116,9 @@ export const AIRCRAFT_STATUS = [
 ] as const;
 
 export const AIRCRAFT_CATEGORIES = [
-  { value: "agricultural", label: "Agrícola" },
+  { value: "agricultural", label: "Aviação Agrícola" },
+  { value: "air_tractor", label: "Air Tractor" },
+  { value: "ipanema", label: "Embraer Ipanema" },
   { value: "executive", label: "Executiva" },
   { value: "instruction", label: "Instrução" },
   { value: "air_taxi", label: "Táxi Aéreo" },
