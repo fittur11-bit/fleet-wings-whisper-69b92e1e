@@ -34,6 +34,7 @@ function LibraryPage() {
    const [editing, setEditing] = useState<any | null>(null);
    const [previewDoc, setPreviewDoc] = useState<any | null>(null);
    const [fullscreen, setFullscreen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
@@ -165,6 +166,26 @@ function LibraryPage() {
       toast.error("Falha no download: " + e.message);
     }
   };
+
+  const openExternal = async (url?: string) => {
+    if (!url) return;
+    const resolved = await resolveStorageUrl(url);
+    window.open(resolved, "_blank", "noopener,noreferrer");
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!previewDoc?.file_url) {
+      setPreviewUrl("");
+      return;
+    }
+    resolveStorageUrl(previewDoc.file_url).then((u) => {
+      if (!cancelled) setPreviewUrl(u);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [previewDoc]);
 
   // Group counts by type
   const counts = DOC_TYPES.reduce((acc: any, t) => {
