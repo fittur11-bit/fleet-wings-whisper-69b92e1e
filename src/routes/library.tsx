@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
  import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X, Download, Maximize2, Minimize2 } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -14,6 +14,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DOC_TYPES } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
+import { resolveStorageUrl } from "@/lib/storage-urls";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -145,7 +146,8 @@ function LibraryPage() {
   const downloadFile = async (doc: any) => {
     if (!doc?.file_url) return;
     try {
-      const res = await fetch(doc.file_url);
+      const url = await resolveStorageUrl(doc.file_url);
+      const res = await fetch(url);
       const blob = await res.blob();
       const ext = getFileExt(doc.file_url) || "bin";
       const safeTitle = (doc.title || "documento").replace(/[^\w\-. ]+/g, "_");
