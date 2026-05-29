@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  Plane, Wrench, Cog, AlertTriangle, CheckCircle2, Clock, TrendingUp,
+  Plane, Wrench, Cog, AlertTriangle, CheckCircle2, TrendingUp,
   BookMarked, BarChart3, PieChart as PieChartIcon, ArrowUpRight, Activity,
-  Package, ShieldCheck,
+  Package,
 } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
