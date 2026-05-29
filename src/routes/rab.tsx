@@ -94,8 +94,12 @@ function RabPage() {
         estimated_cost_usd: bytesToGB(file.size) * COSTS.STORAGE_GB_MONTH,
         metadata: { bucket: "documents", source: "rab-import", name: file.name },
       });
-      const { data: pub } = supabase.storage.from("documents").getPublicUrl(path);
-      await callExtract({ fileUrl: pub.publicUrl, fileType: file.type });
+      const { data: signed, error: signErr } = await supabase
+        .storage
+        .from("documents")
+        .createSignedUrl(path, 3600);
+      if (signErr || !signed?.signedUrl) throw signErr || new Error("Não foi possível gerar URL temporária");
+      await callExtract({ fileUrl: signed.signedUrl, fileType: file.type });
     } catch (e: any) {
       toast.error("Falha no upload: " + (e?.message || "erro"));
       setLoading(false);
