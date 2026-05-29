@@ -335,6 +335,7 @@ function PartsPage() {
             const statusLabel = PART_STATUS.find(s => s.value === p.status)?.label || p.status;
             const condLabel = PART_CONDITION.find(c => c.value === p.condition)?.label;
             const photos = Array.isArray(p.photos) ? p.photos : [];
+            const photoUrl = photos[0] ? (typeof photos[0] === 'string' ? photos[0] : photos[0].url) : null;
             return (
               <motion.div
                 key={p.id}
@@ -345,8 +346,8 @@ function PartsPage() {
               >
                 {/* Photo */}
                 <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
-                  {photos[0] ? (
-                    <img src={photos[0]} alt={p.name} className="h-full w-full object-cover" />
+                  {photoUrl ? (
+                    <img src={photoUrl} alt={p.name} className="h-full w-full object-cover" />
                   ) : (
                     <Package className="h-7 w-7 text-muted-foreground/40" />
                   )}
@@ -465,11 +466,14 @@ function PartDetail({ part }: { part: any }) {
       <div className="space-y-5">
         {photos.length > 0 && (
           <div className="grid grid-cols-3 gap-2">
-            {photos.map((u: string) => (
-              <a key={u} href={u} target="_blank" rel="noreferrer" className="aspect-square rounded-lg overflow-hidden border border-white/10">
-                <img src={u} alt="" className="h-full w-full object-cover" />
-              </a>
-            ))}
+            {photos.map((item: any, idx: number) => {
+              const url = typeof item === 'string' ? item : item.url;
+              return (
+                <a key={idx} href={url} target="_blank" rel="noreferrer" className="aspect-square rounded-lg overflow-hidden border border-white/10">
+                  <img src={url} alt="" className="h-full w-full object-cover" />
+                </a>
+              );
+            })}
           </div>
         )}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
