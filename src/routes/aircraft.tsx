@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { Plus, Plane, Trash2, Pencil, Search, Eye } from "lucide-react";
+import { Plus, Plane, Trash2, Pencil, Search, Eye, FileDown, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
@@ -15,6 +15,7 @@ import { AIRCRAFT_STATUS, AIRCRAFT_CATEGORIES } from "@/lib/constants";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { downloadFleetReport } from "@/lib/fleet-report";
 
 export const Route = createFileRoute("/aircraft")({
   component: () => <AuthGuard><AircraftPage /></AuthGuard>,
@@ -36,6 +37,7 @@ function AircraftPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [exporting, setExporting] = useState(false);
 
   const filtered = useMemo(() => {
     return aircraft.filter((a: any) => {
@@ -62,13 +64,32 @@ function AircraftPage() {
   const openEdit = (a: any) => { setEditing(a); setOpen(true); };
   const openCreate = () => { setEditing(null); setOpen(true); };
 
+  const exportPdf = async () => {
+    if (!filtered.length) return toast.error("Nenhuma aeronave para exportar");
+    setExporting(true);
+    const t = toast.loading("Gerando relatório da frota...");
+    try {
+      await downloadFleetReport(filtered);
+      toast.success("Relatório gerado", { id: t });
+    } catch (e: any) {
+      toast.error(e?.message || "Falha ao gerar PDF", { id: t });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <AppShell>
       <PageHeader
         title="Aeronaves"
         description={`${aircraft.length} aeronave(s) cadastrada(s) na frota`}
         actions={
-          <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
+          <div className="flex gap-2">
+            <Button onClick={exportPdf} variant="outline" disabled={exporting || !filtered.length}>
+              {exporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <FileDown className="mr-2 h-4 w-4" />}
+              Exportar PDF
+            </Button>
+            <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null); }}>
              <DialogTrigger asChild>
                <Button onClick={openCreate} className="bg-primary text-primary-foreground shadow-lg shadow-primary/20">
                  <Plus className="mr-2 h-4 w-4" /> Nova Aeronave
@@ -83,6 +104,7 @@ function AircraftPage() {
               <AircraftForm initial={editing} onDone={() => { setOpen(false); setEditing(null); }} />
             </DialogContent>
           </Dialog>
+          </div>
         }
       />
 
