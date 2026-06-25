@@ -115,7 +115,8 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
     let chipsLines = 1;
     if (services.length) {
       let x = 0;
-      services.forEach((t) => {
+      services.forEach((tRaw) => {
+        const t = safe(tRaw);
         const w = doc.getTextWidth(t) + 5;
         if (x + w > innerW) {
           x = 0;
