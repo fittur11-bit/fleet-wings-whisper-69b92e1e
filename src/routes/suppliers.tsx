@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Plus, Building2, Search, Pencil, Trash2, Eye, Star, Phone, Mail, Globe, MapPin, MessageCircle } from "lucide-react";
+import { Plus, Building2, Search, Pencil, Trash2, Eye, Star, Phone, Mail, Globe, MapPin, MessageCircle, FileDown, Loader2 } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { useSuppliers } from "@/lib/queries";
+import { downloadSuppliersReport } from "@/lib/suppliers-report";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -86,6 +87,20 @@ function SuppliersPage() {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [priceFilter, setPriceFilter] = useState("all");
   const [form, setForm] = useState<any>(emptyForm());
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    if (!filtered.length) return toast.error("Nenhum fornecedor para exportar");
+    setExporting(true);
+    try {
+      await downloadSuppliersReport(filtered);
+      toast.success("PDF gerado");
+    } catch (e: any) {
+      toast.error(e?.message || "Falha ao gerar PDF");
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     return suppliers.filter((s: any) => {
@@ -189,9 +204,15 @@ function SuppliersPage() {
         title="Fornecedores"
         description="Cadastro padronizado de oficinas, fabricantes e prestadores de serviço"
         actions={
-          <Button onClick={openNew} className="gap-2">
-            <Plus className="h-4 w-4" /> Novo fornecedor
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleExport} variant="outline" disabled={exporting} className="gap-2">
+              {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileDown className="h-4 w-4" />}
+              Exportar PDF
+            </Button>
+            <Button onClick={openNew} className="gap-2">
+              <Plus className="h-4 w-4" /> Novo fornecedor
+            </Button>
+          </div>
         }
       />
 
