@@ -33,248 +33,250 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
   const pageH = doc.internal.pageSize.getHeight();
   const margin = 14;
 
-  // ===== Cover =====
-  doc.setFillColor(15, 18, 28);
-  doc.rect(0, 0, pageW, pageH, "F");
-  doc.setFillColor(212, 175, 55);
-  doc.rect(0, 70, pageW, 1.2, "F");
-
-  doc.setTextColor(212, 175, 55);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text("FLIGHTCORE • AVIATION", margin, 30);
-
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(34);
-  doc.text("Relatório de Fornecedores", margin, 55);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(13);
-  doc.setTextColor(200, 205, 215);
-  doc.text("Cadastro completo de oficinas e prestadores", margin, 64);
-
-  // Stats
-  const total = suppliers.length;
-  const preferred = suppliers.filter((s) => s.preferred).length;
-  const cities = new Set(suppliers.map((s) => s.city).filter(Boolean)).size;
-  const rated = suppliers.filter((s) => s.rating);
-  const avgRating = rated.length
-    ? (rated.reduce((a, s) => a + Number(s.rating), 0) / rated.length).toFixed(1)
-    : "—";
-
-  const statCard = (x: number, y: number, w: number, h: number, label: string, value: string) => {
-    doc.setFillColor(28, 32, 46);
-    doc.roundedRect(x, y, w, h, 2, 2, "F");
-    doc.setTextColor(160, 170, 185);
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(8.5);
-    doc.text(label.toUpperCase(), x + 4, y + 7);
-    doc.setTextColor(255, 255, 255);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.text(value, x + 4, y + 18);
-  };
-
-  const cardW = (pageW - margin * 2 - 12) / 4;
-  statCard(margin, 90, cardW, 24, "Total", String(total));
-  statCard(margin + cardW + 4, 90, cardW, 24, "Preferenciais", String(preferred));
-  statCard(margin + (cardW + 4) * 2, 90, cardW, 24, "Cidades", String(cities));
-  statCard(margin + (cardW + 4) * 3, 90, cardW, 24, "Nota Média", avgRating);
-
-  // Categories breakdown
-  const byCat: Record<string, number> = {};
-  suppliers.forEach((s) => {
-    const k = s.category || "other";
-    byCat[k] = (byCat[k] || 0) + 1;
-  });
-  doc.setTextColor(212, 175, 55);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
-  doc.text("DISTRIBUIÇÃO POR CATEGORIA", margin, 130);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(9.5);
-  doc.setTextColor(220, 225, 235);
-  let y = 138;
-  Object.entries(byCat)
-    .sort((a, b) => b[1] - a[1])
-    .forEach(([k, n]) => {
-      doc.text(`• ${cat(k)}`, margin + 2, y);
-      doc.text(String(n), pageW - margin - 8, y, { align: "right" });
-      y += 6;
-      if (y > pageH - 40) return;
-    });
-
-  doc.setTextColor(140, 150, 165);
-  doc.setFontSize(8);
-  doc.text(
-    `Gerado em ${format(new Date(), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}`,
-    margin,
-    pageH - 14
-  );
-
-  // ===== Supplier pages =====
   const sorted = [...suppliers].sort((a, b) => {
     if (a.preferred !== b.preferred) return a.preferred ? -1 : 1;
     return (a.name || "").localeCompare(b.name || "");
   });
 
+  // Stats
+  const total = sorted.length;
+  const preferred = sorted.filter((s) => s.preferred).length;
+  const cities = new Set(sorted.map((s) => s.city).filter(Boolean)).size;
+
+  // ===== Compact header (top of first page) =====
+  const headerH = 28;
+  doc.setFillColor(15, 18, 28);
+  doc.rect(0, 0, pageW, headerH, "F");
+  doc.setFillColor(212, 175, 55);
+  doc.rect(0, headerH, pageW, 0.8, "F");
+
+  doc.setTextColor(212, 175, 55);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.text("FLIGHTCORE • AVIATION", margin, 10);
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.text("Relatório de Fornecedores", margin, 19);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(190, 195, 205);
+  doc.text(
+    `${total} fornecedores • ${preferred} preferenciais • ${cities} cidades  ·  Gerado em ${format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR })}`,
+    margin,
+    25
+  );
+
   let pageIdx = 1;
-  const totalPages = 1 + sorted.length;
-
   const drawFooter = () => {
-    doc.setDrawColor(40, 45, 60);
+    doc.setDrawColor(220, 225, 235);
     doc.setLineWidth(0.2);
-    doc.line(margin, pageH - 14, pageW - margin, pageH - 14);
+    doc.line(margin, pageH - 10, pageW - margin, pageH - 10);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(7.5);
     doc.setTextColor(140, 150, 165);
-    doc.text("FLIGHTCORE • Fornecedores", margin, pageH - 8);
-    doc.text(`${pageIdx}/${totalPages}`, pageW - margin, pageH - 8, { align: "right" });
+    doc.text("FLIGHTCORE • Fornecedores", margin, pageH - 5);
+    doc.text(String(pageIdx), pageW - margin, pageH - 5, { align: "right" });
   };
-  drawFooter();
 
-  for (const s of sorted) {
+  let cy = headerH + 6;
+  const contentBottom = pageH - 14;
+
+  const newPage = () => {
+    drawFooter();
     doc.addPage();
     pageIdx++;
-    doc.setFillColor(255, 255, 255);
-    doc.rect(0, 0, pageW, pageH, "F");
+    cy = margin;
+  };
 
-    // Header band
-    doc.setFillColor(15, 18, 28);
-    doc.rect(0, 0, pageW, 36, "F");
-    doc.setFillColor(212, 175, 55);
-    doc.rect(0, 36, pageW, 0.8, "F");
+  const ensureSpace = (needed: number) => {
+    if (cy + needed > contentBottom) newPage();
+  };
 
-    doc.setTextColor(212, 175, 55);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.text(cat(s.category).toUpperCase(), margin, 14);
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
-    const nameText = (s.preferred ? "★ " : "") + (s.name || "—");
-    doc.text(nameText, margin, 25);
-    if (s.trade_name) {
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(200, 205, 215);
-      doc.text(String(s.trade_name), margin, 32);
-    }
-
-    let cy = 50;
-
-    // Section: Service types
+  // Measure-and-render a supplier card
+  const renderSupplier = (s: any) => {
     const services: string[] = Array.isArray(s.service_types) ? s.service_types : [];
-    doc.setTextColor(80, 88, 105);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.text("TIPOS DE SERVIÇO", margin, cy);
-    cy += 5;
+    const innerW = pageW - margin * 2 - 6; // card inner width with padding
+    const colW = (innerW - 4) / 2;
+
+    // Pre-compute chip layout height
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    doc.setTextColor(30, 35, 50);
+    doc.setFontSize(7.5);
+    let chipsLines = 1;
     if (services.length) {
-      // chips
-      let x = margin;
-      const chipY = cy;
-      doc.setFontSize(9);
+      let x = 0;
       services.forEach((t) => {
-        const w = doc.getTextWidth(t) + 6;
-        if (x + w > pageW - margin) {
-          x = margin;
-          cy += 8;
+        const w = doc.getTextWidth(t) + 5;
+        if (x + w > innerW) {
+          x = 0;
+          chipsLines++;
         }
-        doc.setFillColor(240, 243, 248);
-        doc.roundedRect(x, cy - 4, w, 6.5, 1.5, 1.5, "F");
-        doc.setTextColor(40, 50, 70);
-        doc.text(t, x + 3, cy + 0.5);
-        x += w + 3;
+        x += w + 2;
       });
-      cy += 10;
-    } else {
-      doc.setTextColor(140, 150, 165);
-      doc.text("Não informado", margin, cy);
-      cy += 8;
     }
+    const chipsH = services.length ? chipsLines * 5.5 + 2 : 0;
 
-    // Specialties
-    if (s.specialties) {
-      doc.setTextColor(80, 88, 105);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.text("ESPECIALIDADES", margin, cy);
-      cy += 5;
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(30, 35, 50);
-      const lines = doc.splitTextToSize(String(s.specialties), pageW - margin * 2);
-      doc.text(lines, margin, cy);
-      cy += lines.length * 5 + 4;
-    }
-
-    // Two-column data table
+    // Data rows (compact)
     const rows: [string, string][] = [
       ["Categoria", cat(s.category)],
-      ["Faixa de preço", price(s.price_level)],
-      ["Avaliação", s.rating ? `${Number(s.rating).toFixed(1)} / 5` : "—"],
-      ["Prazo médio", s.lead_time_days ? `${s.lead_time_days} dias` : "—"],
+      ["Avaliação", s.rating ? `${Number(s.rating).toFixed(1)}/5` : "—"],
       ["CNPJ", s.cnpj || "—"],
-      ["Certificado ANAC", s.anac_certificate || "—"],
-      ["Condições pagto.", s.payment_terms || "—"],
-      ["Observação preços", s.avg_price_note || "—"],
-      ["Pessoa de contato", s.contact_name || "—"],
+      ["ANAC", s.anac_certificate || "—"],
+      ["Contato", s.contact_name || "—"],
       ["Telefone", s.phone || "—"],
       ["WhatsApp", s.whatsapp || "—"],
       ["E-mail", s.email || "—"],
-      ["Website", s.website || "—"],
-      ["Endereço", [s.address, s.zip_code].filter(Boolean).join(" – ") || "—"],
-      ["Cidade / UF", [s.city, s.state].filter(Boolean).join(" / ") || "—"],
-      ["País", s.country || "—"],
+      ["Cidade/UF", [s.city, s.state].filter(Boolean).join(" / ") || "—"],
+      ["Endereço", s.address || "—"],
+      ["Pagamento", s.payment_terms || "—"],
+      ["Prazo médio", s.lead_time_days ? `${s.lead_time_days} dias` : "—"],
     ];
+    const rowsH = Math.ceil(rows.length / 2) * 6.5;
 
-    doc.setTextColor(80, 88, 105);
+    // Specialties
+    let specH = 0;
+    let specLines: string[] = [];
+    if (s.specialties) {
+      doc.setFontSize(8.5);
+      specLines = doc.splitTextToSize(String(s.specialties), innerW);
+      specH = specLines.length * 4 + 4;
+    }
+
+    // Notes
+    let notesH = 0;
+    let noteLines: string[] = [];
+    if (s.notes) {
+      doc.setFontSize(8.5);
+      noteLines = doc.splitTextToSize(String(s.notes), innerW);
+      // cap to 4 lines
+      noteLines = noteLines.slice(0, 4);
+      notesH = noteLines.length * 4 + 4;
+    }
+
+    const titleH = 9 + (s.trade_name ? 4 : 0);
+    const cardH =
+      4 /*top*/ +
+      titleH +
+      (chipsH ? chipsH + 3 : 0) +
+      (specH ? specH : 0) +
+      rowsH +
+      (notesH ? notesH : 0) +
+      4 /*bottom*/;
+
+    ensureSpace(cardH + 3);
+
+    // Card frame
+    const cardX = margin;
+    const cardY = cy;
+    doc.setFillColor(250, 251, 253);
+    doc.setDrawColor(225, 230, 240);
+    doc.setLineWidth(0.25);
+    doc.roundedRect(cardX, cardY, pageW - margin * 2, cardH, 2, 2, "FD");
+    // Gold accent on left
+    doc.setFillColor(212, 175, 55);
+    doc.rect(cardX, cardY, 1.5, cardH, "F");
+
+    let y = cardY + 6;
+    const x0 = cardX + 5;
+
+    // Title row
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
-    doc.text("DADOS COMPLETOS", margin, cy);
-    cy += 4;
+    doc.setFontSize(11.5);
+    doc.setTextColor(20, 25, 40);
+    const nameText = (s.preferred ? "★ " : "") + (s.name || "—");
+    const nameMaxW = pageW - margin * 2 - 10 - 40;
+    const nameTrunc = doc.splitTextToSize(nameText, nameMaxW)[0];
+    doc.text(nameTrunc, x0, y);
 
-    const colW = (pageW - margin * 2 - 6) / 2;
-    const rowH = 11;
+    // Category pill on right
+    const catText = cat(s.category);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7);
+    const pillW = doc.getTextWidth(catText.toUpperCase()) + 5;
+    doc.setFillColor(15, 18, 28);
+    doc.roundedRect(cardX + pageW - margin * 2 - pillW - 5, y - 4, pillW, 5.5, 1.5, 1.5, "F");
+    doc.setTextColor(212, 175, 55);
+    doc.text(catText.toUpperCase(), cardX + pageW - margin * 2 - pillW - 5 + 2.5, y - 0.3);
+
+    if (s.trade_name) {
+      y += 4;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(110, 120, 140);
+      doc.text(String(s.trade_name), x0, y);
+    }
+    y += 5;
+
+    // Service chips
+    if (chipsH) {
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      let cx = x0;
+      let cyChip = y;
+      services.forEach((t) => {
+        const w = doc.getTextWidth(t) + 5;
+        if (cx + w > x0 + innerW) {
+          cx = x0;
+          cyChip += 5.5;
+        }
+        doc.setFillColor(232, 237, 246);
+        doc.roundedRect(cx, cyChip - 3.2, w, 4.5, 1, 1, "F");
+        doc.setTextColor(40, 55, 85);
+        doc.text(t, cx + 2.5, cyChip);
+        cx += w + 2;
+      });
+      y = cyChip + 4;
+    }
+
+    // Specialties
+    if (specH) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(7);
+      doc.setTextColor(120, 130, 150);
+      doc.text("ESPECIALIDADES", x0, y);
+      y += 3;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(40, 50, 70);
+      doc.text(specLines, x0, y);
+      y += specLines.length * 4 + 1;
+    }
+
+    // Two-column data
     rows.forEach((r, i) => {
       const col = i % 2;
       const row = Math.floor(i / 2);
-      const x = margin + col * (colW + 6);
-      const ry = cy + row * rowH;
-      if (ry > pageH - 40) return;
-      doc.setFillColor(248, 250, 253);
-      doc.roundedRect(x, ry, colW, rowH - 2, 1.5, 1.5, "F");
+      const rx = x0 + col * (colW + 4);
+      const ry = y + row * 6.5;
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(7.5);
-      doc.setTextColor(120, 130, 150);
-      doc.text(r[0].toUpperCase(), x + 3, ry + 3.5);
+      doc.setFontSize(6.8);
+      doc.setTextColor(130, 140, 160);
+      doc.text(r[0].toUpperCase(), rx, ry);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
+      doc.setFontSize(8.5);
       doc.setTextColor(25, 30, 45);
-      const val = doc.splitTextToSize(r[1], colW - 6);
-      doc.text(val[0] || "—", x + 3, ry + 8);
+      const val = doc.splitTextToSize(r[1] || "—", colW)[0];
+      doc.text(val, rx, ry + 4);
     });
-    cy += Math.ceil(rows.length / 2) * rowH + 4;
+    y += rowsH + 1;
 
     // Notes
-    if (s.notes && cy < pageH - 40) {
-      doc.setTextColor(80, 88, 105);
+    if (notesH) {
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(9);
-      doc.text("OBSERVAÇÕES", margin, cy);
-      cy += 5;
+      doc.setFontSize(7);
+      doc.setTextColor(120, 130, 150);
+      doc.text("OBSERVAÇÕES", x0, y);
+      y += 3;
       doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-      doc.setTextColor(45, 50, 65);
-      const noteLines = doc.splitTextToSize(String(s.notes), pageW - margin * 2);
-      doc.text(noteLines.slice(0, 8), margin, cy);
+      doc.setFontSize(8.5);
+      doc.setTextColor(50, 55, 70);
+      doc.text(noteLines, x0, y);
     }
 
-    drawFooter();
-  }
+    cy += cardH + 3;
+  };
+
+  for (const s of sorted) renderSupplier(s);
+  drawFooter();
 
   return doc.output("blob");
 }
