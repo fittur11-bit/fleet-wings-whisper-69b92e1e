@@ -27,6 +27,17 @@ const PRICE_LEVELS: Record<string, string> = {
 const cat = (v?: string) => (v && CATEGORIES[v]) || v || "—";
 const price = (v?: string) => (v && PRICE_LEVELS[v]) || "—";
 
+// jsPDF's built-in Helvetica only supports WinAnsi (latin1). Any char outside
+// that range (★, emoji, some accents in NFD form) gets rendered as "&xNN" garbage.
+// Normalize to NFC and strip anything outside latin1.
+const safe = (v?: string) => {
+  if (!v) return "";
+  return v
+    .normalize("NFC")
+    .replace(/★/g, "*")
+    .replace(/[^\x00-\xFF]/g, "");
+};
+
 export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageW = doc.internal.pageSize.getWidth();
@@ -182,7 +193,7 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11.5);
     doc.setTextColor(20, 25, 40);
-    const nameText = (s.preferred ? "★ " : "") + (s.name || "—");
+    const nameText = safe((s.preferred ? "* " : "") + (s.name || "—"));
     const nameMaxW = pageW - margin * 2 - 10 - 40;
     const nameTrunc = doc.splitTextToSize(nameText, nameMaxW)[0];
     doc.text(nameTrunc, x0, y);
@@ -202,7 +213,7 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(110, 120, 140);
-      doc.text(String(s.trade_name), x0, y);
+      doc.text(safe(String(s.trade_name)), x0, y);
     }
     y += 5;
 
@@ -212,7 +223,8 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
       doc.setFontSize(7.5);
       let cx = x0;
       let cyChip = y;
-      services.forEach((t) => {
+      services.forEach((tRaw) => {
+        const t = safe(tRaw);
         const w = doc.getTextWidth(t) + 5;
         if (cx + w > x0 + innerW) {
           cx = x0;
@@ -237,7 +249,7 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(40, 50, 70);
-      doc.text(specLines, x0, y);
+      doc.text(specLines.map(safe), x0, y);
       y += specLines.length * 4 + 1;
     }
 
@@ -254,7 +266,7 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.5);
       doc.setTextColor(25, 30, 45);
-      const val = doc.splitTextToSize(r[1] || "—", colW)[0];
+      const val = doc.splitTextToSize(safe(r[1]) || "—", colW)[0];
       doc.text(val, rx, ry + 4);
     });
     y += rowsH + 1;
@@ -269,7 +281,7 @@ export async function generateSuppliersReport(suppliers: any[]): Promise<Blob> {
       doc.setFont("helvetica", "normal");
       doc.setFontSize(8.5);
       doc.setTextColor(50, 55, 70);
-      doc.text(noteLines, x0, y);
+      doc.text(noteLines.map(safe), x0, y);
     }
 
     cy += cardH + 3;
