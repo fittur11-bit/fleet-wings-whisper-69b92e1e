@@ -4,14 +4,21 @@ import { useTheme } from "@/routes/__root";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-import { MODULES, useModuleVisibility } from "@/lib/modules";
+import { MODULES, useModuleVisibility, ADMIN_EMAILS } from "@/lib/modules";
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { data: visibility = {} } = useModuleVisibility();
-  const items = MODULES.filter((m) => ("locked" in m && m.locked) || (visibility[m.key] ?? true));
+  const isAdmin = ADMIN_EMAILS.includes((user?.email ?? "").toLowerCase());
+  const items = MODULES.filter((m) => {
+    // If it's the admin module, only show it to admins
+    if (m.key === "admin") return isAdmin;
+    
+    // For other modules, show if locked OR if visibility is true
+    return ("locked" in m && m.locked) || (visibility[m.key] ?? true);
+  });
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/80 backdrop-blur-xl">
