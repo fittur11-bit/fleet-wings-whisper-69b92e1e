@@ -6,7 +6,9 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Eye, EyeOff, SlidersHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import { MODULES, setModuleVisibility, useModuleVisibility } from "@/lib/modules";
+import { MODULES, OWNER_EMAIL, setModuleVisibility, useModuleVisibility } from "@/lib/modules";
+import { useAuth } from "@/lib/auth";
+import { Lock } from "lucide-react";
 
 export const Route = createFileRoute("/modules")({
   component: ModulesPage,
@@ -25,6 +27,8 @@ function ModulesPage() {
   const { data: visibility = {}, isLoading } = useModuleVisibility();
   const qc = useQueryClient();
   const [saving, setSaving] = useState<string | null>(null);
+  const { user } = useAuth();
+  const isOwner = (user?.email ?? "").toLowerCase() === OWNER_EMAIL;
 
   const toggle = async (key: string, next: boolean) => {
     setSaving(key);
@@ -52,6 +56,13 @@ function ModulesPage() {
         </div>
       </div>
 
+      {!isOwner && (
+        <Card className="p-4 flex items-center gap-3 text-sm text-muted-foreground">
+          <Lock className="h-4 w-4 text-primary" />
+          Apenas o administrador principal pode alterar estas configurações.
+        </Card>
+      )}
+
       <Card className="divide-y divide-border/40">
         {MODULES.map((m) => {
           const Icon = m.icon;
@@ -70,7 +81,7 @@ function ModulesPage() {
               </div>
               <Switch
                 checked={locked ? true : visible}
-                disabled={!!locked || isLoading || saving === m.key}
+                disabled={!!locked || !isOwner || isLoading || saving === m.key}
                 onCheckedChange={(v) => toggle(m.key, v)}
                 aria-label={`Alternar visibilidade de ${m.label}`}
               />

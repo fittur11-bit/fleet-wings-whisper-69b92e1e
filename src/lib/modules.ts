@@ -19,6 +19,8 @@ export const MODULES = [
   { key: "admin", to: "/admin", label: "Administrador", icon: ShieldCheck, locked: true },
 ] as const;
 
+export const OWNER_EMAIL = "geandersonsanttos@gmail.com";
+
 export type ModuleKey = (typeof MODULES)[number]["key"];
 
 export async function fetchModuleVisibility(): Promise<Record<string, boolean>> {
