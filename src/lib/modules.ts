@@ -19,7 +19,7 @@ export const MODULES = [
   { key: "admin", to: "/admin", label: "Administrador", icon: ShieldCheck, locked: true },
 ] as const;
 
-export const OWNER_EMAIL = "geandersonsanttos@gmail.com";
+export const ADMIN_EMAILS = ["geandersonsanttos@gmail.com", "geanderson_jt@hormail.com"];
 
 export type ModuleKey = (typeof MODULES)[number]["key"];
 
