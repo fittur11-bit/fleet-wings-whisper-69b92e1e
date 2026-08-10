@@ -19,6 +19,7 @@ import { Route as ServicePricesRouteImport } from './routes/service-prices'
 import { Route as RabRouteImport } from './routes/rab'
 import { Route as PendingRouteImport } from './routes/pending'
 import { Route as PartsRouteImport } from './routes/parts'
+import { Route as ModulesRouteImport } from './routes/modules'
 import { Route as LibraryRouteImport } from './routes/library'
 import { Route as DemandsRouteImport } from './routes/demands'
 import { Route as DashboardRouteImport } from './routes/dashboard'
@@ -79,6 +80,11 @@ const PartsRoute = PartsRouteImport.update({
   path: '/parts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesRoute = ModulesRouteImport.update({
+  id: '/modules',
+  path: '/modules',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LibraryRoute = LibraryRouteImport.update({
   id: '/library',
   path: '/library',
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
   '/library': typeof LibraryRoute
+  '/modules': typeof ModulesRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
   '/library': typeof LibraryRoute
+  '/modules': typeof ModulesRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/demands': typeof DemandsRoute
   '/library': typeof LibraryRoute
+  '/modules': typeof ModulesRoute
   '/parts': typeof PartsRoute
   '/pending': typeof PendingRoute
   '/rab': typeof RabRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/demands'
     | '/library'
+    | '/modules'
     | '/parts'
     | '/pending'
     | '/rab'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/demands'
     | '/library'
+    | '/modules'
     | '/parts'
     | '/pending'
     | '/rab'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/demands'
     | '/library'
+    | '/modules'
     | '/parts'
     | '/pending'
     | '/rab'
@@ -265,6 +277,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   DemandsRoute: typeof DemandsRoute
   LibraryRoute: typeof LibraryRoute
+  ModulesRoute: typeof ModulesRoute
   PartsRoute: typeof PartsRoute
   PendingRoute: typeof PendingRoute
   RabRoute: typeof RabRoute
@@ -349,6 +362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules': {
+      id: '/modules'
+      path: '/modules'
+      fullPath: '/modules'
+      preLoaderRoute: typeof ModulesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/library': {
       id: '/library'
       path: '/library'
@@ -425,6 +445,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   DemandsRoute: DemandsRoute,
   LibraryRoute: LibraryRoute,
+  ModulesRoute: ModulesRoute,
   PartsRoute: PartsRoute,
   PendingRoute: PendingRoute,
   RabRoute: RabRoute,
@@ -439,12 +460,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
