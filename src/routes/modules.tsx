@@ -6,7 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Eye, EyeOff, SlidersHorizontal } from "lucide-react";
 import { toast } from "sonner";
-import { MODULES, OWNER_EMAIL, setModuleVisibility, useModuleVisibility } from "@/lib/modules";
+import { MODULES, ADMIN_EMAILS, setModuleVisibility, useModuleVisibility } from "@/lib/modules";
 import { useAuth } from "@/lib/auth";
 import { Lock } from "lucide-react";
 
@@ -28,7 +28,7 @@ function ModulesPage() {
   const qc = useQueryClient();
   const [saving, setSaving] = useState<string | null>(null);
   const { user } = useAuth();
-  const isOwner = (user?.email ?? "").toLowerCase() === OWNER_EMAIL;
+  const isOwner = ADMIN_EMAILS.includes((user?.email ?? "").toLowerCase());
 
   const toggle = async (key: string, next: boolean) => {
     setSaving(key);
