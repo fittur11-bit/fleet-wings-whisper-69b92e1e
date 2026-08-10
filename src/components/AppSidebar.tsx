@@ -1,31 +1,17 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-  import { LayoutDashboard, Plane, Search, Wrench, Cog, BookMarked, LogOut, ShieldCheck, Package, Building2, ListChecks, GitBranch, Megaphone, DollarSign, Sun, Moon } from "lucide-react";
+import { Plane, LogOut, Sun, Moon } from "lucide-react";
 import { useTheme } from "@/routes/__root";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
-
-const items = [
-  { to: "/dashboard", label: "Painel", icon: LayoutDashboard },
-  { to: "/pending", label: "Pendências", icon: ListChecks },
-  { to: "/demands", label: "Quadro de Avisos", icon: Megaphone },
-  { to: "/timeline", label: "Histórico", icon: GitBranch },
-  { to: "/aircraft", label: "Aeronaves", icon: Plane },
-  { to: "/rab", label: "Consulta RAB", icon: Search },
-   { to: "/parts", label: "Peças", icon: Cog },
-   { to: "/applicability", label: "Aplicabilidade", icon: ShieldCheck },
-  { to: "/services", label: "Manutenção", icon: Wrench },
-  { to: "/service-prices", label: "Tabela de Preços", icon: DollarSign },
-  { to: "/shipments", label: "Componentes Externos", icon: Package },
-  { to: "/suppliers", label: "Fornecedores", icon: Building2 },
-   { to: "/library", label: "Biblioteca", icon: BookMarked },
-  { to: "/admin", label: "Administrador", icon: ShieldCheck },
-] as const;
+import { MODULES, useModuleVisibility } from "@/lib/modules";
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: visibility = {} } = useModuleVisibility();
+  const items = MODULES.filter((m) => ("locked" in m && m.locked) || (visibility[m.key] ?? true));
 
   return (
     <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/80 backdrop-blur-xl">

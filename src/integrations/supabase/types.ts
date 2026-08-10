@@ -398,6 +398,24 @@ export type Database = {
           },
         ]
       }
+      module_visibility: {
+        Row: {
+          module_key: string
+          updated_at: string
+          visible: boolean
+        }
+        Insert: {
+          module_key: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Update: {
+          module_key?: string
+          updated_at?: string
+          visible?: boolean
+        }
+        Relationships: []
+      }
       part_shipments: {
         Row: {
           actual_return_date: string | null
