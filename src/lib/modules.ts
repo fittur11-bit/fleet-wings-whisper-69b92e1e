@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 export const MODULES = [
-  { key: "dashboard", to: "/dashboard", label: "Painel", icon: LayoutDashboard, locked: true },
+  { key: "dashboard", to: "/dashboard", label: "Painel", icon: LayoutDashboard },
   { key: "pending", to: "/pending", label: "Pendências", icon: ListChecks },
   { key: "demands", to: "/demands", label: "Quadro de Avisos", icon: Megaphone },
   { key: "timeline", to: "/timeline", label: "Histórico", icon: GitBranch },
