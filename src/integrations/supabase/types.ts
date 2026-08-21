@@ -135,6 +135,9 @@ export type Database = {
           location: string | null
           priority: string
           resolution_notes: string | null
+          schedule_type: string | null
+          scheduled_end: string | null
+          scheduled_start: string | null
           status: string
           title: string
           updated_at: string
@@ -152,6 +155,9 @@ export type Database = {
           location?: string | null
           priority?: string
           resolution_notes?: string | null
+          schedule_type?: string | null
+          scheduled_end?: string | null
+          scheduled_start?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -169,6 +175,9 @@ export type Database = {
           location?: string | null
           priority?: string
           resolution_notes?: string | null
+          schedule_type?: string | null
+          scheduled_end?: string | null
+          scheduled_start?: string | null
           status?: string
           title?: string
           updated_at?: string

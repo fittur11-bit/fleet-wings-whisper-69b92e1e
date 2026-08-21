@@ -18,7 +18,22 @@ export type Demand = {
   created_at: string;
   updated_at: string;
   resolution_notes?: string | null;
+  scheduled_start?: string | null;
+  scheduled_end?: string | null;
+  schedule_type?: string | null;
 };
+
+export const SCHEDULE_TYPES = [
+  { value: "maintenance", label: "Manutenção" },
+  { value: "inspection", label: "Inspeção / Vistoria" },
+  { value: "flight", label: "Voo / Traslado" },
+  { value: "workshop", label: "Oficina / Envio de peça" },
+  { value: "other", label: "Outro" },
+] as const;
+
+export function scheduleTypeLabel(v?: string | null) {
+  return SCHEDULE_TYPES.find((s) => s.value === v)?.label ?? null;
+}
 
 export function useDemands() {
   const { user } = useAuth();
