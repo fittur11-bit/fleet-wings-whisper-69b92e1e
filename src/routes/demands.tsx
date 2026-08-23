@@ -1,6 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
-import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren, Calendar } from "lucide-react";
+import { 
+  Plus, 
+  Megaphone, 
+  Trash2, 
+  Pencil, 
+  AlertTriangle, 
+  CheckCircle2, 
+  Clock, 
+  Siren, 
+  Calendar as CalendarIcon, 
+  List, 
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { 
@@ -25,7 +39,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { differenceInHours, format, parseISO } from "date-fns";
+import { 
+  differenceInHours, 
+  format, 
+  parseISO, 
+  startOfMonth, 
+  endOfMonth, 
+  eachDayOfInterval, 
+  isSameDay, 
+  addMonths, 
+  subMonths,
+  startOfWeek,
+  endOfWeek,
+  isSameMonth
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
