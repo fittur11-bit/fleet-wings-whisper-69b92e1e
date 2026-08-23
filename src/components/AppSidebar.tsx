@@ -48,12 +48,15 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               to={item.to}
               onClick={onNavigate}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all",
                 active
                   ? "bg-sidebar-accent text-sidebar-foreground font-semibold"
                   : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
               )}
             >
+              {active && (
+                <div className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r bg-primary" />
+              )}
               <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-sidebar-foreground/40 group-hover:text-sidebar-foreground/60")} />
               <span>{item.label}</span>
             </Link>
