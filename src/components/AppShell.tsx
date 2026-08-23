@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                </kbd>
              </Button>
            </div>
-          <Link to="/dashboard" className="ml-auto font-display font-semibold tracking-tight">
+          <Link to="/dashboard" className="ml-auto font-sans font-bold tracking-tight text-primary">
             FlightCore
           </Link>
         </header>

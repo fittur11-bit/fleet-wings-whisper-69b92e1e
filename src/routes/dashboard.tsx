@@ -23,8 +23,8 @@ import { cn } from "@/lib/utils";
  * Tipografia: Sora (display) + Manrope (body), já carregadas globalmente.
  */
 
-const EMBER = "#e85d3a";
-const EMBER_SOFT = "#f5c0a8";
+const EMBER = "#245A7A";
+const EMBER_SOFT = "#2F7196";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -110,10 +110,10 @@ function SectionLabel({
   count?: number 
 }) {
   const toneClass = {
-    default: "text-neutral-500",
-    ember: "text-[#e85d3a]",
-    warn: "text-amber-500/80",
-    ok: "text-emerald-500/80",
+    default: "text-muted-foreground",
+    ember: "text-primary",
+    warn: "text-amber-600",
+    ok: "text-green-600",
   }[tone];
   
   return (
@@ -186,10 +186,10 @@ function DashboardContent() {
   }).reverse();
 
   const conditionData = [
-    { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#e85d3a" },
-    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#f5c0a8" },
-    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#a8a29e" },
-    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#4a4a4a" },
+    { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#245A7A" },
+    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#37805A" },
+    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#B94A48" },
+    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#66727D" },
   ].filter((d) => d.value > 0);
 
   const totalAlerts = cvaAlerts.length + upcomingMx.length + lateShipments.length;
@@ -210,7 +210,7 @@ function DashboardContent() {
           <div className="flex items-end justify-between">
             <div className="relative">
               <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-[#e85d3a]/20 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
-              <p className="font-display text-8xl font-bold tracking-tighter text-white tabular-nums">
+              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
               <p className="mt-2 text-sm text-neutral-400">
@@ -238,7 +238,7 @@ function DashboardContent() {
           <div className="flex items-center gap-8">
             <div className="relative">
               <div className="absolute inset-0 animate-pulse rounded-full bg-[#e85d3a]/20 blur-2xl" />
-              <p className="relative font-display text-7xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
+              <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
                 {totalAlerts}
               </p>
             </div>
@@ -265,8 +265,8 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-bold text-[#e85d3a]">R$</span>
-            <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
+            <span className="text-sm font-bold text-primary">R$</span>
+            <p className="font-sans text-4xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
@@ -305,12 +305,11 @@ function DashboardContent() {
                 <Tooltip
                   cursor={{ fill: "rgba(255,255,255,0.02)" }}
                   contentStyle={{ 
-                    backgroundColor: "#171717", 
-                    border: "1px solid rgba(255,255,255,0.05)", 
-                    borderRadius: "12px", 
-                    color: "#fafaf9", 
+                    backgroundColor: "var(--card)", 
+                    border: "1px solid var(--border)", 
+                    borderRadius: "6px", 
+                    color: "var(--foreground)", 
                     fontSize: "11px",
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)"
                   }}
                   itemStyle={{ color: EMBER, fontWeight: "bold" }}
                 />
