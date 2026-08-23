@@ -49,7 +49,7 @@ function ModulesPage() {
         <Button variant="ghost" size="icon" asChild aria-label="Voltar ao painel administrador">
           <Link to="/admin"><ArrowLeft className="h-4 w-4" /></Link>
         </Button>
-        <div className="rounded-xl bg-primary/10 p-2"><SlidersHorizontal className="h-6 w-6 text-primary" /></div>
+        <div className="rounded bg-primary/10 p-2"><SlidersHorizontal className="h-6 w-6 text-primary" /></div>
         <div>
           <h1 className="font-sans text-2xl md:text-3xl font-bold tracking-tight">Visibilidade de Módulos</h1>
           <p className="text-muted-foreground text-sm mt-1">Escolha quais módulos aparecem no menu para todos os usuários.</p>
@@ -63,7 +63,7 @@ function ModulesPage() {
         </Card>
       )}
 
-      <Card className="divide-y divide-border/40">
+      <div className="technical-card divide-y divide-border/40">
         {MODULES.map((m) => {
           const Icon = m.icon;
           const visible = visibility[m.key] ?? true;
