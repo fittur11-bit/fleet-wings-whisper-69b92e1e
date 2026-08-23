@@ -187,9 +187,9 @@ function DashboardContent() {
 
   const conditionData = [
     { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#245A7A" },
-    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#37805A" },
-    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#B94A48" },
-    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#66727D" },
+    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#22c55e" },
+    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#dc2626" },
+    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#71717a" },
   ].filter((d) => d.value > 0);
 
   const totalAlerts = cvaAlerts.length + upcomingMx.length + lateShipments.length;
