@@ -79,7 +79,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             onClick={toggleTheme} 
             variant="ghost" 
             size="sm" 
-            className="flex-1 justify-start text-muted-foreground hover:text-foreground"
+            className="flex-1 justify-start text-[11px] font-bold uppercase tracking-wider text-sidebar-foreground/30 hover:text-sidebar-foreground"
           >
             {theme === "dark" ? (
               <Sun className="mr-2 h-4 w-4" />
@@ -89,7 +89,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             Modo {theme === "dark" ? "Claro" : "Escuro"}
           </Button>
         </div>
-        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
+        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-[11px] font-bold uppercase tracking-wider text-sidebar-foreground/30 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
           <LogOut className="mr-2 h-4 w-4" /> Sair
         </Button>
       </div>
