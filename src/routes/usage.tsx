@@ -222,7 +222,7 @@ const chartTooltip = {
 function KpiCard({ icon, label, value, hint, accent }: { icon: React.ReactNode; label: string; value: string; hint?: string; accent?: "primary" }) {
   return (
     <div className={`technical-card border-white/5 ${accent === "primary" ? "ring-1 ring-primary/30" : ""}`}>
-      <CardContent className="p-4">
+      <div className="p-4">
         <div className="flex items-center gap-2 text-muted-foreground">
           {icon}
           <p className="text-[10px] uppercase tracking-wider">{label}</p>
@@ -263,12 +263,12 @@ function ProgressBar({ label, used, total, pct }: { label: string; used: number;
 function ChartCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="technical-card border-white/5">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-sm">
+      <div className="p-6 pb-0">
+        <h3 className="flex items-center gap-2 text-sm font-semibold">
           {icon} {title}
-        </CardTitle>
-      </CardHeader>
+        </h3>
       </div>
+      <div className="p-6">{children}</div>
     </div>
   );
 }
