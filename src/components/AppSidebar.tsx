@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { MODULES, useModuleVisibility, ADMIN_EMAILS } from "@/lib/modules";
+import { NotificationBell } from "./NotificationBell";
+
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
@@ -31,8 +33,12 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
           <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1">Aviation</p>
         </div>
       </div>
+      
+      <div className="px-6 py-2">
+        <NotificationBell />
+      </div>
 
-      <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-1">
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
         {items.map((item) => {
           const active = pathname === item.to || pathname.startsWith(item.to + "/");
           const Icon = item.icon;
