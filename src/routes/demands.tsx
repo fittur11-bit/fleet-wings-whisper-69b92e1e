@@ -253,6 +253,7 @@ function DemandsPage() {
               <DialogTrigger asChild>
                 <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" /> Nova demanda</Button>
               </DialogTrigger>
+            </div>
             <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>{editing ? "Editar demanda" : "Nova demanda"}</DialogTitle>
