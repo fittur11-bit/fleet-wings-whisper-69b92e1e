@@ -242,12 +242,12 @@ function DashboardContent() {
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="rounded bg-accent/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-text-sec uppercase">CVA</p>
-              <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase tracking-widest">CVA</p>
+              <p className="mt-1 text-2xl font-bold text-foreground tabular-nums">{cvaAlerts.length}</p>
             </div>
             <div className="rounded bg-accent/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-text-sec uppercase">Envios</p>
-              <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase tracking-widest">Envios</p>
+              <p className="mt-1 text-2xl font-bold text-foreground tabular-nums">{lateShipments.length}</p>
             </div>
           </div>
         </BentoCard>
@@ -257,11 +257,11 @@ function DashboardContent() {
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
             <span className="text-xs font-bold text-text-sec">BRL</span>
-            <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
+            <p className="font-sans text-4xl font-bold tracking-tighter text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
-          <p className="mt-2 text-xs text-text-sec">{parts.length} componentes inventariados</p>
+          <p className="mt-2 text-[10px] font-bold text-text-sec uppercase tracking-wider">{parts.length} componentes</p>
           <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-accent">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
