@@ -194,7 +194,7 @@
     font-size: 9px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em;
     padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     text-align: left;
@@ -204,6 +204,7 @@
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--text-main);
+    font-weight: 500;
     background: var(--card);
   }
   .technical-table tr:last-child td {
