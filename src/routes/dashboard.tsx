@@ -294,15 +294,16 @@ function DashboardContent() {
                   tick={{ dx: -10 }}
                 />
                 <Tooltip
-                  cursor={{ fill: "rgba(255,255,255,0.02)" }}
+                  cursor={{ fill: "var(--muted)", opacity: 0.4 }}
                   contentStyle={{ 
-                    backgroundColor: "var(--card)", 
+                    backgroundColor: "#FFFFFF", 
                     border: "1px solid var(--border)", 
                     borderRadius: "6px", 
-                    color: "var(--foreground)", 
+                    color: "var(--text-main)", 
                     fontSize: "11px",
+                    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
                   }}
-                  itemStyle={{ color: EMBER, fontWeight: "bold" }}
+                  itemStyle={{ color: "var(--institutional-blue)", fontWeight: "bold" }}
                 />
                 <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
@@ -332,14 +333,15 @@ function DashboardContent() {
                       {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: "var(--card)", 
-                        border: "1px solid var(--border)", 
-                        borderRadius: "6px", 
-                        color: "var(--foreground)", 
-                        fontSize: "11px"
-                      }} 
-                    />
+                    contentStyle={{ 
+                      backgroundColor: "#FFFFFF", 
+                      border: "1px solid var(--border)", 
+                      borderRadius: "6px", 
+                      color: "var(--text-main)", 
+                      fontSize: "11px",
+                      boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                    }} 
+                  />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
