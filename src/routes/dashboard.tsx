@@ -495,8 +495,8 @@ function DashboardContent() {
 function MiniStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="relative">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500">{label}</p>
-      <p className="mt-1 font-display text-3xl font-bold tabular-nums text-white">
+      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{label}</p>
+      <p className="mt-1 font-sans text-3xl font-bold tabular-nums text-foreground">
         {typeof value === "number" ? String(value).padStart(2, "0") : value}
       </p>
     </div>
@@ -506,10 +506,10 @@ function MiniStat({ label, value }: { label: string; value: number | string }) {
 function EmptyState({ icon: Icon, label }: { icon: any; label: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/5 text-emerald-500/50 ring-1 ring-inset ring-emerald-500/10">
+      <div className="flex h-12 w-12 items-center justify-center rounded bg-green-500/5 text-green-500/50 border border-green-500/10">
         <Icon className="h-6 w-6" />
       </div>
-      <p className="mt-4 text-xs font-medium text-neutral-500">{label}</p>
+      <p className="mt-4 text-xs font-medium text-muted-foreground">{label}</p>
     </div>
   );
 }
@@ -520,10 +520,10 @@ function UrgencyChip({ days }: { days: number }) {
   
   return (
     <div className={cn(
-      "flex h-8 min-w-[3rem] items-center justify-center rounded-lg px-2 font-mono text-[11px] font-bold shadow-sm ring-1 ring-inset",
+      "flex h-7 min-w-[3rem] items-center justify-center rounded px-2 font-mono text-[11px] font-bold border",
       overdue || critical 
-        ? "bg-[#e85d3a] text-white ring-[#e85d3a]/20" 
-        : "bg-white/[0.03] text-neutral-400 ring-white/10"
+        ? "bg-red-600 text-white border-red-700" 
+        : "bg-muted text-muted-foreground border-border"
     )}>
       {overdue ? `${Math.abs(days)}d↑` : `${days}d`}
     </div>
@@ -534,12 +534,12 @@ function QuickLink({ to, icon: Icon, label }: { to: string; icon: any; label: st
   return (
     <Link
       to={to as any}
-      className="group/q flex items-center gap-3 rounded-xl bg-white/[0.02] p-4 transition-all duration-300 ring-1 ring-inset ring-white/[0.05] hover:bg-[#e85d3a]/[0.08] hover:ring-[#e85d3a]/30"
+      className="group/q flex items-center gap-3 rounded bg-muted/30 p-4 transition-all duration-200 border border-border hover:bg-primary/5 hover:border-primary/30"
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.03] text-neutral-400 transition-all duration-300 group-hover/q:bg-[#e85d3a] group-hover/q:text-white group-hover/q:shadow-[0_0_20px_-5px_#e85d3a]">
+      <div className="flex h-9 w-9 items-center justify-center rounded bg-muted text-muted-foreground transition-all duration-200 group-hover/q:bg-primary group-hover/q:text-white">
         <Icon className="h-4 w-4" />
       </div>
-      <span className="text-[13px] font-bold text-neutral-300 group-hover/q:text-white transition-colors">{label}</span>
+      <span className="text-[13px] font-bold text-foreground transition-colors">{label}</span>
     </Link>
   );
 }
