@@ -30,7 +30,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
          </div>
          <div>
           <div className="font-sans text-lg font-bold leading-none tracking-tight text-sidebar-foreground">FlightCore</div>
-          <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-sidebar-foreground/40 mt-1">Aviation Engineering</p>
+          <p className="text-[9px] uppercase tracking-[0.4em] font-bold text-sidebar-foreground/30 mt-1.5">Aviation Engineering</p>
         </div>
       </div>
       
@@ -48,7 +48,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               to={item.to}
               onClick={onNavigate}
               className={cn(
-                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all",
+                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-[13px] tracking-tight transition-all",
                 active
                   ? "bg-sidebar-accent text-sidebar-foreground font-medium"
                   : "text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
