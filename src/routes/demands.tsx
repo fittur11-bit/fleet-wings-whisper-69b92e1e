@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
-import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren } from "lucide-react";
+import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren, Calendar } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useDemands, PRIORITY_LABEL, STATUS_LABEL, priorityClasses, type Demand } from "@/lib/demands";
+import { 
+  useDemands, 
+  PRIORITY_LABEL, 
+  STATUS_LABEL, 
+  priorityClasses, 
+  type Demand,
+  SCHEDULE_TYPES,
+  scheduleTypeLabel
+} from "@/lib/demands";
 import { useAircraft } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +43,9 @@ const emptyForm = {
   assigned_to: "",
   location: "",
   resolution_notes: "",
+  scheduled_start: "",
+  scheduled_end: "",
+  schedule_type: "" as string,
 };
 
 function DemandsPage() {
@@ -105,6 +116,9 @@ function DemandsPage() {
       assigned_to: d.assigned_to || "",
       location: d.location || "",
       resolution_notes: d.resolution_notes || "",
+      scheduled_start: d.scheduled_start ? d.scheduled_start.slice(0, 16) : "",
+      scheduled_end: d.scheduled_end ? d.scheduled_end.slice(0, 16) : "",
+      schedule_type: d.schedule_type || "",
     });
     setOpen(true);
   };
@@ -127,6 +141,9 @@ function DemandsPage() {
       user_id: user.id,
       completed_at: form.status === "done" ? new Date().toISOString() : null,
       resolution_notes: form.resolution_notes?.trim() || null,
+      scheduled_start: form.scheduled_start ? new Date(form.scheduled_start).toISOString() : null,
+      scheduled_end: form.scheduled_end ? new Date(form.scheduled_end).toISOString() : null,
+      schedule_type: form.schedule_type || null,
     };
     const { error } = editing
       ? await supabase.from("demands" as any).update(payload).eq("id", editing.id)
@@ -248,6 +265,36 @@ function DemandsPage() {
                   <div>
                     <Label>Local</Label>
                     <Input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} />
+                  </div>
+                </div>
+
+                <div className="pt-2 pb-1 border-t border-white/5">
+                  <Label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
+                    <Calendar className="h-3 w-3" /> Agendamento (Opcional)
+                  </Label>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>Tipo de Agendamento</Label>
+                      <Select value={form.schedule_type || "none"} onValueChange={(v) => setForm({ ...form, schedule_type: v === "none" ? "" : v })}>
+                        <SelectTrigger><SelectValue placeholder="Selecione o tipo..." /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Nenhum</SelectItem>
+                          {SCHEDULE_TYPES.map((t) => (
+                            <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label>Início</Label>
+                        <Input type="datetime-local" value={form.scheduled_start} onChange={(e) => setForm({ ...form, scheduled_start: e.target.value })} />
+                      </div>
+                      <div>
+                        <Label>Fim</Label>
+                        <Input type="datetime-local" value={form.scheduled_end} onChange={(e) => setForm({ ...form, scheduled_end: e.target.value })} />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 {(form.status === "done" || form.status === "cancelled") && (
@@ -376,6 +423,11 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
                 {PRIORITY_LABEL[d.priority]}
               </Badge>
               <Badge variant="secondary" className="text-[10px]">{STATUS_LABEL[d.status]}</Badge>
+              {d.schedule_type && (
+                <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
+                  <Calendar className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
+                </Badge>
+              )}
               {d.aircraft_prefix && <span className="text-[10px] font-mono font-bold text-primary">{d.aircraft_prefix}</span>}
             </div>
             <CardTitle className={cn("text-base leading-tight", done && "line-through")}>{d.title}</CardTitle>
@@ -400,6 +452,13 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
                   {isOverdue ? `(${Math.abs(hoursLeft)}h atraso)` : `(${hoursLeft}h)`}
                 </span>
               )}
+            </span>
+          )}
+          {d.scheduled_start && (
+            <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 border bg-primary/5 border-primary/10 text-primary-foreground/80">
+              <Calendar className="h-3 w-3" />
+              {format(parseISO(d.scheduled_start), "dd/MM HH:mm", { locale: ptBR })}
+              {d.scheduled_end && ` - ${format(parseISO(d.scheduled_end), "dd/MM HH:mm", { locale: ptBR })}`}
             </span>
           )}
           {d.assigned_to && <span>👤 {d.assigned_to}</span>}
