@@ -203,7 +203,7 @@ function LibraryPage() {
              <DialogTrigger asChild>
                <Button className="bg-primary text-primary-foreground shadow-lg"><Plus className="mr-2 h-4 w-4" /> Novo documento</Button>
              </DialogTrigger>
-             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95 backdrop-blur-xl border-white/10">
+             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95  border-white/10">
                <DialogHeader>
                  <DialogTitle className="font-display text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
                </DialogHeader>
@@ -305,7 +305,7 @@ function LibraryPage() {
       </div>
 
        {filtered.length === 0 ? (
-         <div className="glass-card rounded-2xl p-16 text-center border-dashed border-white/10">
+         <div className="technical-card  p-16 text-center border-dashed border-white/10">
            <BookMarked className="mx-auto h-14 w-14 text-muted-foreground/40" />
            <h3 className="mt-4 font-display text-lg font-semibold">
              {docs.length === 0 ? "Biblioteca vazia" : "Nenhum documento encontrado"}
@@ -317,9 +317,9 @@ function LibraryPage() {
        ) : (
          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
            {filtered.map((d: any) => (
-             <div key={d.id} className="glass-card glass-card-hover rounded-2xl p-5 border border-white/5 flex flex-col">
+             <div key={d.id} className="technical-card technical-card-hover  p-5 border border-white/5 flex flex-col">
                <div className="flex items-start justify-between mb-4">
-                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
                    <FileText className="h-5 w-5" />
                  </div>
                  <div className="flex items-center gap-1">
@@ -368,7 +368,7 @@ function LibraryPage() {
                   <div className="flex gap-2">
                     <Button 
                       onClick={() => setPreviewDoc(d)} 
-                      className="flex-1 h-9 rounded-xl shadow-lg shadow-primary/10" 
+                      className="flex-1 h-9 rounded-md shadow-lg shadow-primary/10" 
                       variant="secondary"
                     >
                       <Eye className="mr-2 h-3.5 w-3.5" /> Visualizar
@@ -376,7 +376,7 @@ function LibraryPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      className="h-9 w-9 rounded-xl shrink-0"
+                      className="h-9 w-9 rounded-md shrink-0"
                       onClick={() => downloadFile(d)}
                       title="Baixar arquivo"
                     >
@@ -385,7 +385,7 @@ function LibraryPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      className="h-9 w-9 rounded-xl shrink-0"
+                      className="h-9 w-9 rounded-md shrink-0"
                       title="Abrir em nova aba"
                       onClick={() => openExternal(d.file_url)}
                     >
@@ -393,7 +393,7 @@ function LibraryPage() {
                     </Button>
                   </div>
                 ) : (
-                 <Button disabled variant="outline" className="w-full h-9 rounded-xl border-dashed">
+                 <Button disabled variant="outline" className="w-full h-9 rounded-md border-dashed">
                    Sem Arquivo
                  </Button>
                )}

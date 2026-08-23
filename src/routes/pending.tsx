@@ -59,7 +59,7 @@ function PendingPage() {
       />
 
       {totalCount === 0 && (
-        <div className="glass-card rounded-2xl p-16 text-center border-dashed border-white/10">
+        <div className="technical-card  p-16 text-center border-dashed border-white/10">
           <CheckCircle2 className="mx-auto h-14 w-14 text-emerald-400" />
           <h3 className="mt-4 font-display text-lg font-semibold">Tudo em dia!</h3>
           <p className="mt-1 text-sm text-muted-foreground">Nenhuma pendência crítica no momento.</p>

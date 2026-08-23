@@ -417,7 +417,7 @@ function DemandsPage() {
 
       {view === "list" ? (
         filtered.length === 0 ? (
-          <div className="glass-card rounded-2xl p-16 text-center border border-dashed border-white/10">
+          <div className="technical-card  p-16 text-center border border-dashed border-white/10">
             <Megaphone className="mx-auto h-14 w-14 text-muted-foreground/40" />
             <h3 className="mt-4 font-display text-lg font-semibold">Nenhuma demanda</h3>
             <p className="mt-1 text-sm text-muted-foreground">Crie a primeira demanda para começar.</p>
@@ -462,7 +462,7 @@ function CalendarView({
   const goToToday = () => onMonthChange(new Date());
 
   return (
-    <div className="glass-card rounded-2xl border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
+    <div className="technical-card  border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
       <div className="p-4 flex items-center justify-between border-b border-white/5 bg-white/5">
         <h3 className="font-display text-lg font-semibold capitalize">
           {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
