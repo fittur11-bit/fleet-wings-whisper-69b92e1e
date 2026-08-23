@@ -116,7 +116,7 @@ function SectionLabel({
         {children}
       </div>
       {typeof count === "number" && count > 0 && (
-        <span className="flex h-5 items-center rounded-full bg-muted px-2 font-mono text-[10px] text-neutral-500 border border-border">
+        <span className="flex h-5 items-center rounded-full bg-accent px-2 font-mono text-[10px] text-text-sec border border-border">
           {count}
         </span>
       )}
@@ -204,7 +204,7 @@ function DashboardContent() {
               <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <p className="mt-2 text-xs font-medium text-text-sec uppercase tracking-wider">
                 Aeronaves operacionais
               </p>
             </div>
@@ -237,16 +237,16 @@ function DashboardContent() {
               <p className="text-2xl font-bold text-foreground tabular-nums">
                 {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
               </p>
-              <p className="text-xs text-neutral-400 font-medium">Ações imediatas recomendadas</p>
+              <p className="text-xs text-text-sec font-medium">Ações imediatas recomendadas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="rounded bg-muted/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase">CVA</p>
               <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
             </div>
             <div className="rounded bg-muted/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase">Envios</p>
               <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
             </div>
           </div>
@@ -256,12 +256,12 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-xs font-bold text-neutral-400">BRL</span>
+            <span className="text-xs font-bold text-text-sec">BRL</span>
             <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
+          <p className="mt-2 text-xs text-text-sec">{parts.length} componentes inventariados</p>
           <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-muted">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
@@ -348,7 +348,7 @@ function DashboardContent() {
               <div className="mt-4 space-y-2">
                 {conditionData.map((d) => (
                   <div key={d.name} className="flex items-center justify-between text-[10px] font-medium uppercase tracking-wider">
-                    <span className="flex items-center gap-2 text-neutral-500">
+                    <span className="flex items-center gap-2 text-text-sec">
                       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
