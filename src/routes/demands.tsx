@@ -87,6 +87,8 @@ function DemandsPage() {
   const [resolveOpen, setResolveOpen] = useState(false);
   const [resolving, setResolving] = useState<Demand | null>(null);
   const [resolutionText, setResolutionText] = useState("");
+  const [view, setView] = useState<"list" | "calendar">("list");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Alert about urgent demands once on load
   useEffect(() => {
