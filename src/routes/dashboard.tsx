@@ -64,9 +64,9 @@ function BentoCard({
 }) {
   const base = cn(
     "group relative overflow-hidden rounded-md border transition-all duration-200",
-    "bg-card text-card-foreground shadow-sm",
+    "bg-card text-card-foreground",
     accent
-      ? "border-primary/40 ring-1 ring-primary/10"
+      ? "border-primary"
       : "border-border hover:border-primary/50",
     to && "hover:-translate-y-0.5",
     className,
@@ -76,7 +76,7 @@ function BentoCard({
       {accent && (
         <div className="absolute left-0 top-0 w-1 h-full bg-primary" />
       )}
-      <div className="relative p-6">{children}</div>
+      <div className="relative p-5">{children}</div>
     </>
   );
   if (to) {
@@ -200,7 +200,7 @@ function DashboardContent() {
           <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
           <div className="flex items-end justify-between">
             <div className="relative">
-              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
+
               <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
@@ -228,7 +228,7 @@ function DashboardContent() {
           <SectionLabel icon={AlertTriangle} tone="ember">Status de Atenção</SectionLabel>
           <div className="flex items-center gap-8">
             <div className="relative">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-red-600/10 blur-2xl" />
+
               <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
                 {totalAlerts}
               </p>
@@ -296,14 +296,14 @@ function DashboardContent() {
                 <Tooltip
                   cursor={{ fill: "var(--muted)", opacity: 0.4 }}
                   contentStyle={{ 
-                    backgroundColor: "#FFFFFF", 
+                    backgroundColor: "var(--card)", 
                     border: "1px solid var(--border)", 
                     borderRadius: "6px", 
                     color: "var(--text-main)", 
                     fontSize: "11px",
-                    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                    boxShadow: "none"
                   }}
-                  itemStyle={{ color: "var(--institutional-blue)", fontWeight: "bold" }}
+                  itemStyle={{ color: "var(--primary)", fontWeight: "bold" }}
                 />
                 <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
@@ -334,12 +334,12 @@ function DashboardContent() {
                     </Pie>
                     <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: "#FFFFFF", 
+                      backgroundColor: "var(--card)", 
                       border: "1px solid var(--border)", 
                       borderRadius: "6px", 
                       color: "var(--text-main)", 
                       fontSize: "11px",
-                      boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                      boxShadow: "none"
                     }} 
                   />
                   </PieChart>
