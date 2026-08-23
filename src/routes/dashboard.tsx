@@ -350,10 +350,10 @@ function DashboardContent() {
                 {conditionData.map((d) => (
                   <div key={d.name} className="flex items-center justify-between text-[10px] font-medium uppercase tracking-wider">
                     <span className="flex items-center gap-2 text-text-sec">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
+                      <span className="h-1.5 w-1.5 rounded-sm" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
-                    <span className="text-foreground">{d.value}</span>
+                    <span className="text-foreground tabular-nums">{d.value}</span>
                   </div>
                 ))}
               </div>
@@ -455,7 +455,7 @@ function DashboardContent() {
                     </div>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-bold text-foreground">{s.service_type}</p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[10px] font-bold uppercase tracking-tight text-text-sec">
                         <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
                         {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
                       </p>
@@ -516,8 +516,8 @@ function UrgencyChip({ days }: { days: number }) {
     <div className={cn(
       "flex h-7 min-w-[3rem] items-center justify-center rounded px-2 font-mono text-[11px] font-bold border",
       overdue || critical 
-        ? "bg-red-600 text-white border-red-700" 
-        : "bg-muted text-muted-foreground border-border"
+        ? "bg-[#B94A48] text-white border-[#B94A48]/20" 
+        : "bg-accent/50 text-text-sec border-border"
     )}>
       {overdue ? `${Math.abs(days)}d↑` : `${days}d`}
     </div>
