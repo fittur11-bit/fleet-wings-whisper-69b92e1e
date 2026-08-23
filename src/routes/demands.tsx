@@ -454,7 +454,7 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
               <Badge variant="secondary" className="text-[10px]">{STATUS_LABEL[d.status]}</Badge>
               {d.schedule_type && (
                 <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
-                  <Calendar className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
+                  <CalendarIcon className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
                 </Badge>
               )}
               {d.aircraft_prefix && <span className="text-[10px] font-mono font-bold text-primary">{d.aircraft_prefix}</span>}
@@ -485,7 +485,7 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
           )}
           {d.scheduled_start && (
             <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 border bg-primary/5 border-primary/10 text-primary-foreground/80">
-              <Calendar className="h-3 w-3" />
+              <CalendarIcon className="h-3 w-3" />
               {format(parseISO(d.scheduled_start), "dd/MM HH:mm", { locale: ptBR })}
               {d.scheduled_end && ` - ${format(parseISO(d.scheduled_end), "dd/MM HH:mm", { locale: ptBR })}`}
             </span>
