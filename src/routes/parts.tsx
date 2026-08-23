@@ -37,18 +37,18 @@ const statusStyles: Record<string, string> = {
 };
 
 const conditionStyles: Record<string, string> = {
-  new: "bg-emerald-500/10 text-emerald-300",
-  serviceable: "bg-sky-500/10 text-sky-300",
-  unserviceable: "bg-red-500/10 text-red-300",
-  overhauled: "bg-violet-500/10 text-violet-300",
-  repairable: "bg-amber-500/10 text-amber-300",
-  damaged: "bg-red-500/15 text-red-400",
-  consumable: "bg-teal-500/10 text-teal-300",
-  workshop_use: "bg-indigo-500/10 text-indigo-300",
-  quarantine: "bg-yellow-500/10 text-yellow-300",
-  expired: "bg-rose-500/10 text-rose-300",
-  loaner: "bg-cyan-500/10 text-cyan-300",
-  core: "bg-fuchsia-500/10 text-fuchsia-300",
+  new: "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20",
+  serviceable: "bg-sky-600/10 text-sky-600 border-sky-600/20",
+  unserviceable: "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20",
+  overhauled: "bg-indigo-600/10 text-indigo-600 border-indigo-600/20",
+  repairable: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
+  damaged: "bg-[#B94A48]/15 text-[#B94A48] border-[#B94A48]/30",
+  consumable: "bg-slate-600/10 text-slate-600 border-slate-600/20",
+  workshop_use: "bg-slate-600/10 text-slate-600 border-slate-600/20",
+  quarantine: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
+  expired: "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20",
+  loaner: "bg-cyan-600/10 text-cyan-600 border-cyan-600/20",
+  core: "bg-purple-600/10 text-purple-600 border-purple-600/20",
 };
 
 const fmtBRL = (v: any) => {
@@ -345,11 +345,11 @@ function PartsPage() {
                 className="technical-card p-4 flex items-center gap-4"
               >
                 {/* Photo */}
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
+                <div className="h-16 w-16 shrink-0 overflow-hidden rounded bg-muted border border-border flex items-center justify-center">
                   {photoUrl ? (
                     <img src={photoUrl} alt={p.name} className="h-full w-full object-cover" />
                   ) : (
-                    <Package className="h-7 w-7 text-muted-foreground/40" />
+                    <Package className="h-7 w-7 text-neutral-400/50" />
                   )}
                 </div>
 
@@ -361,16 +361,16 @@ function PartsPage() {
                       {statusLabel}
                     </span>
                     {p.condition && (
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${conditionStyles[p.condition]}`}>
+                      <span className={`inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold border uppercase tracking-widest ${conditionStyles[p.condition] || "bg-muted text-muted-foreground border-border"}`}>
                         {condLabel}
                       </span>
                     )}
                   </div>
                   <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-muted-foreground font-mono">
-                    {p.part_number && <span>P/N: <span className="text-foreground/80">{p.part_number}</span></span>}
-                    {p.serial_number && <span>S/N: <span className="text-foreground/80">{p.serial_number}</span></span>}
-                     {p.aircraft?.prefix && <span className="text-primary">{p.aircraft.prefix}</span>}
-                     {fmtBRL(p.unit_price) && <span className="text-emerald-300">{fmtBRL(p.unit_price)}</span>}
+                    {p.part_number && <span>P/N: <span className="text-foreground font-bold">{p.part_number}</span></span>}
+                    {p.serial_number && <span>S/N: <span className="text-foreground font-bold">{p.serial_number}</span></span>}
+                     {p.aircraft?.prefix && <span className="text-primary font-bold tracking-widest">{p.aircraft.prefix}</span>}
+                     {fmtBRL(p.unit_price) && <span className="text-[#37805A] font-bold">{fmtBRL(p.unit_price)}</span>}
                   </div>
                 </div>
 
