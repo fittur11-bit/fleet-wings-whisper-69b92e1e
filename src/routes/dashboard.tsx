@@ -201,10 +201,10 @@ function DashboardContent() {
           <div className="flex items-end justify-between">
             <div className="relative">
 
-              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
+              <p className="font-sans text-8xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-xs font-medium text-text-sec uppercase tracking-wider">
+              <p className="mt-3 text-[10px] font-bold text-text-sec uppercase tracking-[0.2em]">
                 Aeronaves operacionais
               </p>
             </div>
@@ -229,15 +229,15 @@ function DashboardContent() {
           <div className="flex items-center gap-8">
             <div className="relative">
 
-              <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
+              <p className="relative font-sans text-7xl font-bold tracking-tighter tabular-nums text-[#B94A48]">
                 {totalAlerts}
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-bold text-foreground tabular-nums">
-                {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
+              <p className="text-3xl font-bold text-foreground tabular-nums">
+                {criticalAlerts} <span className="text-[10px] font-bold text-text-sec uppercase tracking-[0.2em]">Críticos</span>
               </p>
-              <p className="text-xs text-text-sec font-medium">Ações imediatas recomendadas</p>
+              <p className="text-[10px] text-text-sec font-bold uppercase tracking-wider">Ações imediatas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
