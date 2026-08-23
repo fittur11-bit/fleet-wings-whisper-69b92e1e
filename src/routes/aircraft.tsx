@@ -256,7 +256,7 @@ function AircraftPage() {
                 )}
 
                 <div className="flex flex-wrap gap-2">
-                  <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusStyles[viewing.status]}`}>
+                  <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${statusStyles[viewing.status]}`}>
                     {AIRCRAFT_STATUS.find(s => s.value === viewing.status)?.label}
                   </span>
                   {viewing.cva_expiration && <CVAStatusBadge expiration={viewing.cva_expiration} />}
