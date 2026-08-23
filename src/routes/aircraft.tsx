@@ -180,12 +180,12 @@ function AircraftPage() {
                 className="technical-card group overflow-hidden flex flex-col"
               >
                 {/* Photo */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-primary/10 to-transparent">
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#F8FAFC]">
                   {a.photo_url ? (
                     <img src={a.photo_url} alt={a.prefix} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <Plane className="h-16 w-16 text-primary/30" />
+                      <Plane className="h-16 w-16 text-primary/10" />
                     </div>
                   )}
                   <div className="absolute top-3 left-3 right-3 flex justify-between gap-2">
@@ -198,7 +198,7 @@ function AircraftPage() {
 
                 {/* Body */}
                 <div className="flex-1 p-5">
-                  <p className="font-mono text-lg font-bold text-primary tracking-wider">{a.prefix}</p>
+                  <p className="font-mono text-sm font-bold text-primary tracking-widest">{a.prefix}</p>
                   <h3 className="font-sans font-semibold mt-1 truncate">
                     {a.manufacturer} {a.model}
                   </h3>
@@ -210,24 +210,24 @@ function AircraftPage() {
                   <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                     <div>
                       <p className="text-[10px] uppercase tracking-wider opacity-70">Horas</p>
-                      <p className="font-mono text-sm text-foreground">{Number(a.total_hours || 0).toFixed(1)}h</p>
+                      <p className="font-mono text-xs text-foreground font-bold">{Number(a.total_hours || 0).toFixed(1)}h</p>
                     </div>
                     <div>
                       <p className="text-[10px] uppercase tracking-wider opacity-70">Ano</p>
-                      <p className="font-mono text-sm text-foreground">{a.year || "—"}</p>
+                      <p className="font-mono text-xs text-foreground font-bold">{a.year || "—"}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex border-t border-white/5">
-                  <button onClick={() => setViewing(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-muted-foreground hover:bg-white/5 hover:text-foreground transition">
+                <div className="flex border-t border-border">
+                  <button onClick={() => setViewing(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-neutral-500 hover:bg-muted hover:text-foreground transition">
                     <Eye className="h-3.5 w-3.5" /> Detalhes
                   </button>
-                  <button onClick={() => openEdit(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-muted-foreground hover:bg-white/5 hover:text-primary transition border-l border-white/5">
+                  <button onClick={() => openEdit(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-neutral-500 hover:bg-muted hover:text-primary transition border-l border-border">
                     <Pencil className="h-3.5 w-3.5" /> Editar
                   </button>
-                  <button onClick={() => remove(a.id)} className="flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition border-l border-white/5">
+                  <button onClick={() => remove(a.id)} className="flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs font-bold text-neutral-500 hover:bg-red-50 hover:text-red-600 transition border-l border-border">
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
