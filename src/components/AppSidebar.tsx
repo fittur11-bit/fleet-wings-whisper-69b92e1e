@@ -23,8 +23,8 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   });
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-border bg-sidebar">
-       <div className="flex items-center gap-3 px-6 py-6 border-b border-border">
+    <aside className="flex h-full w-64 flex-col border-r border-sidebar-border bg-sidebar">
+       <div className="flex items-center gap-3 px-6 py-6 border-b border-sidebar-border">
          <div className="flex h-10 w-10 items-center justify-center rounded bg-primary">
            <Plane className="h-5 w-5 text-primary-foreground" />
          </div>
@@ -64,7 +64,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
         })}
       </nav>
 
-      <div className="border-t border-border/5 p-4">
+      <div className="border-t border-sidebar-border p-4">
         <div className="flex items-center gap-3 mb-3">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/20 text-primary text-sm font-semibold">
             {(user?.email?.[0] || "?").toUpperCase()}
@@ -89,7 +89,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             Modo {theme === "dark" ? "Claro" : "Escuro"}
           </Button>
         </div>
-        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-muted-foreground hover:text-foreground">
+        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
           <LogOut className="mr-2 h-4 w-4" /> Sair
         </Button>
       </div>

@@ -234,20 +234,20 @@ function DashboardContent() {
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-bold text-white tabular-nums">
-                {criticalAlerts} <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Críticos</span>
+              <p className="text-2xl font-bold text-foreground tabular-nums">
+                {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
               </p>
-              <p className="text-xs text-neutral-500">Ações imediatas recomendadas</p>
+              <p className="text-xs text-neutral-400 font-medium">Ações imediatas recomendadas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
-              <p className="mt-1 text-lg font-bold text-white">{cvaAlerts.length}</p>
+              <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
             </div>
             <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
-              <p className="mt-1 text-lg font-bold text-white">{lateShipments.length}</p>
+              <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
             </div>
           </div>
         </BentoCard>
@@ -350,7 +350,7 @@ function DashboardContent() {
                       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
-                    <span className="text-white">{d.value}</span>
+                    <span className="text-foreground">{d.value}</span>
                   </div>
                 ))}
               </div>
