@@ -30,7 +30,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
          </div>
          <div>
           <div className="font-sans text-lg font-bold leading-none tracking-tight text-sidebar-foreground">FlightCore</div>
-          <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-sidebar-foreground/40 mt-1">Aviation Engineering</p>
+          <p className="text-[9px] uppercase tracking-[0.4em] font-bold text-sidebar-foreground/30 mt-1.5">Aviation Engineering</p>
         </div>
       </div>
       
@@ -48,16 +48,16 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               to={item.to}
               onClick={onNavigate}
               className={cn(
-                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-all",
+                "group relative flex items-center gap-3 rounded-md px-3 py-2 text-[13px] tracking-tight transition-all",
                 active
-                  ? "bg-sidebar-accent text-sidebar-foreground font-semibold"
-                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
+                  ? "bg-sidebar-accent text-sidebar-foreground font-medium"
+                  : "text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
               )}
             >
               {active && (
-                <div className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r bg-primary" />
+                <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-primary" />
               )}
-              <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-sidebar-foreground/40 group-hover:text-sidebar-foreground/60")} />
+              <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-sidebar-foreground/30 group-hover:text-sidebar-foreground/50")} />
               <span>{item.label}</span>
             </Link>
           );
@@ -79,7 +79,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             onClick={toggleTheme} 
             variant="ghost" 
             size="sm" 
-            className="flex-1 justify-start text-muted-foreground hover:text-foreground"
+            className="flex-1 justify-start text-[11px] font-bold uppercase tracking-wider text-sidebar-foreground/30 hover:text-sidebar-foreground"
           >
             {theme === "dark" ? (
               <Sun className="mr-2 h-4 w-4" />
@@ -89,7 +89,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
             Modo {theme === "dark" ? "Claro" : "Escuro"}
           </Button>
         </div>
-        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
+        <Button onClick={signOut} variant="ghost" size="sm" className="w-full justify-start text-[11px] font-bold uppercase tracking-wider text-sidebar-foreground/30 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
           <LogOut className="mr-2 h-4 w-4" /> Sair
         </Button>
       </div>

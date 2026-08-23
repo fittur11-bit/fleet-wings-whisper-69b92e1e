@@ -138,7 +138,8 @@
   --border: #2A3945;
   --input: #2A3945;
   --text-main: #F1F4F6;
-  --text-sec: #98A6B2;
+  --text-sec: #A5B2BD;
+  --text-aux: #82919D;
   --sidebar-bg: #17212B;
   --sidebar-border: #2A3945;
 }
@@ -190,10 +191,10 @@
   .technical-table th {
     background: var(--muted);
     color: var(--text-sec);
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 9px;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.15em;
     padding: 10px 16px;
     border-bottom: 1px solid var(--border);
     text-align: left;
@@ -203,6 +204,7 @@
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--text-main);
+    font-weight: 500;
     background: var(--card);
   }
   .technical-table tr:last-child td {

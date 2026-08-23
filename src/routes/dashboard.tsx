@@ -110,7 +110,7 @@ function SectionLabel({
   return (
     <div className="mb-6 flex items-center justify-between">
       <div className={cn("flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em]", toneClass)}>
-        <div className={cn("flex h-6 w-6 items-center justify-center rounded-lg bg-current/10")}>
+        <div className={cn("flex h-6 w-6 items-center justify-center rounded bg-current/10 border border-current/10")}>
           <Icon className="h-3.5 w-3.5" />
         </div>
         {children}
@@ -201,10 +201,10 @@ function DashboardContent() {
           <div className="flex items-end justify-between">
             <div className="relative">
 
-              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
+              <p className="font-sans text-8xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-xs font-medium text-text-sec uppercase tracking-wider">
+              <p className="mt-3 text-[10px] font-bold text-text-sec uppercase tracking-[0.2em]">
                 Aeronaves operacionais
               </p>
             </div>
@@ -229,25 +229,25 @@ function DashboardContent() {
           <div className="flex items-center gap-8">
             <div className="relative">
 
-              <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
+              <p className="relative font-sans text-7xl font-bold tracking-tighter tabular-nums text-[#B94A48]">
                 {totalAlerts}
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-bold text-foreground tabular-nums">
-                {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
+              <p className="text-3xl font-bold text-foreground tabular-nums">
+                {criticalAlerts} <span className="text-[10px] font-bold text-text-sec uppercase tracking-[0.2em]">Críticos</span>
               </p>
-              <p className="text-xs text-text-sec font-medium">Ações imediatas recomendadas</p>
+              <p className="text-[10px] text-text-sec font-bold uppercase tracking-wider">Ações imediatas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="rounded bg-accent/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-text-sec uppercase">CVA</p>
-              <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase tracking-widest">CVA</p>
+              <p className="mt-1 text-2xl font-bold text-foreground tabular-nums">{cvaAlerts.length}</p>
             </div>
             <div className="rounded bg-accent/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-text-sec uppercase">Envios</p>
-              <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
+              <p className="text-[10px] font-bold text-text-sec uppercase tracking-widest">Envios</p>
+              <p className="mt-1 text-2xl font-bold text-foreground tabular-nums">{lateShipments.length}</p>
             </div>
           </div>
         </BentoCard>
@@ -257,12 +257,12 @@ function DashboardContent() {
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
             <span className="text-xs font-bold text-text-sec">BRL</span>
-            <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
+            <p className="font-sans text-4xl font-bold tracking-tighter text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
-          <p className="mt-2 text-xs text-text-sec">{parts.length} componentes inventariados</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-accent">
+          <p className="mt-2 text-[10px] font-bold text-text-sec uppercase tracking-wider">{parts.length} componentes</p>
+          <div className="mt-6 h-0.5 w-full overflow-hidden rounded-full bg-accent">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
@@ -306,7 +306,7 @@ function DashboardContent() {
                   }}
                   itemStyle={{ color: "var(--primary)", fontWeight: "bold" }}
                 />
-                <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[1, 1, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -325,9 +325,10 @@ function DashboardContent() {
                       data={conditionData} 
                       cx="50%" 
                       cy="50%" 
-                      innerRadius={45} 
+                      innerRadius={50} 
                       outerRadius={65} 
-                      paddingAngle={4} 
+                      paddingAngle={2} 
+
                       dataKey="value" 
                       stroke="none"
                     >
@@ -350,10 +351,10 @@ function DashboardContent() {
                 {conditionData.map((d) => (
                   <div key={d.name} className="flex items-center justify-between text-[10px] font-medium uppercase tracking-wider">
                     <span className="flex items-center gap-2 text-text-sec">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
+                      <span className="h-1.5 w-1.5 rounded-sm" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
-                    <span className="text-foreground">{d.value}</span>
+                    <span className="text-foreground tabular-nums">{d.value}</span>
                   </div>
                 ))}
               </div>
@@ -375,7 +376,7 @@ function DashboardContent() {
                 <li key={a.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
                 </li>
@@ -395,7 +396,7 @@ function DashboardContent() {
                 <li key={m.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
@@ -455,7 +456,7 @@ function DashboardContent() {
                     </div>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-bold text-foreground">{s.service_type}</p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[10px] font-bold uppercase tracking-tight text-text-sec">
                         <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
                         {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
                       </p>
@@ -489,8 +490,8 @@ function DashboardContent() {
 function MiniStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="relative">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{label}</p>
-      <p className="mt-1 font-sans text-3xl font-bold tabular-nums text-foreground">
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-sec">{label}</p>
+      <p className="mt-2 font-sans text-3xl font-bold tabular-nums text-foreground">
         {typeof value === "number" ? String(value).padStart(2, "0") : value}
       </p>
     </div>
@@ -503,7 +504,7 @@ function EmptyState({ icon: Icon, label }: { icon: any; label: string }) {
       <div className="flex h-12 w-12 items-center justify-center rounded bg-green-500/5 text-green-500/50 border border-green-500/10">
         <Icon className="h-6 w-6" />
       </div>
-      <p className="mt-4 text-xs font-medium text-muted-foreground">{label}</p>
+      <p className="mt-4 text-[10px] font-bold uppercase tracking-wider text-text-sec">{label}</p>
     </div>
   );
 }
@@ -516,8 +517,8 @@ function UrgencyChip({ days }: { days: number }) {
     <div className={cn(
       "flex h-7 min-w-[3rem] items-center justify-center rounded px-2 font-mono text-[11px] font-bold border",
       overdue || critical 
-        ? "bg-red-600 text-white border-red-700" 
-        : "bg-muted text-muted-foreground border-border"
+        ? "bg-[#B94A48] text-white border-[#B94A48]/20" 
+        : "bg-accent/50 text-text-sec border-border"
     )}>
       {overdue ? `${Math.abs(days)}d↑` : `${days}d`}
     </div>
