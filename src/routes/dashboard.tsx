@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * Dashboard com layout Bento Grid.
- * Paleta local: Charcoal & Ember (#1a1a1a / #2d2d2d / #4a4a4a / #e85d3a).
- * Tipografia: Sora (display) + Manrope (body), já carregadas globalmente.
+ * Paleta local: Institucional FlightCore (#245A7A / #17212B / #F4F5F6).
+ * Tipografia: Inter (global), já carregada.
  */
 
 const EMBER = "#245A7A";
@@ -83,7 +83,7 @@ function BentoCard({
         }}
       />
       {accent && (
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#e85d3a]/10 blur-[80px]" />
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-[80px]" />
       )}
       <div className="relative p-6">{children}</div>
     </>
@@ -209,7 +209,7 @@ function DashboardContent() {
           <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
           <div className="flex items-end justify-between">
             <div className="relative">
-              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-[#e85d3a]/20 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
               <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
@@ -237,7 +237,7 @@ function DashboardContent() {
           <SectionLabel icon={AlertTriangle} tone="ember">Status de Atenção</SectionLabel>
           <div className="flex items-center gap-8">
             <div className="relative">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-[#e85d3a]/20 blur-2xl" />
+              <div className="absolute inset-0 animate-pulse rounded-full bg-red-600/10 blur-2xl" />
               <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
                 {totalAlerts}
               </p>
@@ -272,7 +272,7 @@ function DashboardContent() {
           </div>
           <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
           <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/[0.03]">
-            <div className="h-full bg-gradient-to-r from-[#e85d3a] to-[#f5c0a8]" style={{ width: "65%" }} />
+            <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
 
