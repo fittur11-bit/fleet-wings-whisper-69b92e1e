@@ -31,9 +31,9 @@ export const Route = createFileRoute("/parts")({
 
 const statusStyles: Record<string, string> = {
   stock: "bg-primary/10 text-primary border-primary/20",
-  installed: "bg-green-600/10 text-green-600 border-green-600/20",
+  installed: "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20",
   scrapped: "bg-muted text-muted-foreground border-border",
-  sent_repair: "bg-amber-600/10 text-amber-600 border-amber-600/20",
+  sent_repair: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
 };
 
 const conditionStyles: Record<string, string> = {

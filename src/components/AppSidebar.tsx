@@ -30,7 +30,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
          </div>
          <div>
           <div className="font-sans text-lg font-bold leading-none tracking-tight text-sidebar-foreground">FlightCore</div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-sidebar-foreground/50 mt-1">Aviation</p>
+          <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-sidebar-foreground/40 mt-1">Aviation Engineering</p>
         </div>
       </div>
       

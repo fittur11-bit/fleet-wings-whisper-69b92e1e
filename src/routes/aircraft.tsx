@@ -22,10 +22,10 @@ export const Route = createFileRoute("/aircraft")({
 });
 
 const statusStyles: Record<string, string> = {
-  active: "bg-green-600/10 text-green-600 border-green-600/20",
-  maintenance: "bg-amber-600/10 text-amber-600 border-amber-600/20",
+  active: "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20",
+  maintenance: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
   inactive: "bg-muted text-muted-foreground border-border",
-  non_conform: "bg-red-600/10 text-red-600 border-red-600/20",
+  non_conform: "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20",
 };
 
 function AircraftPage() {
