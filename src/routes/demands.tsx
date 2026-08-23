@@ -362,7 +362,8 @@ function DemandsPage() {
                 </div>
               </form>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
         }
       />
 
