@@ -439,35 +439,35 @@ function DashboardContent() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
         <BentoCard className="md:col-span-4">
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-neutral-500/10">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-muted">
                 <Activity className="h-3.5 w-3.5" />
               </div>
               Atividade recente
             </div>
-            <Link to="/services" className="text-[10px] font-bold uppercase tracking-wider text-[#e85d3a] hover:underline">
+            <Link to="/services" className="text-[10px] font-bold uppercase tracking-wider text-primary hover:underline">
               Ver histórico →
             </Link>
           </div>
           {recentServices.length === 0 ? (
             <EmptyState icon={Activity} label="Nenhum serviço registrado ainda." />
           ) : (
-            <ul className="divide-y divide-white/[0.06]">
+            <ul className="divide-y divide-border">
               {recentServices.map((s: any) => (
                 <li key={s.id} className="flex items-center justify-between py-2.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e85d3a]/10 text-[#e85d3a]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-primary/10 text-primary">
                       <Wrench className="h-3.5 w-3.5" />
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-white">{s.service_type}</p>
-                      <p className="text-[11px] text-[#a8a29e]">
+                      <p className="truncate text-sm font-bold text-foreground">{s.service_type}</p>
+                      <p className="text-[11px] text-muted-foreground">
                         <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
                         {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
                       </p>
                     </div>
                   </div>
-                  <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px]">
+                  <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px] rounded">
                     {s.status}
                   </Badge>
                 </li>
