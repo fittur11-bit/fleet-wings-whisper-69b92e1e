@@ -126,16 +126,21 @@
 }
 
 .dark {
-  --bg-primary: #0F172A;
+  --bg-primary: #0F171E;
   --background: var(--bg-primary);
-  --foreground: #F4F5F6;
-  --card: #1E293B;
-  --card-foreground: #F4F5F6;
-  --border: #334155;
-  --input: #334155;
-  --text-main: #F4F5F6;
-  --text-sec: #94A3B8;
-  --sidebar-bg: #0B111A;
+  --foreground: #F1F4F6;
+  --card: #16222C;
+  --card-foreground: #F1F4F6;
+  --popover: #1B2A35;
+  --popover-foreground: #F1F4F6;
+  --accent: #1B2A35;
+  --accent-foreground: #F1F4F6;
+  --border: #2A3945;
+  --input: #2A3945;
+  --text-main: #F1F4F6;
+  --text-sec: #98A6B2;
+  --sidebar-bg: #17212B;
+  --sidebar-border: #2A3945;
 }
 
 @layer base {
@@ -183,7 +188,7 @@
     border-spacing: 0;
   }
   .technical-table th {
-    background: #F8FAFC;
+    background: var(--muted);
     color: var(--text-sec);
     font-size: 10px;
     font-weight: 700;
@@ -198,12 +203,12 @@
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--text-main);
-    background: #FFFFFF;
+    background: var(--card);
   }
   .technical-table tr:last-child td {
     border-bottom: none;
   }
   .technical-table tr:hover td {
-    background: #F8FAFC;
+    background: var(--accent);
   }
 }

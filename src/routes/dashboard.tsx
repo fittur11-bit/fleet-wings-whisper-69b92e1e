@@ -64,9 +64,9 @@ function BentoCard({
 }) {
   const base = cn(
     "group relative overflow-hidden rounded-md border transition-all duration-200",
-    "bg-card text-card-foreground shadow-sm",
+    "bg-card text-card-foreground",
     accent
-      ? "border-primary/40 ring-1 ring-primary/10"
+      ? "border-primary"
       : "border-border hover:border-primary/50",
     to && "hover:-translate-y-0.5",
     className,
@@ -76,7 +76,7 @@ function BentoCard({
       {accent && (
         <div className="absolute left-0 top-0 w-1 h-full bg-primary" />
       )}
-      <div className="relative p-6">{children}</div>
+      <div className="relative p-5">{children}</div>
     </>
   );
   if (to) {
@@ -116,7 +116,7 @@ function SectionLabel({
         {children}
       </div>
       {typeof count === "number" && count > 0 && (
-        <span className="flex h-5 items-center rounded-full bg-muted px-2 font-mono text-[10px] text-neutral-500 border border-border">
+        <span className="flex h-5 items-center rounded-full bg-accent px-2 font-mono text-[10px] text-text-sec border border-border">
           {count}
         </span>
       )}
@@ -200,11 +200,11 @@ function DashboardContent() {
           <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
           <div className="flex items-end justify-between">
             <div className="relative">
-              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
+
               <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+              <p className="mt-2 text-xs font-medium text-text-sec uppercase tracking-wider">
                 Aeronaves operacionais
               </p>
             </div>
@@ -228,7 +228,7 @@ function DashboardContent() {
           <SectionLabel icon={AlertTriangle} tone="ember">Status de Atenção</SectionLabel>
           <div className="flex items-center gap-8">
             <div className="relative">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-red-600/10 blur-2xl" />
+
               <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
                 {totalAlerts}
               </p>
@@ -237,16 +237,16 @@ function DashboardContent() {
               <p className="text-2xl font-bold text-foreground tabular-nums">
                 {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
               </p>
-              <p className="text-xs text-neutral-400 font-medium">Ações imediatas recomendadas</p>
+              <p className="text-xs text-text-sec font-medium">Ações imediatas recomendadas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="rounded bg-muted/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
+            <div className="rounded bg-accent/50 p-3 border border-border">
+              <p className="text-[10px] font-bold text-text-sec uppercase">CVA</p>
               <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
             </div>
-            <div className="rounded bg-muted/50 p-3 border border-border">
-              <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
+            <div className="rounded bg-accent/50 p-3 border border-border">
+              <p className="text-[10px] font-bold text-text-sec uppercase">Envios</p>
               <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
             </div>
           </div>
@@ -256,13 +256,13 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-xs font-bold text-neutral-400">BRL</span>
+            <span className="text-xs font-bold text-text-sec">BRL</span>
             <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
-          <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-muted">
+          <p className="mt-2 text-xs text-text-sec">{parts.length} componentes inventariados</p>
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-accent">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
@@ -276,17 +276,18 @@ function DashboardContent() {
           <div className="h-[220px] -ml-6">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={last6Months} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" className="opacity-50" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" className="opacity-30" vertical={false} />
                 <XAxis 
                   dataKey="month" 
-                  stroke="#525252" 
+                  stroke="var(--text-sec)" 
+
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false}
                   tick={{ dy: 10 }}
                 />
                 <YAxis 
-                  stroke="#525252" 
+                  stroke="var(--text-sec)" 
                   fontSize={10} 
                   tickLine={false} 
                   axisLine={false} 
@@ -296,14 +297,14 @@ function DashboardContent() {
                 <Tooltip
                   cursor={{ fill: "var(--muted)", opacity: 0.4 }}
                   contentStyle={{ 
-                    backgroundColor: "#FFFFFF", 
+                    backgroundColor: "var(--card)", 
                     border: "1px solid var(--border)", 
                     borderRadius: "6px", 
                     color: "var(--text-main)", 
                     fontSize: "11px",
-                    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                    boxShadow: "none"
                   }}
-                  itemStyle={{ color: "var(--institutional-blue)", fontWeight: "bold" }}
+                  itemStyle={{ color: "var(--primary)", fontWeight: "bold" }}
                 />
                 <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
@@ -334,12 +335,12 @@ function DashboardContent() {
                     </Pie>
                     <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: "#FFFFFF", 
+                      backgroundColor: "var(--card)", 
                       border: "1px solid var(--border)", 
                       borderRadius: "6px", 
                       color: "var(--text-main)", 
                       fontSize: "11px",
-                      boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                      boxShadow: "none"
                     }} 
                   />
                   </PieChart>
@@ -348,7 +349,7 @@ function DashboardContent() {
               <div className="mt-4 space-y-2">
                 {conditionData.map((d) => (
                   <div key={d.name} className="flex items-center justify-between text-[10px] font-medium uppercase tracking-wider">
-                    <span className="flex items-center gap-2 text-neutral-500">
+                    <span className="flex items-center gap-2 text-text-sec">
                       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
@@ -371,10 +372,10 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {cvaAlerts.slice(0, 4).map((a: any) => (
-                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{a.model || "—"}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
                 </li>
@@ -391,10 +392,10 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {upcomingMx.map((m: any) => (
-                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{m.aircraft_prefix || "—"}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
