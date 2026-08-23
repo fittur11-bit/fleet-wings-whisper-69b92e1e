@@ -285,7 +285,7 @@ function DashboardContent() {
           <div className="h-[220px] -ml-6">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={last6Months} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" className="opacity-[0.03]" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" className="opacity-50" vertical={false} />
                 <XAxis 
                   dataKey="month" 
                   stroke="#525252" 
@@ -340,15 +340,14 @@ function DashboardContent() {
                     >
                       {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: "#171717", 
-                        border: "1px solid rgba(255,255,255,0.05)", 
-                        borderRadius: "12px", 
-                        color: "#fafaf9", 
-                        fontSize: "11px"
-                      }} 
-                    />
+                    contentStyle={{ 
+                      backgroundColor: "var(--card)", 
+                      border: "1px solid var(--border)", 
+                      borderRadius: "6px", 
+                      color: "var(--foreground)", 
+                      fontSize: "11px"
+                    }} 
+                  />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -378,9 +377,9 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {cvaAlerts.slice(0, 4).map((a: any) => (
-                <li key={a.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
+                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0">
-                    <p className="font-mono text-sm font-bold text-white">{a.prefix}</p>
+                    <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
                     <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
