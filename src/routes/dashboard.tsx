@@ -110,7 +110,7 @@ function SectionLabel({
   return (
     <div className="mb-6 flex items-center justify-between">
       <div className={cn("flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em]", toneClass)}>
-        <div className={cn("flex h-6 w-6 items-center justify-center rounded-lg bg-current/10")}>
+        <div className={cn("flex h-6 w-6 items-center justify-center rounded bg-current/10 border border-current/10")}>
           <Icon className="h-3.5 w-3.5" />
         </div>
         {children}
