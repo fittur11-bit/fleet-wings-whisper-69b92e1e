@@ -193,7 +193,7 @@ function ShipmentsPage() {
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-sidebar/95  border-white/10">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
+                <DialogTitle className="font-sans text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
               </DialogHeader>
               <form onSubmit={submit} className="space-y-4 pt-4">
                 <div className="space-y-2 p-4 rounded-md bg-primary/5 border border-primary/20">
@@ -465,7 +465,7 @@ function ShipmentsPage() {
                     </Badge>
                     <span className="text-[10px] font-mono font-bold text-primary">{s.aircraft?.prefix}</span>
                   </div>
-                  <h3 className="font-display font-semibold text-lg line-clamp-1">{s.part_name}</h3>
+                  <h3 className="font-sans font-semibold text-lg line-clamp-1">{s.part_name}</h3>
                   {s.part_number && <p className="text-xs text-muted-foreground">P/N: {s.part_number}</p>}
                   {s.serial_number && <p className="text-xs text-muted-foreground">S/N: {s.serial_number}</p>}
                 </div>

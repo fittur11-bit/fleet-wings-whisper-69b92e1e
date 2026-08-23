@@ -258,7 +258,7 @@ function ServicesPage() {
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <p className="font-mono text-sm font-bold text-primary">{s.aircraft?.prefix || s.aircraft_prefix}</p>
-                  <h3 className="font-display font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
+                  <h3 className="font-sans font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
                 </div>
                 <div className="flex items-center gap-1">
                   <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Visualizar" onClick={() => setViewing(s)}>

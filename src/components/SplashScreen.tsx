@@ -60,9 +60,9 @@
                   initial={{ y: 15, opacity: 0, filter: "blur(10px)" }}
                   animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
                   transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
-                  className="font-display text-5xl font-extrabold tracking-tight text-white sm:text-6xl"
+                  className="font-sans text-5xl font-extrabold tracking-tight text-white sm:text-6xl"
                 >
-                  Flight<span className="gold-text">Core</span>
+                  Flight<span className="text-primary">Core</span>
                 </motion.h1>
                
                <motion.div 

@@ -97,7 +97,7 @@ function AircraftPage() {
              </DialogTrigger>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">
+                <DialogTitle className="font-sans text-xl">
                   {editing ? `Editar ${editing.prefix}` : "Nova Aeronave"}
                 </DialogTitle>
               </DialogHeader>
@@ -154,7 +154,7 @@ function AircraftPage() {
       ) : filtered.length === 0 ? (
         <div className="technical-card p-16 text-center">
           <Plane className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">
+          <h3 className="mt-4 font-sans text-lg font-semibold">
             {aircraft.length === 0 ? "Nenhuma aeronave cadastrada" : "Nenhuma aeronave encontrada"}
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -199,7 +199,7 @@ function AircraftPage() {
                 {/* Body */}
                 <div className="flex-1 p-5">
                   <p className="font-mono text-lg font-bold text-primary tracking-wider">{a.prefix}</p>
-                  <h3 className="font-display font-semibold mt-1 truncate">
+                  <h3 className="font-sans font-semibold mt-1 truncate">
                     {a.manufacturer} {a.model}
                   </h3>
                   {categoryLabel && (
@@ -243,7 +243,7 @@ function AircraftPage() {
           {viewing && (
             <>
               <DialogHeader>
-                <DialogTitle className="font-display text-2xl flex items-center gap-3">
+                <DialogTitle className="font-sans text-2xl flex items-center gap-3">
                   <span className="font-mono text-primary">{viewing.prefix}</span>
                   <span className="text-muted-foreground font-sans text-base font-normal">
                     {viewing.manufacturer} {viewing.model}

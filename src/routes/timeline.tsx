@@ -170,14 +170,14 @@ function TimelinePage() {
       {events.length === 0 ? (
         <div className="technical-card  p-16 text-center border-dashed border-white/10">
           <HistoryIcon className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">Sem eventos</h3>
+          <h3 className="mt-4 font-sans text-lg font-semibold">Sem eventos</h3>
           <p className="mt-1 text-sm text-muted-foreground">Nenhum registro para os filtros selecionados.</p>
         </div>
       ) : (
         <div className="space-y-8">
           {grouped.map(([month, items]) => (
             <div key={month}>
-              <h3 className="font-display text-sm uppercase tracking-widest text-muted-foreground mb-3">
+              <h3 className="font-sans text-sm uppercase tracking-widest text-muted-foreground mb-3">
                 {format(parseISO(month + "-01"), "MMMM 'de' yyyy", { locale: ptBR })}
                 <span className="ml-2 text-xs">({items.length})</span>
               </h3>

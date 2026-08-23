@@ -215,7 +215,7 @@ function BackupPage() {
               {byBucket.map((b) => (
                 <div key={b.name} className="rounded-lg border border-white/5 bg-background/40 p-3">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{b.label}</p>
-                  <p className="mt-1 font-display text-xl font-bold">{b.count}</p>
+                  <p className="mt-1 font-sans text-xl font-bold">{b.count}</p>
                   <p className="text-[10px] text-muted-foreground">{fmtBytes(b.bytes)}</p>
                 </div>
               ))}
@@ -226,7 +226,7 @@ function BackupPage() {
             <div className="flex items-center justify-between rounded-lg bg-primary/5 px-4 py-3">
               <div>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground">Total</p>
-                <p className="font-display text-2xl font-bold">{files.length} arquivos</p>
+                <p className="font-sans text-2xl font-bold">{files.length} arquivos</p>
               </div>
               <Badge variant="outline" className="text-sm">{fmtBytes(totalBytes)}</Badge>
             </div>

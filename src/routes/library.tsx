@@ -205,7 +205,7 @@ function LibraryPage() {
              </DialogTrigger>
              <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95  border-white/10">
                <DialogHeader>
-                 <DialogTitle className="font-display text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
+                 <DialogTitle className="font-sans text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
                </DialogHeader>
               <div className="space-y-4 pt-2">
                 <div>
@@ -280,7 +280,7 @@ function LibraryPage() {
             className={`rounded-lg border p-3 text-left transition ${typeFilter === t.value ? "border-primary/60 bg-primary/10" : "border-white/5 bg-card/40 hover:border-white/20"}`}
           >
             <p className="text-xs uppercase tracking-wider text-muted-foreground">{t.label}</p>
-            <p className="mt-1 font-display text-xl font-bold">{counts[t.value] || 0}</p>
+            <p className="mt-1 font-sans text-xl font-bold">{counts[t.value] || 0}</p>
           </button>
         ))}
       </div>
@@ -307,7 +307,7 @@ function LibraryPage() {
        {filtered.length === 0 ? (
          <div className="technical-card  p-16 text-center border-dashed border-white/10">
            <BookMarked className="mx-auto h-14 w-14 text-muted-foreground/40" />
-           <h3 className="mt-4 font-display text-lg font-semibold">
+           <h3 className="mt-4 font-sans text-lg font-semibold">
              {docs.length === 0 ? "Biblioteca vazia" : "Nenhum documento encontrado"}
            </h3>
            <p className="mt-1 text-sm text-muted-foreground">
@@ -343,7 +343,7 @@ function LibraryPage() {
                      </Badge>
                    )}
                  </div>
-                 <h3 className="font-display font-semibold text-lg line-clamp-1 leading-tight">{d.title}</h3>
+                 <h3 className="font-sans font-semibold text-lg line-clamp-1 leading-tight">{d.title}</h3>
                  <p className="text-xs text-muted-foreground mt-1 mb-4">
                    {d.model || "Uso Geral"}
                  </p>
@@ -416,7 +416,7 @@ function LibraryPage() {
                 <FileText className="h-4 w-4" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-display font-semibold text-foreground leading-none truncate">{previewDoc?.title}</h3>
+                <h3 className="text-sm font-sans font-semibold text-foreground leading-none truncate">{previewDoc?.title}</h3>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
                   {previewDoc?.doc_type} {previewDoc?.version && `· v${previewDoc.version}`}
                 </p>

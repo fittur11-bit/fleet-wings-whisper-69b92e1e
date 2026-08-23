@@ -129,7 +129,7 @@ function AdminPage() {
         <div className="flex items-center gap-3">
           <div className="rounded-xl bg-primary/10 p-2"><ShieldCheck className="h-6 w-6 text-primary" /></div>
           <div>
-            <h1 className="font-display text-3xl font-bold tracking-tight">Painel Administrador</h1>
+            <h1 className="font-sans text-3xl font-bold tracking-tight">Painel Administrador</h1>
             <p className="text-muted-foreground text-sm mt-1">Acesso restrito aos módulos sensíveis do sistema.</p>
           </div>
         </div>
@@ -171,7 +171,7 @@ function Gate({ icon, title, subtitle, children }: { icon: React.ReactNode; titl
       <Card className="w-full max-w-md p-8 space-y-6">
         <div className="flex flex-col items-center text-center space-y-3">
           <div className="rounded-2xl bg-primary/10 p-4">{icon}</div>
-          <h1 className="font-display text-2xl font-bold">{title}</h1>
+          <h1 className="font-sans text-2xl font-bold">{title}</h1>
           <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
         {children}

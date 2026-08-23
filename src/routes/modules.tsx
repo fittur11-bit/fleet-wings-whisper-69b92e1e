@@ -51,7 +51,7 @@ function ModulesPage() {
         </Button>
         <div className="rounded-xl bg-primary/10 p-2"><SlidersHorizontal className="h-6 w-6 text-primary" /></div>
         <div>
-          <h1 className="font-display text-2xl md:text-3xl font-bold tracking-tight">Visibilidade de Módulos</h1>
+          <h1 className="font-sans text-2xl md:text-3xl font-bold tracking-tight">Visibilidade de Módulos</h1>
           <p className="text-muted-foreground text-sm mt-1">Escolha quais módulos aparecem no menu para todos os usuários.</p>
         </div>
       </div>

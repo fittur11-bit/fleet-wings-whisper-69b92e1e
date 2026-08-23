@@ -261,7 +261,7 @@ function PartsPage() {
              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">
+                <DialogTitle className="font-sans text-xl">
                   {editing ? `Editar ${editing.name}` : "Nova Peça"}
                 </DialogTitle>
               </DialogHeader>
@@ -322,7 +322,7 @@ function PartsPage() {
       ) : filtered.length === 0 ? (
         <div className="technical-card p-16 text-center">
           <Package className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">
+          <h3 className="mt-4 font-sans text-lg font-semibold">
             {parts.length === 0 ? "Nenhuma peça cadastrada" : "Nenhuma peça encontrada"}
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -356,7 +356,7 @@ function PartsPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display font-semibold truncate">{p.name}</h3>
+                    <h3 className="font-sans font-semibold truncate">{p.name}</h3>
                     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusStyles[p.status]}`}>
                       {statusLabel}
                     </span>
@@ -461,7 +461,7 @@ function PartDetail({ part }: { part: any }) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="font-display text-2xl">{part.name}</DialogTitle>
+        <DialogTitle className="font-sans text-2xl">{part.name}</DialogTitle>
       </DialogHeader>
       <div className="space-y-5">
         {photos.length > 0 && (
@@ -746,7 +746,7 @@ function ActionForm({ part, mode, aircraft, onDone }: { part: any; mode: "instal
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="font-display text-xl flex items-center gap-2">
+        <DialogTitle className="font-sans text-xl flex items-center gap-2">
           {mode === "install" ? <ArrowDownToLine className="h-5 w-5 text-emerald-300" /> : <ArrowUpFromLine className="h-5 w-5 text-orange-300" />}
           {mode === "install" ? "Instalar peça" : "Remover peça"}
         </DialogTitle>

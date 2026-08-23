@@ -419,7 +419,7 @@ function DemandsPage() {
         filtered.length === 0 ? (
           <div className="technical-card  p-16 text-center border border-dashed border-white/10">
             <Megaphone className="mx-auto h-14 w-14 text-muted-foreground/40" />
-            <h3 className="mt-4 font-display text-lg font-semibold">Nenhuma demanda</h3>
+            <h3 className="mt-4 font-sans text-lg font-semibold">Nenhuma demanda</h3>
             <p className="mt-1 text-sm text-muted-foreground">Crie a primeira demanda para começar.</p>
           </div>
         ) : (
@@ -464,7 +464,7 @@ function CalendarView({
   return (
     <div className="technical-card  border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
       <div className="p-4 flex items-center justify-between border-b border-white/5 bg-white/5">
-        <h3 className="font-display text-lg font-semibold capitalize">
+        <h3 className="font-sans text-lg font-semibold capitalize">
           {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
         </h3>
         <div className="flex items-center gap-2">
@@ -553,7 +553,7 @@ function StatCard({ icon: Icon, label, value, tone, pulse }: any) {
         </div>
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
-          <p className={cn("text-2xl font-display font-bold", tone)}>{value}</p>
+          <p className={cn("text-2xl font-sans font-bold", tone)}>{value}</p>
         </div>
       </CardContent>
     </Card>

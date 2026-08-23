@@ -227,7 +227,7 @@ function KpiCard({ icon, label, value, hint, accent }: { icon: React.ReactNode; 
           {icon}
           <p className="text-[10px] uppercase tracking-wider">{label}</p>
         </div>
-        <p className="mt-2 font-display text-2xl font-bold">{value}</p>
+        <p className="mt-2 font-sans text-2xl font-bold">{value}</p>
         {hint && <p className="mt-1 text-[10px] text-muted-foreground">{hint}</p>}
       </CardContent>
     </Card>
