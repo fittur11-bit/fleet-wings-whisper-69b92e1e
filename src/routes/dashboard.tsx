@@ -306,7 +306,7 @@ function DashboardContent() {
                   }}
                   itemStyle={{ color: "var(--primary)", fontWeight: "bold" }}
                 />
-                <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[1, 1, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -325,9 +325,10 @@ function DashboardContent() {
                       data={conditionData} 
                       cx="50%" 
                       cy="50%" 
-                      innerRadius={45} 
+                      innerRadius={50} 
                       outerRadius={65} 
-                      paddingAngle={4} 
+                      paddingAngle={2} 
+
                       dataKey="value" 
                       stroke="none"
                     >
