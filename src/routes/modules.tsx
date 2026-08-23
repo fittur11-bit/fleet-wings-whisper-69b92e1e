@@ -88,7 +88,7 @@ function ModulesPage() {
             </div>
           );
         })}
-      </Card>
+      </div>
     </div>
   );
 }
