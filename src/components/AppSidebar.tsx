@@ -55,7 +55,7 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               )}
             >
               {active && (
-                <div className="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r bg-primary" />
+                <div className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r bg-primary" />
               )}
               <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-sidebar-foreground/30 group-hover:text-sidebar-foreground/50")} />
               <span>{item.label}</span>
