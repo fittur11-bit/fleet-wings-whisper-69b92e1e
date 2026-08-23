@@ -501,20 +501,20 @@ function CalendarView({
             <div 
               key={day.toISOString()} 
               className={cn(
-                "min-h-[100px] border-r border-b border-white/5 p-2 transition-colors",
-                !isCurrentMonth && "bg-black/20 text-muted-foreground/30",
-                isCurrentMonth && "hover:bg-white/5"
+                "min-h-[100px] border-r border-b border-border p-2 transition-colors",
+                !isCurrentMonth && "bg-muted text-muted-foreground/30",
+                isCurrentMonth && "bg-card hover:bg-muted/10"
               )}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className={cn(
-                  "text-xs font-medium h-6 w-6 flex items-center justify-center rounded-full",
+                  "text-xs font-bold h-6 w-6 flex items-center justify-center rounded",
                   isToday && "bg-primary text-primary-foreground font-bold"
                 )}>
                   {format(day, "d")}
                 </span>
                 {dayDemands.length > 0 && (
-                  <span className="text-[10px] text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded-full border border-white/10">
+                  <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded border border-border">
                     {dayDemands.length}
                   </span>
                 )}
