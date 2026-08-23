@@ -63,12 +63,12 @@ function BentoCard({
   accent?: boolean;
 }) {
   const base = cn(
-    "group relative overflow-hidden rounded-2xl border transition-all duration-500",
-    "bg-neutral-900/50 backdrop-blur-sm",
+    "group relative overflow-hidden rounded-md border transition-all duration-200",
+    "bg-card text-card-foreground shadow-sm",
     accent
-      ? "border-[#e85d3a]/30 shadow-[0_0_40px_-15px_rgba(232,93,58,0.3)]"
-      : "border-white/[0.05] hover:border-[#e85d3a]/20",
-    to && "hover:bg-neutral-900/80 hover:-translate-y-0.5",
+      ? "border-primary/30"
+      : "border-border hover:border-primary/50",
+    to && "hover:-translate-y-0.5",
     className,
   );
   const content = (
