@@ -30,10 +30,10 @@ export const Route = createFileRoute("/parts")({
 });
 
 const statusStyles: Record<string, string> = {
-  stock: "bg-sky-500/15 text-sky-300 border-sky-500/30",
-  installed: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  scrapped: "bg-white/5 text-muted-foreground border-white/10",
-  sent_repair: "bg-orange-500/15 text-orange-300 border-orange-500/30",
+  stock: "bg-primary/10 text-primary border-primary/20",
+  installed: "bg-green-600/10 text-green-600 border-green-600/20",
+  scrapped: "bg-muted text-muted-foreground border-border",
+  sent_repair: "bg-amber-600/10 text-amber-600 border-amber-600/20",
 };
 
 const conditionStyles: Record<string, string> = {

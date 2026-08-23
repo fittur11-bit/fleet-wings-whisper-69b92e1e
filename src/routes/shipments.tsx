@@ -171,10 +171,10 @@ function ShipmentsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "sent": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "in_repair": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-      case "received": return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
-      case "cancelled": return "bg-red-500/10 text-red-500 border-red-500/20";
+      case "sent": return "bg-primary/10 text-primary border-primary/20";
+      case "in_repair": return "bg-amber-600/10 text-amber-600 border-amber-600/20";
+      case "received": return "bg-green-600/10 text-green-600 border-green-600/20";
+      case "cancelled": return "bg-red-600/10 text-red-600 border-red-600/20";
       default: return "bg-slate-500/10 text-slate-500 border-slate-500/20";
     }
   };

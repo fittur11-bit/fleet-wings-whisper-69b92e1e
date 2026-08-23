@@ -22,10 +22,10 @@ export const Route = createFileRoute("/aircraft")({
 });
 
 const statusStyles: Record<string, string> = {
-  active: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-600/40 dark:border-emerald-500/30",
-  maintenance: "bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-600/40 dark:border-orange-500/30",
-  inactive: "bg-foreground/5 text-muted-foreground border-foreground/10",
-  non_conform: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-600/40 dark:border-red-500/30",
+  active: "bg-green-600/10 text-green-600 border-green-600/20",
+  maintenance: "bg-amber-600/10 text-amber-600 border-amber-600/20",
+  inactive: "bg-muted text-muted-foreground border-border",
+  non_conform: "bg-red-600/10 text-red-600 border-red-600/20",
 };
 
 function AircraftPage() {
