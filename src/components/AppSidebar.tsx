@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { MODULES, useModuleVisibility, ADMIN_EMAILS } from "@/lib/modules";
+import { NotificationBell } from "./NotificationBell";
+
 
 export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const { user, signOut } = useAuth();
