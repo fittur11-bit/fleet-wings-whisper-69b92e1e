@@ -489,8 +489,8 @@ function DashboardContent() {
 function MiniStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="relative">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{label}</p>
-      <p className="mt-1 font-sans text-3xl font-bold tabular-nums text-foreground">
+      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-sec">{label}</p>
+      <p className="mt-2 font-sans text-3xl font-bold tabular-nums text-foreground">
         {typeof value === "number" ? String(value).padStart(2, "0") : value}
       </p>
     </div>
