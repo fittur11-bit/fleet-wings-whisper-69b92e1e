@@ -13,17 +13,17 @@ export function getCVAStatus(expiration: string | null | undefined) {
 }
 
 const colors = {
-  success: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-600/40 dark:border-emerald-500/30",
-  warning: "bg-yellow-500/20 text-yellow-800 dark:text-yellow-300 border-yellow-600/40 dark:border-yellow-500/30",
-  orange: "bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-600/40 dark:border-orange-500/30",
-  danger: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-600/40 dark:border-red-500/30",
-  muted: "bg-foreground/5 text-muted-foreground border-foreground/10",
+  success: "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20",
+  warning: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
+  orange: "bg-[#C58A21]/15 text-[#C58A21] border-[#C58A21]/30",
+  danger: "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20",
+  muted: "bg-muted text-muted-foreground border-border",
 };
 
 export function CVAStatusBadge({ expiration, className }: { expiration: string | null | undefined; className?: string }) {
   const s = getCVAStatus(expiration);
   return (
-    <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium", colors[s.color], className)}>
+    <span className={cn("inline-flex items-center gap-1.5 rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider", colors[s.color], className)}>
       <span className="h-1.5 w-1.5 rounded-full bg-current" />
       CVA · {s.label}
     </span>
