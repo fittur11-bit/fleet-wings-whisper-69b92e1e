@@ -116,7 +116,7 @@ function SectionLabel({
         {children}
       </div>
       {typeof count === "number" && count > 0 && (
-        <span className="flex h-5 items-center rounded-full bg-white/[0.03] px-2 font-mono text-[10px] text-neutral-500 ring-1 ring-inset ring-white/10">
+        <span className="flex h-5 items-center rounded-full bg-muted px-2 font-mono text-[10px] text-neutral-500 border border-border">
           {count}
         </span>
       )}
@@ -217,8 +217,8 @@ function DashboardContent() {
             <MiniStat label="Instaladas" value={installedParts} />
             <MiniStat label="Serviços" value={pendingServices} />
           </div>
-          <div className="mt-8 flex items-center justify-between text-[11px] font-bold tracking-wider text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
-            <span>EXPLORAR FROTA COMPLETA</span>
+          <div className="mt-8 flex items-center justify-between text-[10px] font-bold tracking-[0.2em] text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
+            <span>RELATÓRIO DE FROTA</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </BentoCard>
@@ -256,13 +256,13 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-bold text-primary">R$</span>
-            <p className="font-sans text-4xl font-bold tracking-tight text-foreground tabular-nums">
+            <span className="text-xs font-bold text-neutral-400">BRL</span>
+            <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
           <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/[0.03]">
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-muted">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
