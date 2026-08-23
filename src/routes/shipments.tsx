@@ -191,7 +191,7 @@ function ShipmentsPage() {
                 <Plus className="mr-2 h-4 w-4" /> Novo Envio
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-sidebar/95  border-white/10">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-sidebar border-white/10">
               <DialogHeader>
                 <DialogTitle className="font-sans text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
               </DialogHeader>
