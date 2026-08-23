@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex-1 lg:pl-64">
         {/* Mobile header */}
-         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-white/5 bg-background/60 backdrop-blur-xl px-4 py-3">
+         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background px-4 py-3">
            <div className="lg:hidden flex items-center gap-2">
              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}>
                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -65,8 +65,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                </kbd>
              </Button>
            </div>
-          <Link to="/dashboard" className="ml-auto font-display font-semibold tracking-tight">
-            FlightCore
+          <Link to="/dashboard" className="ml-auto flex items-center gap-2">
+            <span className="font-sans font-bold tracking-tight text-primary">FlightCore</span>
           </Link>
         </header>
 
@@ -88,7 +88,7 @@ export function PageHeader({
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="font-display text-3xl font-bold tracking-tight">{title}</h1>
+        <h1 className="font-sans text-3xl font-bold tracking-tight">{title}</h1>
         {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

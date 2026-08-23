@@ -30,10 +30,10 @@ export const Route = createFileRoute("/parts")({
 });
 
 const statusStyles: Record<string, string> = {
-  stock: "bg-sky-500/15 text-sky-300 border-sky-500/30",
-  installed: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
-  scrapped: "bg-white/5 text-muted-foreground border-white/10",
-  sent_repair: "bg-orange-500/15 text-orange-300 border-orange-500/30",
+  stock: "bg-primary/10 text-primary border-primary/20",
+  installed: "bg-green-600/10 text-green-600 border-green-600/20",
+  scrapped: "bg-muted text-muted-foreground border-border",
+  sent_repair: "bg-amber-600/10 text-amber-600 border-amber-600/20",
 };
 
 const conditionStyles: Record<string, string> = {
@@ -261,7 +261,7 @@ function PartsPage() {
              </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">
+                <DialogTitle className="font-sans text-xl">
                   {editing ? `Editar ${editing.name}` : "Nova Peça"}
                 </DialogTitle>
               </DialogHeader>
@@ -280,7 +280,7 @@ function PartsPage() {
           { label: "Instaladas", value: stats.installed, color: "text-emerald-300" },
           { label: "Em Reparo", value: stats.repair, color: "text-orange-300" },
         ].map((s) => (
-          <div key={s.label} className="glass-card rounded-2xl p-4">
+          <div key={s.label} className="technical-card p-4">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.label}</p>
             <p className={`mt-1 font-mono text-2xl font-bold ${s.color}`}>{s.value}</p>
           </div>
@@ -317,12 +317,12 @@ function PartsPage() {
       {/* List */}
       {isLoading ? (
         <div className="space-y-2">
-          {[...Array(5)].map((_, i) => <div key={i} className="glass-card animate-pulse rounded-2xl h-20" />)}
+          {[...Array(5)].map((_, i) => <div key={i} className="technical-card animate-pulse h-20" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center">
+        <div className="technical-card p-16 text-center">
           <Package className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">
+          <h3 className="mt-4 font-sans text-lg font-semibold">
             {parts.length === 0 ? "Nenhuma peça cadastrada" : "Nenhuma peça encontrada"}
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -342,7 +342,7 @@ function PartsPage() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.02 }}
-                className="glass-card glass-card-hover rounded-2xl p-4 flex items-center gap-4"
+                className="technical-card p-4 flex items-center gap-4"
               >
                 {/* Photo */}
                 <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
@@ -356,7 +356,7 @@ function PartsPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-display font-semibold truncate">{p.name}</h3>
+                    <h3 className="font-sans font-semibold truncate">{p.name}</h3>
                     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusStyles[p.status]}`}>
                       {statusLabel}
                     </span>
@@ -461,7 +461,7 @@ function PartDetail({ part }: { part: any }) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="font-display text-2xl">{part.name}</DialogTitle>
+        <DialogTitle className="font-sans text-2xl">{part.name}</DialogTitle>
       </DialogHeader>
       <div className="space-y-5">
         {photos.length > 0 && (
@@ -746,7 +746,7 @@ function ActionForm({ part, mode, aircraft, onDone }: { part: any; mode: "instal
   return (
     <>
       <DialogHeader>
-        <DialogTitle className="font-display text-xl flex items-center gap-2">
+        <DialogTitle className="font-sans text-xl flex items-center gap-2">
           {mode === "install" ? <ArrowDownToLine className="h-5 w-5 text-emerald-300" /> : <ArrowUpFromLine className="h-5 w-5 text-orange-300" />}
           {mode === "install" ? "Instalar peça" : "Remover peça"}
         </DialogTitle>

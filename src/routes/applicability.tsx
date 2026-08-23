@@ -91,7 +91,7 @@
          )}
  
           {query && results.length === 0 && !loadingParts && (
-            <div className="text-center py-12 glass-card rounded-2xl border-dashed">
+            <div className="text-center py-12 technical-card  border-dashed">
               <p className="text-muted-foreground">Nenhum resultado encontrado no seu estoque.</p>
             </div>
           )}

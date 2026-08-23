@@ -23,14 +23,14 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
   });
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-white/5 bg-sidebar/80 backdrop-blur-xl">
-       <div className="flex items-center gap-3 px-6 py-6 border-b border-border/5">
-         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg">
+    <aside className="flex h-full w-64 flex-col border-r border-border bg-sidebar">
+       <div className="flex items-center gap-3 px-6 py-6 border-b border-border">
+         <div className="flex h-10 w-10 items-center justify-center rounded bg-primary">
            <Plane className="h-5 w-5 text-primary-foreground" />
          </div>
          <div>
-          <div className="font-display text-lg font-bold leading-none tracking-tight">FlightCore</div>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mt-1">Aviation</p>
+          <div className="font-sans text-lg font-bold leading-none tracking-tight text-sidebar-foreground">FlightCore</div>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-sidebar-foreground/50 mt-1">Aviation</p>
         </div>
       </div>
       
@@ -50,11 +50,11 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               className={cn(
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 active
-                  ? "bg-gradient-to-r from-primary/20 to-transparent text-primary border-l-2 border-primary"
-                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-primary/5",
+                  ? "bg-sidebar-accent text-sidebar-foreground font-semibold"
+                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
               )}
             >
-              <Icon className={cn("h-4 w-4", active && "text-primary")} />
+              <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-sidebar-foreground/40 group-hover:text-sidebar-foreground/60")} />
               <span>{item.label}</span>
             </Link>
           );

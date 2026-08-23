@@ -22,10 +22,10 @@ export const Route = createFileRoute("/aircraft")({
 });
 
 const statusStyles: Record<string, string> = {
-  active: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-600/40 dark:border-emerald-500/30",
-  maintenance: "bg-orange-500/15 text-orange-700 dark:text-orange-300 border-orange-600/40 dark:border-orange-500/30",
-  inactive: "bg-foreground/5 text-muted-foreground border-foreground/10",
-  non_conform: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-600/40 dark:border-red-500/30",
+  active: "bg-green-600/10 text-green-600 border-green-600/20",
+  maintenance: "bg-amber-600/10 text-amber-600 border-amber-600/20",
+  inactive: "bg-muted text-muted-foreground border-border",
+  non_conform: "bg-red-600/10 text-red-600 border-red-600/20",
 };
 
 function AircraftPage() {
@@ -97,7 +97,7 @@ function AircraftPage() {
              </DialogTrigger>
             <DialogContent className="max-w-3xl">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">
+                <DialogTitle className="font-sans text-xl">
                   {editing ? `Editar ${editing.prefix}` : "Nova Aeronave"}
                 </DialogTitle>
               </DialogHeader>
@@ -148,13 +148,13 @@ function AircraftPage() {
       {isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="glass-card animate-pulse rounded-2xl h-72" />
+            <div key={i} className="technical-card animate-pulse h-72" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center">
+        <div className="technical-card p-16 text-center">
           <Plane className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">
+          <h3 className="mt-4 font-sans text-lg font-semibold">
             {aircraft.length === 0 ? "Nenhuma aeronave cadastrada" : "Nenhuma aeronave encontrada"}
           </h3>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -177,7 +177,7 @@ function AircraftPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="glass-card glass-card-hover group rounded-2xl overflow-hidden flex flex-col"
+                className="technical-card group overflow-hidden flex flex-col"
               >
                 {/* Photo */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-primary/10 to-transparent">
@@ -199,7 +199,7 @@ function AircraftPage() {
                 {/* Body */}
                 <div className="flex-1 p-5">
                   <p className="font-mono text-lg font-bold text-primary tracking-wider">{a.prefix}</p>
-                  <h3 className="font-display font-semibold mt-1 truncate">
+                  <h3 className="font-sans font-semibold mt-1 truncate">
                     {a.manufacturer} {a.model}
                   </h3>
                   {categoryLabel && (
@@ -243,7 +243,7 @@ function AircraftPage() {
           {viewing && (
             <>
               <DialogHeader>
-                <DialogTitle className="font-display text-2xl flex items-center gap-3">
+                <DialogTitle className="font-sans text-2xl flex items-center gap-3">
                   <span className="font-mono text-primary">{viewing.prefix}</span>
                   <span className="text-muted-foreground font-sans text-base font-normal">
                     {viewing.manufacturer} {viewing.model}

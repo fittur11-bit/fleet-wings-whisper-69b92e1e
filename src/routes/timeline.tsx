@@ -26,10 +26,10 @@ type Event = {
 
 const typeConfig: Record<Event["type"], { icon: any; color: string; label: string }> = {
   service: { icon: Wrench, color: "text-primary bg-primary/10 border-primary/20", label: "Serviço" },
-  shipment: { icon: Package, color: "text-orange-400 bg-orange-500/10 border-orange-500/20", label: "Envio" },
-  part_install: { icon: Cog, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", label: "Peça instalada" },
-  part_remove: { icon: Cog, color: "text-amber-400 bg-amber-500/10 border-amber-500/20", label: "Peça removida" },
-  document: { icon: FileText, color: "text-violet-400 bg-violet-500/10 border-violet-500/20", label: "Documento" },
+  shipment: { icon: Package, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Envio" },
+  part_install: { icon: Cog, color: "text-green-600 bg-green-600/10 border-green-600/20", label: "Peça instalada" },
+  part_remove: { icon: Cog, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Peça removida" },
+  document: { icon: FileText, color: "text-primary bg-primary/10 border-primary/20", label: "Documento" },
 };
 
 function TimelinePage() {
@@ -168,16 +168,16 @@ function TimelinePage() {
       </div>
 
       {events.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center border-dashed border-white/10">
+        <div className="technical-card  p-16 text-center border-dashed border-white/10">
           <HistoryIcon className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">Sem eventos</h3>
+          <h3 className="mt-4 font-sans text-lg font-semibold">Sem eventos</h3>
           <p className="mt-1 text-sm text-muted-foreground">Nenhum registro para os filtros selecionados.</p>
         </div>
       ) : (
         <div className="space-y-8">
           {grouped.map(([month, items]) => (
             <div key={month}>
-              <h3 className="font-display text-sm uppercase tracking-widest text-muted-foreground mb-3">
+              <h3 className="font-sans text-sm uppercase tracking-widest text-muted-foreground mb-3">
                 {format(parseISO(month + "-01"), "MMMM 'de' yyyy", { locale: ptBR })}
                 <span className="ml-2 text-xs">({items.length})</span>
               </h3>
@@ -190,7 +190,7 @@ function TimelinePage() {
                       <div className={`absolute -left-[34px] top-2 flex h-7 w-7 items-center justify-center rounded-full border ${cfg.color}`}>
                         <Icon className="h-3.5 w-3.5" />
                       </div>
-                      <div className="glass-card rounded-xl border border-white/5 p-3">
+                      <div className="technical-card rounded-md border border-white/5 p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 mb-1">

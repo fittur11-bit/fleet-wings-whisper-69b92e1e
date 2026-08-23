@@ -225,7 +225,7 @@ function SuppliersPage() {
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-white/5 bg-card/50 p-4">
             <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{s.label}</p>
-            <p className="text-2xl font-display font-bold mt-1">{s.value}</p>
+            <p className="text-2xl font-sans font-bold mt-1">{s.value}</p>
           </div>
         ))}
       </div>

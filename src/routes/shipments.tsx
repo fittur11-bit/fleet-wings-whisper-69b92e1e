@@ -171,10 +171,10 @@ function ShipmentsPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "sent": return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-      case "in_repair": return "bg-amber-500/10 text-amber-500 border-amber-500/20";
-      case "received": return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
-      case "cancelled": return "bg-red-500/10 text-red-500 border-red-500/20";
+      case "sent": return "bg-primary/10 text-primary border-primary/20";
+      case "in_repair": return "bg-amber-600/10 text-amber-600 border-amber-600/20";
+      case "received": return "bg-green-600/10 text-green-600 border-green-600/20";
+      case "cancelled": return "bg-red-600/10 text-red-600 border-red-600/20";
       default: return "bg-slate-500/10 text-slate-500 border-slate-500/20";
     }
   };
@@ -191,12 +191,12 @@ function ShipmentsPage() {
                 <Plus className="mr-2 h-4 w-4" /> Novo Envio
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-sidebar/95 backdrop-blur-xl border-white/10">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-sidebar border-white/10">
               <DialogHeader>
-                <DialogTitle className="font-display text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
+                <DialogTitle className="font-sans text-xl">{editing ? "Editar Envio" : "Novo Envio de Peça"}</DialogTitle>
               </DialogHeader>
               <form onSubmit={submit} className="space-y-4 pt-4">
-                <div className="space-y-2 p-4 rounded-xl bg-primary/5 border border-primary/20">
+                <div className="space-y-2 p-4 rounded-md bg-primary/5 border border-primary/20">
                   <Label className="flex items-center gap-2">
                     <Package className="h-4 w-4 text-primary" />
                     Peça cadastrada (opcional)
@@ -361,7 +361,7 @@ function ShipmentsPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                <div className="grid grid-cols-2 gap-4 p-4 rounded-md bg-white/5 border border-white/10">
                   <div className="space-y-2">
                     <Label>Critério de Revisão</Label>
                     <Select value={form.overhaul_type} onValueChange={(v) => setForm({ ...form, overhaul_type: v })}>
@@ -449,14 +449,14 @@ function ShipmentsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-12 text-center border-dashed border-white/10">
+        <div className="technical-card  p-12 text-center border-dashed border-white/10">
           <Package className="mx-auto h-12 w-12 text-muted-foreground/30" />
           <p className="mt-4 text-muted-foreground">Nenhum envio de peça registrado</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((s: any) => (
-            <div key={s.id} className="glass-card glass-card-hover rounded-2xl p-5 border border-white/5 flex flex-col">
+            <div key={s.id} className="technical-card p-5 border border-white/5 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -465,7 +465,7 @@ function ShipmentsPage() {
                     </Badge>
                     <span className="text-[10px] font-mono font-bold text-primary">{s.aircraft?.prefix}</span>
                   </div>
-                  <h3 className="font-display font-semibold text-lg line-clamp-1">{s.part_name}</h3>
+                  <h3 className="font-sans font-semibold text-lg line-clamp-1">{s.part_name}</h3>
                   {s.part_number && <p className="text-xs text-muted-foreground">P/N: {s.part_number}</p>}
                   {s.serial_number && <p className="text-xs text-muted-foreground">S/N: {s.serial_number}</p>}
                 </div>

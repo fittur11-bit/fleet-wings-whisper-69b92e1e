@@ -247,18 +247,18 @@ function ServicesPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-12 text-center">
+        <div className="technical-card  p-12 text-center">
           <Wrench className="mx-auto h-12 w-12 text-muted-foreground/50" />
           <p className="mt-4 text-muted-foreground">Nenhum serviço cadastrado</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {filtered.map((s: any) => (
-            <div key={s.id} className="glass-card glass-card-hover rounded-2xl p-5">
+            <div key={s.id} className="technical-card p-5">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <p className="font-mono text-sm font-bold text-primary">{s.aircraft?.prefix || s.aircraft_prefix}</p>
-                  <h3 className="font-display font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
+                  <h3 className="font-sans font-semibold mt-1">{(s.service_types || [s.service_type]).map((t: string) => SERVICE_TYPES.find(x => x.value === t)?.label || t).join(", ")}</h3>
                 </div>
                 <div className="flex items-center gap-1">
                   <Button size="icon" variant="ghost" className="h-7 w-7 hover:text-primary" title="Visualizar" onClick={() => setViewing(s)}>
@@ -347,7 +347,7 @@ function ServicesPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="glass-card p-4 rounded-xl space-y-3">
+                  <div className="technical-card p-4 space-y-3">
                     <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Informações Gerais</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
@@ -375,7 +375,7 @@ function ServicesPage() {
                     )}
                   </div>
 
-                  <div className="glass-card p-4 rounded-xl space-y-3">
+                  <div className="technical-card p-4 rounded-md space-y-3">
                     <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Descrição</h4>
                     <p className="text-sm whitespace-pre-wrap">{viewing.description || "Nenhuma descrição fornecida."}</p>
                   </div>
@@ -442,7 +442,7 @@ function ServicesPage() {
                         {allShipments
                           .filter(s => s.aircraft_id === viewing.aircraft_id && !["received", "cancelled"].includes(s.status))
                           .map((s: any) => (
-                            <div key={s.id} className="glass-card p-3 rounded-lg border border-white/5 bg-white/5">
+                            <div key={s.id} className="technical-card p-3 rounded-lg border border-white/5 bg-white/5">
                               <div className="flex justify-between items-start">
                                 <div>
                                   <p className="font-medium text-sm">{s.part_name}</p>

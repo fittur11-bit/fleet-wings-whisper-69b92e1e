@@ -95,14 +95,14 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-[oklch(0.86_0.11_86)] shadow-[0_0_40px_-10px] shadow-primary/60">
+          <div className="flex h-14 w-14 items-center justify-center rounded bg-primary">
             <ShieldCheck className="h-7 w-7 text-primary-foreground" />
           </div>
-          <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Entrar no FlightCore</h1>
+          <h1 className="mt-4 font-sans text-3xl font-bold tracking-tight">Entrar no FlightCore</h1>
           <p className="mt-1 text-sm text-muted-foreground">Acesso ao centro de comando</p>
         </div>
 
-        <div className="glass-card rounded-2xl p-6">
+        <div className="technical-card  p-6">
           <Tabs defaultValue="signin">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Entrar</TabsTrigger>
@@ -119,7 +119,7 @@ function AuthPage() {
                   <Label htmlFor="si-pw">Senha</Label>
                   <Input id="si-pw" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
-                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
+                <Button type="submit" disabled={loading} className="w-full">
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Entrar
                 </Button>
@@ -156,7 +156,7 @@ function AuthPage() {
                   <Input id="su-ans" required value={secAnswer} onChange={(e) => setSecAnswer(e.target.value)} placeholder="Use algo que você sempre lembre" />
                   <p className="mt-1 text-xs text-muted-foreground">Será usada para recuperar sua senha. Não diferencia maiúsculas/acentos.</p>
                 </div>
-                <Button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-primary to-[oklch(0.86_0.11_86)] text-primary-foreground">
+                <Button type="submit" disabled={loading} className="w-full">
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Criar conta
                 </Button>

@@ -19,12 +19,12 @@ import { cn } from "@/lib/utils";
 
 /**
  * Dashboard com layout Bento Grid.
- * Paleta local: Charcoal & Ember (#1a1a1a / #2d2d2d / #4a4a4a / #e85d3a).
- * Tipografia: Sora (display) + Manrope (body), já carregadas globalmente.
+ * Paleta local: Institucional FlightCore (#245A7A / #17212B / #F4F5F6).
+ * Tipografia: Inter (global), já carregada.
  */
 
-const EMBER = "#e85d3a";
-const EMBER_SOFT = "#f5c0a8";
+const EMBER = "#245A7A";
+const EMBER_SOFT = "#2F7196";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -63,12 +63,12 @@ function BentoCard({
   accent?: boolean;
 }) {
   const base = cn(
-    "group relative overflow-hidden rounded-2xl border transition-all duration-500",
-    "bg-neutral-900/50 backdrop-blur-sm",
+    "group relative overflow-hidden rounded-md border transition-all duration-200",
+    "bg-card text-card-foreground shadow-sm",
     accent
-      ? "border-[#e85d3a]/30 shadow-[0_0_40px_-15px_rgba(232,93,58,0.3)]"
-      : "border-white/[0.05] hover:border-[#e85d3a]/20",
-    to && "hover:bg-neutral-900/80 hover:-translate-y-0.5",
+      ? "border-primary/30"
+      : "border-border hover:border-primary/50",
+    to && "hover:-translate-y-0.5",
     className,
   );
   const content = (
@@ -83,7 +83,7 @@ function BentoCard({
         }}
       />
       {accent && (
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#e85d3a]/10 blur-[80px]" />
+        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-[80px]" />
       )}
       <div className="relative p-6">{children}</div>
     </>
@@ -110,10 +110,10 @@ function SectionLabel({
   count?: number 
 }) {
   const toneClass = {
-    default: "text-neutral-500",
-    ember: "text-[#e85d3a]",
-    warn: "text-amber-500/80",
-    ok: "text-emerald-500/80",
+    default: "text-muted-foreground",
+    ember: "text-primary",
+    warn: "text-amber-600",
+    ok: "text-green-600",
   }[tone];
   
   return (
@@ -186,10 +186,10 @@ function DashboardContent() {
   }).reverse();
 
   const conditionData = [
-    { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#e85d3a" },
-    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#f5c0a8" },
-    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#a8a29e" },
-    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#4a4a4a" },
+    { name: "Novo", value: parts.filter((p: any) => p.condition === "new").length, color: "#245A7A" },
+    { name: "Serviçável", value: parts.filter((p: any) => p.condition === "serviceable").length, color: "#22c55e" },
+    { name: "Reparo", value: parts.filter((p: any) => p.condition === "repairable" || p.condition === "unserviceable").length, color: "#dc2626" },
+    { name: "Outros", value: parts.filter((p: any) => !["new", "serviceable", "repairable", "unserviceable"].includes(p.condition || "")).length, color: "#71717a" },
   ].filter((d) => d.value > 0);
 
   const totalAlerts = cvaAlerts.length + upcomingMx.length + lateShipments.length;
@@ -209,24 +209,24 @@ function DashboardContent() {
           <SectionLabel icon={Plane} tone="ember">Frota Ativa</SectionLabel>
           <div className="flex items-end justify-between">
             <div className="relative">
-              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-[#e85d3a]/20 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
-              <p className="font-display text-8xl font-bold tracking-tighter text-white tabular-nums">
+              <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
+              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
               <p className="mt-2 text-sm text-neutral-400">
                 de <span className="font-mono text-white/90">{aircraft.length}</span> aeronaves operacionais
               </p>
             </div>
-            <div className="hidden h-20 w-20 items-center justify-center rounded-2xl bg-white/[0.03] text-[#e85d3a] ring-1 ring-inset ring-white/10 sm:flex">
-              <Plane className="h-10 w-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
+            <div className="hidden h-16 w-16 items-center justify-center rounded bg-primary/5 text-primary border border-primary/20 sm:flex">
+              <Plane className="h-8 w-8 transition-transform duration-500 group-hover:scale-110" />
             </div>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-white/[0.06] pt-8">
+          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-8">
             <MiniStat label="Manutenção" value={inMaintenance} />
             <MiniStat label="Instaladas" value={installedParts} />
             <MiniStat label="Serviços" value={pendingServices} />
           </div>
-          <div className="mt-8 flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#e85d3a] opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <div className="mt-8 flex items-center justify-between text-[11px] font-bold tracking-wider text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
             <span>EXPLORAR FROTA COMPLETA</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
@@ -237,8 +237,8 @@ function DashboardContent() {
           <SectionLabel icon={AlertTriangle} tone="ember">Status de Atenção</SectionLabel>
           <div className="flex items-center gap-8">
             <div className="relative">
-              <div className="absolute inset-0 animate-pulse rounded-full bg-[#e85d3a]/20 blur-2xl" />
-              <p className="relative font-display text-7xl font-bold tracking-tight tabular-nums" style={{ color: EMBER }}>
+              <div className="absolute inset-0 animate-pulse rounded-full bg-red-600/10 blur-2xl" />
+              <p className="relative font-sans text-6xl font-bold tracking-tight tabular-nums text-red-600">
                 {totalAlerts}
               </p>
             </div>
@@ -250,11 +250,11 @@ function DashboardContent() {
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+            <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
               <p className="mt-1 text-lg font-bold text-white">{cvaAlerts.length}</p>
             </div>
-            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+            <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
               <p className="mt-1 text-lg font-bold text-white">{lateShipments.length}</p>
             </div>
@@ -265,14 +265,14 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-bold text-[#e85d3a]">R$</span>
-            <p className="font-display text-4xl font-bold tracking-tight text-white tabular-nums">
+            <span className="text-sm font-bold text-primary">R$</span>
+            <p className="font-sans text-4xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
           <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
           <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/[0.03]">
-            <div className="h-full bg-gradient-to-r from-[#e85d3a] to-[#f5c0a8]" style={{ width: "65%" }} />
+            <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
 
@@ -285,7 +285,7 @@ function DashboardContent() {
           <div className="h-[220px] -ml-6">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={last6Months} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" className="opacity-[0.03]" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" className="opacity-50" vertical={false} />
                 <XAxis 
                   dataKey="month" 
                   stroke="#525252" 
@@ -305,16 +305,15 @@ function DashboardContent() {
                 <Tooltip
                   cursor={{ fill: "rgba(255,255,255,0.02)" }}
                   contentStyle={{ 
-                    backgroundColor: "#171717", 
-                    border: "1px solid rgba(255,255,255,0.05)", 
-                    borderRadius: "12px", 
-                    color: "#fafaf9", 
+                    backgroundColor: "var(--card)", 
+                    border: "1px solid var(--border)", 
+                    borderRadius: "6px", 
+                    color: "var(--foreground)", 
                     fontSize: "11px",
-                    boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)"
                   }}
                   itemStyle={{ color: EMBER, fontWeight: "bold" }}
                 />
-                <Bar dataKey="count" fill={EMBER} radius={[4, 4, 0, 0]} barSize={32} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -343,10 +342,10 @@ function DashboardContent() {
                     </Pie>
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: "#171717", 
-                        border: "1px solid rgba(255,255,255,0.05)", 
-                        borderRadius: "12px", 
-                        color: "#fafaf9", 
+                        backgroundColor: "var(--card)", 
+                        border: "1px solid var(--border)", 
+                        borderRadius: "6px", 
+                        color: "var(--foreground)", 
                         fontSize: "11px"
                       }} 
                     />
@@ -379,9 +378,9 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {cvaAlerts.slice(0, 4).map((a: any) => (
-                <li key={a.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
+                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0">
-                    <p className="font-mono text-sm font-bold text-white">{a.prefix}</p>
+                    <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
                     <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
@@ -399,10 +398,10 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {upcomingMx.map((m: any) => (
-                <li key={m.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
-                  <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-semibold text-white">{m.description || m.item_type}</p>
-                    <p className="font-mono text-[10px] uppercase text-[#e85d3a]">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
+                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                  <div className="min-w-0">
+                    <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{m.aircraft_prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
@@ -419,14 +418,14 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {lateShipments.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between rounded-xl border border-[#e85d3a]/10 bg-[#e85d3a]/[0.03] p-3 transition-colors hover:bg-[#e85d3a]/[0.05]">
+                <li key={s.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-semibold text-white">{s.part_name}</p>
+                    <p className="truncate text-sm font-bold text-foreground">{s.part_name}</p>
                     <p className="truncate font-mono text-[10px] uppercase text-neutral-500">
                       {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
                     </p>
                   </div>
-                  <div className="flex h-8 w-12 items-center justify-center rounded-lg bg-[#e85d3a] text-[10px] font-bold text-white shadow-[0_0_15px_-5px_#e85d3a]">
+                  <div className="flex h-7 px-2 items-center justify-center rounded bg-red-600 text-[10px] font-bold text-white">
                     {s.daysLate}d
                   </div>
                 </li>
@@ -440,35 +439,35 @@ function DashboardContent() {
       <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-6">
         <BentoCard className="md:col-span-4">
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-500">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-neutral-500/10">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-muted">
                 <Activity className="h-3.5 w-3.5" />
               </div>
               Atividade recente
             </div>
-            <Link to="/services" className="text-[10px] font-bold uppercase tracking-wider text-[#e85d3a] hover:underline">
+            <Link to="/services" className="text-[10px] font-bold uppercase tracking-wider text-primary hover:underline">
               Ver histórico →
             </Link>
           </div>
           {recentServices.length === 0 ? (
             <EmptyState icon={Activity} label="Nenhum serviço registrado ainda." />
           ) : (
-            <ul className="divide-y divide-white/[0.06]">
+            <ul className="divide-y divide-border">
               {recentServices.map((s: any) => (
                 <li key={s.id} className="flex items-center justify-between py-2.5">
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#e85d3a]/10 text-[#e85d3a]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-primary/10 text-primary">
                       <Wrench className="h-3.5 w-3.5" />
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-white">{s.service_type}</p>
-                      <p className="text-[11px] text-[#a8a29e]">
+                      <p className="truncate text-sm font-bold text-foreground">{s.service_type}</p>
+                      <p className="text-[11px] text-muted-foreground">
                         <span className="font-mono">{s.aircraft?.prefix || s.aircraft_prefix || "—"}</span>
                         {s.performed_at && ` · ${format(parseISO(s.performed_at), "dd/MM/yyyy", { locale: ptBR })}`}
                       </p>
                     </div>
                   </div>
-                  <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px]">
+                  <Badge variant={s.status === "completed" ? "default" : "outline"} className="text-[10px] rounded">
                     {s.status}
                   </Badge>
                 </li>
@@ -496,8 +495,8 @@ function DashboardContent() {
 function MiniStat({ label, value }: { label: string; value: number | string }) {
   return (
     <div className="relative">
-      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-neutral-500">{label}</p>
-      <p className="mt-1 font-display text-3xl font-bold tabular-nums text-white">
+      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{label}</p>
+      <p className="mt-1 font-sans text-3xl font-bold tabular-nums text-foreground">
         {typeof value === "number" ? String(value).padStart(2, "0") : value}
       </p>
     </div>
@@ -507,10 +506,10 @@ function MiniStat({ label, value }: { label: string; value: number | string }) {
 function EmptyState({ icon: Icon, label }: { icon: any; label: string }) {
   return (
     <div className="flex flex-col items-center justify-center py-10 text-center">
-      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/5 text-emerald-500/50 ring-1 ring-inset ring-emerald-500/10">
+      <div className="flex h-12 w-12 items-center justify-center rounded bg-green-500/5 text-green-500/50 border border-green-500/10">
         <Icon className="h-6 w-6" />
       </div>
-      <p className="mt-4 text-xs font-medium text-neutral-500">{label}</p>
+      <p className="mt-4 text-xs font-medium text-muted-foreground">{label}</p>
     </div>
   );
 }
@@ -521,10 +520,10 @@ function UrgencyChip({ days }: { days: number }) {
   
   return (
     <div className={cn(
-      "flex h-8 min-w-[3rem] items-center justify-center rounded-lg px-2 font-mono text-[11px] font-bold shadow-sm ring-1 ring-inset",
+      "flex h-7 min-w-[3rem] items-center justify-center rounded px-2 font-mono text-[11px] font-bold border",
       overdue || critical 
-        ? "bg-[#e85d3a] text-white ring-[#e85d3a]/20" 
-        : "bg-white/[0.03] text-neutral-400 ring-white/10"
+        ? "bg-red-600 text-white border-red-700" 
+        : "bg-muted text-muted-foreground border-border"
     )}>
       {overdue ? `${Math.abs(days)}d↑` : `${days}d`}
     </div>
@@ -535,12 +534,12 @@ function QuickLink({ to, icon: Icon, label }: { to: string; icon: any; label: st
   return (
     <Link
       to={to as any}
-      className="group/q flex items-center gap-3 rounded-xl bg-white/[0.02] p-4 transition-all duration-300 ring-1 ring-inset ring-white/[0.05] hover:bg-[#e85d3a]/[0.08] hover:ring-[#e85d3a]/30"
+      className="group/q flex items-center gap-3 rounded bg-muted/30 p-4 transition-all duration-200 border border-border hover:bg-primary/5 hover:border-primary/30"
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/[0.03] text-neutral-400 transition-all duration-300 group-hover/q:bg-[#e85d3a] group-hover/q:text-white group-hover/q:shadow-[0_0_20px_-5px_#e85d3a]">
+      <div className="flex h-9 w-9 items-center justify-center rounded bg-muted text-muted-foreground transition-all duration-200 group-hover/q:bg-primary group-hover/q:text-white">
         <Icon className="h-4 w-4" />
       </div>
-      <span className="text-[13px] font-bold text-neutral-300 group-hover/q:text-white transition-colors">{label}</span>
+      <span className="text-[13px] font-bold text-foreground transition-colors">{label}</span>
     </Link>
   );
 }

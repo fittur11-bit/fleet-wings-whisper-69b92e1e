@@ -203,9 +203,9 @@ function LibraryPage() {
              <DialogTrigger asChild>
                <Button className="bg-primary text-primary-foreground shadow-lg"><Plus className="mr-2 h-4 w-4" /> Novo documento</Button>
              </DialogTrigger>
-             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95 backdrop-blur-xl border-white/10">
+             <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg bg-sidebar/95  border-white/10">
                <DialogHeader>
-                 <DialogTitle className="font-display text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
+                 <DialogTitle className="font-sans text-xl">{editing ? "Editar documento" : "Novo documento"}</DialogTitle>
                </DialogHeader>
               <div className="space-y-4 pt-2">
                 <div>
@@ -280,7 +280,7 @@ function LibraryPage() {
             className={`rounded-lg border p-3 text-left transition ${typeFilter === t.value ? "border-primary/60 bg-primary/10" : "border-white/5 bg-card/40 hover:border-white/20"}`}
           >
             <p className="text-xs uppercase tracking-wider text-muted-foreground">{t.label}</p>
-            <p className="mt-1 font-display text-xl font-bold">{counts[t.value] || 0}</p>
+            <p className="mt-1 font-sans text-xl font-bold">{counts[t.value] || 0}</p>
           </button>
         ))}
       </div>
@@ -305,9 +305,9 @@ function LibraryPage() {
       </div>
 
        {filtered.length === 0 ? (
-         <div className="glass-card rounded-2xl p-16 text-center border-dashed border-white/10">
+         <div className="technical-card  p-16 text-center border-dashed border-white/10">
            <BookMarked className="mx-auto h-14 w-14 text-muted-foreground/40" />
-           <h3 className="mt-4 font-display text-lg font-semibold">
+           <h3 className="mt-4 font-sans text-lg font-semibold">
              {docs.length === 0 ? "Biblioteca vazia" : "Nenhum documento encontrado"}
            </h3>
            <p className="mt-1 text-sm text-muted-foreground">
@@ -317,9 +317,9 @@ function LibraryPage() {
        ) : (
          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
            {filtered.map((d: any) => (
-             <div key={d.id} className="glass-card glass-card-hover rounded-2xl p-5 border border-white/5 flex flex-col">
+             <div key={d.id} className="technical-card p-5 border border-white/5 flex flex-col">
                <div className="flex items-start justify-between mb-4">
-                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
                    <FileText className="h-5 w-5" />
                  </div>
                  <div className="flex items-center gap-1">
@@ -343,7 +343,7 @@ function LibraryPage() {
                      </Badge>
                    )}
                  </div>
-                 <h3 className="font-display font-semibold text-lg line-clamp-1 leading-tight">{d.title}</h3>
+                 <h3 className="font-sans font-semibold text-lg line-clamp-1 leading-tight">{d.title}</h3>
                  <p className="text-xs text-muted-foreground mt-1 mb-4">
                    {d.model || "Uso Geral"}
                  </p>
@@ -368,7 +368,7 @@ function LibraryPage() {
                   <div className="flex gap-2">
                     <Button 
                       onClick={() => setPreviewDoc(d)} 
-                      className="flex-1 h-9 rounded-xl shadow-lg shadow-primary/10" 
+                      className="flex-1 h-9 rounded-md shadow-lg shadow-primary/10" 
                       variant="secondary"
                     >
                       <Eye className="mr-2 h-3.5 w-3.5" /> Visualizar
@@ -376,7 +376,7 @@ function LibraryPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      className="h-9 w-9 rounded-xl shrink-0"
+                      className="h-9 w-9 rounded-md shrink-0"
                       onClick={() => downloadFile(d)}
                       title="Baixar arquivo"
                     >
@@ -385,7 +385,7 @@ function LibraryPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      className="h-9 w-9 rounded-xl shrink-0"
+                      className="h-9 w-9 rounded-md shrink-0"
                       title="Abrir em nova aba"
                       onClick={() => openExternal(d.file_url)}
                     >
@@ -393,7 +393,7 @@ function LibraryPage() {
                     </Button>
                   </div>
                 ) : (
-                 <Button disabled variant="outline" className="w-full h-9 rounded-xl border-dashed">
+                 <Button disabled variant="outline" className="w-full h-9 rounded-md border-dashed">
                    Sem Arquivo
                  </Button>
                )}
@@ -406,8 +406,8 @@ function LibraryPage() {
         <DialogContent
           className={
             fullscreen
-              ? "max-w-none w-screen h-screen p-0 flex flex-col bg-[#0B1221] border-0 rounded-none overflow-hidden"
-              : "max-w-5xl w-[100vw] sm:w-auto h-[100dvh] sm:h-[90vh] p-0 flex flex-col bg-[#0B1221] border-white/10 overflow-hidden rounded-none sm:rounded-lg"
+              ? "max-w-none w-screen h-screen p-0 flex flex-col bg-background border-0 rounded-none overflow-hidden"
+              : "max-w-5xl w-[100vw] sm:w-auto h-[100dvh] sm:h-[90vh] p-0 flex flex-col bg-background border-white/10 overflow-hidden rounded-none sm:rounded-md"
           }
         >
           <div className="flex items-center justify-between gap-2 px-3 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-sidebar/50 shrink-0">
@@ -416,7 +416,7 @@ function LibraryPage() {
                 <FileText className="h-4 w-4" />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-display font-semibold text-foreground leading-none truncate">{previewDoc?.title}</h3>
+                <h3 className="text-sm font-sans font-semibold text-foreground leading-none truncate">{previewDoc?.title}</h3>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-widest mt-1">
                   {previewDoc?.doc_type} {previewDoc?.version && `· v${previewDoc.version}`}
                 </p>
