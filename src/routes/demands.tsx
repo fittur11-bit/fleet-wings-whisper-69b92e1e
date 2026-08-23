@@ -525,10 +525,10 @@ function CalendarView({
                     key={d.id}
                     onClick={() => onEdit(d)}
                     className={cn(
-                      "w-full text-left text-[9px] p-1 rounded border truncate leading-tight transition-colors",
-                      d.priority === "aog" ? "bg-red-500/10 border-red-500/20 text-red-300" :
-                      d.status === "done" ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-400/60" :
-                      "bg-primary/10 border-primary/20 text-primary-foreground/90"
+                      "w-full text-left text-[9px] p-1 rounded-[2px] border truncate leading-tight transition-colors font-bold uppercase tracking-tight",
+                      d.priority === "aog" ? "bg-[#B94A48]/10 border-[#B94A48]/20 text-[#B94A48]" :
+                      d.status === "done" ? "bg-muted border-border text-muted-foreground" :
+                      "bg-primary/5 border-primary/20 text-primary"
                     )}
                   >
                     {d.aircraft_prefix && <span className="font-bold mr-1">{d.aircraft_prefix}</span>}
