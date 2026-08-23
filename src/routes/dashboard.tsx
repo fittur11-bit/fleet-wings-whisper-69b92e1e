@@ -241,11 +241,11 @@ function DashboardContent() {
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="rounded bg-muted/50 p-3 border border-border">
+            <div className="rounded bg-accent/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-text-sec uppercase">CVA</p>
               <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
             </div>
-            <div className="rounded bg-muted/50 p-3 border border-border">
+            <div className="rounded bg-accent/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-text-sec uppercase">Envios</p>
               <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
             </div>
@@ -262,7 +262,7 @@ function DashboardContent() {
             </p>
           </div>
           <p className="mt-2 text-xs text-text-sec">{parts.length} componentes inventariados</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-muted">
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-accent">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
@@ -371,7 +371,7 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {cvaAlerts.slice(0, 4).map((a: any) => (
-                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                <li key={a.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
                     <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
@@ -391,7 +391,7 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {upcomingMx.map((m: any) => (
-                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
                     <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
