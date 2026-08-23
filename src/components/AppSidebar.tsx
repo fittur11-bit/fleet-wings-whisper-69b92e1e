@@ -50,8 +50,8 @@ export function AppSidebar({ onNavigate }: { onNavigate?: () => void }) {
               className={cn(
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
                 active
-                  ? "bg-gradient-to-r from-primary/20 to-transparent text-primary border-l-2 border-primary"
-                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-primary/5",
+                  ? "bg-sidebar-accent text-sidebar-primary-foreground border-l-2 border-sidebar-primary"
+                  : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50",
               )}
             >
               <Icon className={cn("h-4 w-4", active && "text-primary")} />
