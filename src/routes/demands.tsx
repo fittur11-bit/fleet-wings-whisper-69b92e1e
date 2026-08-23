@@ -454,6 +454,13 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
               )}
             </span>
           )}
+          {d.scheduled_start && (
+            <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 border bg-primary/5 border-primary/10 text-primary-foreground/80">
+              <Calendar className="h-3 w-3" />
+              {format(parseISO(d.scheduled_start), "dd/MM HH:mm", { locale: ptBR })}
+              {d.scheduled_end && ` - ${format(parseISO(d.scheduled_end), "dd/MM HH:mm", { locale: ptBR })}`}
+            </span>
+          )}
           {d.assigned_to && <span>👤 {d.assigned_to}</span>}
           {d.location && <span>📍 {d.location}</span>}
         </div>
