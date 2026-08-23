@@ -22,10 +22,10 @@ export const Route = createFileRoute("/aircraft")({
 });
 
 const statusStyles: Record<string, string> = {
-  active: "bg-green-600/10 text-green-600 border-green-600/20",
-  maintenance: "bg-amber-600/10 text-amber-600 border-amber-600/20",
+  active: "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20",
+  maintenance: "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20",
   inactive: "bg-muted text-muted-foreground border-border",
-  non_conform: "bg-red-600/10 text-red-600 border-red-600/20",
+  non_conform: "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20",
 };
 
 function AircraftPage() {
@@ -180,16 +180,16 @@ function AircraftPage() {
                 className="technical-card group overflow-hidden flex flex-col"
               >
                 {/* Photo */}
-                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-primary/10 to-transparent">
+                <div className="relative aspect-[16/10] overflow-hidden bg-[#F8FAFC]">
                   {a.photo_url ? (
                     <img src={a.photo_url} alt={a.prefix} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
                     <div className="flex h-full items-center justify-center">
-                      <Plane className="h-16 w-16 text-primary/30" />
+                      <Plane className="h-16 w-16 text-primary/10" />
                     </div>
                   )}
                   <div className="absolute top-3 left-3 right-3 flex justify-between gap-2">
-                    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium backdrop-blur-md ${statusStyles[a.status] || statusStyles.inactive}`}>
+                    <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md ${statusStyles[a.status] || statusStyles.inactive}`}>
                       {statusLabel}
                     </span>
                     {a.cva_expiration && <CVAStatusBadge expiration={a.cva_expiration} className="backdrop-blur-md" />}
@@ -198,36 +198,36 @@ function AircraftPage() {
 
                 {/* Body */}
                 <div className="flex-1 p-5">
-                  <p className="font-mono text-lg font-bold text-primary tracking-wider">{a.prefix}</p>
+                  <p className="font-mono text-sm font-bold text-primary tracking-widest">{a.prefix}</p>
                   <h3 className="font-sans font-semibold mt-1 truncate">
                     {a.manufacturer} {a.model}
                   </h3>
                   {categoryLabel && (
-                    <span className="mt-2 inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
+                    <span className="mt-2 inline-flex items-center rounded border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-primary">
                       {categoryLabel}
                     </span>
                   )}
                   <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
                     <div>
                       <p className="text-[10px] uppercase tracking-wider opacity-70">Horas</p>
-                      <p className="font-mono text-sm text-foreground">{Number(a.total_hours || 0).toFixed(1)}h</p>
+                      <p className="font-mono text-xs text-foreground font-bold">{Number(a.total_hours || 0).toFixed(1)}h</p>
                     </div>
                     <div>
                       <p className="text-[10px] uppercase tracking-wider opacity-70">Ano</p>
-                      <p className="font-mono text-sm text-foreground">{a.year || "—"}</p>
+                      <p className="font-mono text-xs text-foreground font-bold">{a.year || "—"}</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex border-t border-white/5">
-                  <button onClick={() => setViewing(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-muted-foreground hover:bg-white/5 hover:text-foreground transition">
+                <div className="flex border-t border-border">
+                  <button onClick={() => setViewing(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-neutral-500 hover:bg-muted hover:text-foreground transition">
                     <Eye className="h-3.5 w-3.5" /> Detalhes
                   </button>
-                  <button onClick={() => openEdit(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium text-muted-foreground hover:bg-white/5 hover:text-primary transition border-l border-white/5">
+                  <button onClick={() => openEdit(a)} className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-bold text-neutral-500 hover:bg-muted hover:text-primary transition border-l border-border">
                     <Pencil className="h-3.5 w-3.5" /> Editar
                   </button>
-                  <button onClick={() => remove(a.id)} className="flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition border-l border-white/5">
+                  <button onClick={() => remove(a.id)} className="flex items-center justify-center gap-1.5 py-2.5 px-4 text-xs font-bold text-neutral-500 hover:bg-red-50 hover:text-red-600 transition border-l border-border">
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
@@ -256,7 +256,7 @@ function AircraftPage() {
                 )}
 
                 <div className="flex flex-wrap gap-2">
-                  <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium ${statusStyles[viewing.status]}`}>
+                  <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${statusStyles[viewing.status]}`}>
                     {AIRCRAFT_STATUS.find(s => s.value === viewing.status)?.label}
                   </span>
                   {viewing.cva_expiration && <CVAStatusBadge expiration={viewing.cva_expiration} />}

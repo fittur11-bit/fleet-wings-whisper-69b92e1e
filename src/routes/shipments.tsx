@@ -172,10 +172,10 @@ function ShipmentsPage() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "sent": return "bg-primary/10 text-primary border-primary/20";
-      case "in_repair": return "bg-amber-600/10 text-amber-600 border-amber-600/20";
-      case "received": return "bg-green-600/10 text-green-600 border-green-600/20";
-      case "cancelled": return "bg-red-600/10 text-red-600 border-red-600/20";
-      default: return "bg-slate-500/10 text-slate-500 border-slate-500/20";
+      case "in_repair": return "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20";
+      case "received": return "bg-[#37805A]/10 text-[#37805A] border-[#37805A]/20";
+      case "cancelled": return "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20";
+      default: return "bg-muted text-muted-foreground border-border";
     }
   };
 
@@ -431,7 +431,7 @@ function ShipmentsPage() {
           variant={filterStatus === "all" ? "default" : "outline"} 
           size="sm" 
           onClick={() => setFilterStatus("all")}
-          className="rounded-full"
+          className="rounded-md"
         >
           Todos
         </Button>
@@ -441,7 +441,7 @@ function ShipmentsPage() {
             variant={filterStatus === s.value ? "default" : "outline"} 
             size="sm" 
             onClick={() => setFilterStatus(s.value)}
-            className="rounded-full"
+            className="rounded-md"
           >
             {s.label}
           </Button>
@@ -485,10 +485,10 @@ function ShipmentsPage() {
                   <div className="flex flex-col">
                     <span className="text-muted-foreground">Envio: {format(parseISO(s.shipping_date), "dd/MM/yyyy", { locale: ptBR })}</span>
                     {s.estimated_return_date && (
-                      <span className="text-amber-500/80">Prev: {format(parseISO(s.estimated_return_date), "dd/MM/yyyy", { locale: ptBR })}</span>
+                      <span className="text-[#C58A21]">Prev: {format(parseISO(s.estimated_return_date), "dd/MM/yyyy", { locale: ptBR })}</span>
                     )}
                     {s.actual_return_date && (
-                      <span className="text-emerald-500/80">Chegada: {format(parseISO(s.actual_return_date), "dd/MM/yyyy", { locale: ptBR })}</span>
+                      <span className="text-[#37805A]">Chegada: {format(parseISO(s.actual_return_date), "dd/MM/yyyy", { locale: ptBR })}</span>
                     )}
                   </div>
                 </div>

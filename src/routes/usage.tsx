@@ -166,15 +166,15 @@ function UsagePage() {
             <AreaChart data={series}>
               <defs>
                 <linearGradient id="gUpload" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0.6} />
-                  <stop offset="100%" stopColor="oklch(0.74 0.142 78)" stopOpacity={0} />
+                  <stop offset="0%" stopColor="#245A7A" stopOpacity={0.6} />
+                  <stop offset="100%" stopColor="#245A7A" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-              <XAxis dataKey="date" stroke="oklch(0.7 0 0)" fontSize={11} />
-              <YAxis stroke="oklch(0.7 0 0)" fontSize={11} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="date" stroke="var(--text-sec)" fontSize={11} />
+              <YAxis stroke="var(--text-sec)" fontSize={11} />
               <Tooltip contentStyle={chartTooltip} />
-              <Area type="monotone" dataKey="uploadsMB" stroke="oklch(0.74 0.142 78)" strokeWidth={2} fill="url(#gUpload)" name="MB" />
+              <Area type="monotone" dataKey="uploadsMB" stroke="var(--institutional-blue)" strokeWidth={2} fill="url(#gUpload)" name="MB" />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -183,11 +183,11 @@ function UsagePage() {
         <ChartCard title="Custo diário estimado (US$)" icon={<DollarSign className="h-4 w-4" />}>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={series}>
-              <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-              <XAxis dataKey="date" stroke="oklch(0.7 0 0)" fontSize={11} />
-              <YAxis stroke="oklch(0.7 0 0)" fontSize={11} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="date" stroke="var(--text-sec)" fontSize={11} />
+              <YAxis stroke="var(--text-sec)" fontSize={11} />
               <Tooltip contentStyle={chartTooltip} formatter={(v: any) => fmtUSD(Number(v))} />
-              <Line type="monotone" dataKey="cost" stroke="oklch(0.78 0.16 150)" strokeWidth={2} dot={false} name="USD" />
+              <Line type="monotone" dataKey="cost" stroke="#37805A" strokeWidth={2} dot={false} name="USD" />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -195,11 +195,11 @@ function UsagePage() {
         <ChartCard title="Banco de dados por categoria" icon={<Database className="h-4 w-4" />}>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={dbBreakdown} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="oklch(1 0 0 / 0.08)" />
-              <XAxis type="number" stroke="oklch(0.7 0 0)" fontSize={11} />
-              <YAxis dataKey="name" type="category" stroke="oklch(0.7 0 0)" fontSize={11} width={90} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis type="number" stroke="var(--text-sec)" fontSize={11} />
+              <YAxis dataKey="name" type="category" stroke="var(--text-sec)" fontSize={11} width={90} />
               <Tooltip contentStyle={chartTooltip} />
-              <Bar dataKey="value" fill="oklch(0.7 0.14 220)" radius={[0, 4, 4, 0]} name="Registros" />
+              <Bar dataKey="value" fill="var(--institutional-blue)" radius={[0, 4, 4, 0]} name="Registros" />
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -213,8 +213,8 @@ function UsagePage() {
 }
 
 const chartTooltip = {
-  background: "oklch(0.18 0.02 255)",
-  border: "1px solid oklch(1 0 0 / 0.1)",
+  background: "#FFFFFF",
+  border: "1px solid var(--border)",
   borderRadius: 8,
   fontSize: 12,
 };
@@ -250,8 +250,8 @@ function ProgressBar({ label, used, total, pct }: { label: string; used: number;
           style={{
             width: `${pct}%`,
             background: isHigh
-              ? "linear-gradient(90deg, oklch(0.7 0.2 25), oklch(0.65 0.22 15))"
-              : "linear-gradient(90deg, oklch(0.74 0.142 78), oklch(0.86 0.11 86))",
+              ? "#B94A48"
+              : "#245A7A",
           }}
         />
       </div>

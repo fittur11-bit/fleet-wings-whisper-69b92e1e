@@ -69,12 +69,12 @@ export const STATUS_LABEL: Record<Demand["status"], string> = {
 export function priorityClasses(p: Demand["priority"]) {
   switch (p) {
     case "aog":
-      return "bg-red-500/15 text-red-300 border-red-500/40 animate-pulse";
+      return "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20 font-bold animate-pulse";
     case "high":
-      return "bg-orange-500/15 text-orange-300 border-orange-500/30";
+      return "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20 font-bold";
     case "normal":
-      return "bg-sky-500/15 text-sky-300 border-sky-500/30";
+      return "bg-[#245A7A]/10 text-[#245A7A] border-[#245A7A]/20 font-bold";
     case "low":
-      return "bg-muted text-muted-foreground border-white/10";
+      return "bg-muted text-muted-foreground border-border";
   }
 }

@@ -66,24 +66,15 @@ function BentoCard({
     "group relative overflow-hidden rounded-md border transition-all duration-200",
     "bg-card text-card-foreground shadow-sm",
     accent
-      ? "border-primary/30"
+      ? "border-primary/40 ring-1 ring-primary/10"
       : "border-border hover:border-primary/50",
     to && "hover:-translate-y-0.5",
     className,
   );
   const content = (
     <>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03] transition-opacity group-hover:opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-      />
       {accent && (
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-[80px]" />
+        <div className="absolute left-0 top-0 w-1 h-full bg-primary" />
       )}
       <div className="relative p-6">{children}</div>
     </>
@@ -112,8 +103,8 @@ function SectionLabel({
   const toneClass = {
     default: "text-muted-foreground",
     ember: "text-primary",
-    warn: "text-amber-600",
-    ok: "text-green-600",
+    warn: "text-[#C58A21]",
+    ok: "text-[#37805A]",
   }[tone];
   
   return (
@@ -125,7 +116,7 @@ function SectionLabel({
         {children}
       </div>
       {typeof count === "number" && count > 0 && (
-        <span className="flex h-5 items-center rounded-full bg-white/[0.03] px-2 font-mono text-[10px] text-neutral-500 ring-1 ring-inset ring-white/10">
+        <span className="flex h-5 items-center rounded-full bg-muted px-2 font-mono text-[10px] text-neutral-500 border border-border">
           {count}
         </span>
       )}
@@ -210,11 +201,11 @@ function DashboardContent() {
           <div className="flex items-end justify-between">
             <div className="relative">
               <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
-              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums">
+              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-sm text-neutral-400">
-                de <span className="font-mono text-white/90">{aircraft.length}</span> aeronaves operacionais
+              <p className="mt-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                Aeronaves operacionais
               </p>
             </div>
             <div className="hidden h-16 w-16 items-center justify-center rounded bg-primary/5 text-primary border border-primary/20 sm:flex">
@@ -226,8 +217,8 @@ function DashboardContent() {
             <MiniStat label="Instaladas" value={installedParts} />
             <MiniStat label="Serviços" value={pendingServices} />
           </div>
-          <div className="mt-8 flex items-center justify-between text-[11px] font-bold tracking-wider text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
-            <span>EXPLORAR FROTA COMPLETA</span>
+          <div className="mt-8 flex items-center justify-between text-[10px] font-bold tracking-[0.2em] text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
+            <span>RELATÓRIO DE FROTA</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
         </BentoCard>
@@ -243,20 +234,20 @@ function DashboardContent() {
               </p>
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-bold text-white tabular-nums">
-                {criticalAlerts} <span className="text-sm font-medium text-neutral-400 uppercase tracking-widest">Críticos</span>
+              <p className="text-2xl font-bold text-foreground tabular-nums">
+                {criticalAlerts} <span className="text-sm font-medium text-neutral-500 uppercase tracking-widest">Críticos</span>
               </p>
-              <p className="text-xs text-neutral-500">Ações imediatas recomendadas</p>
+              <p className="text-xs text-neutral-400 font-medium">Ações imediatas recomendadas</p>
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
             <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
-              <p className="mt-1 text-lg font-bold text-white">{cvaAlerts.length}</p>
+              <p className="mt-1 text-lg font-bold text-foreground">{cvaAlerts.length}</p>
             </div>
             <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
-              <p className="mt-1 text-lg font-bold text-white">{lateShipments.length}</p>
+              <p className="mt-1 text-lg font-bold text-foreground">{lateShipments.length}</p>
             </div>
           </div>
         </BentoCard>
@@ -265,13 +256,13 @@ function DashboardContent() {
         <BentoCard to="/parts" className="md:col-span-3">
           <SectionLabel icon={TrendingUp}>Ativos em Estoque</SectionLabel>
           <div className="flex items-baseline gap-2">
-            <span className="text-sm font-bold text-primary">R$</span>
-            <p className="font-sans text-4xl font-bold tracking-tight text-foreground tabular-nums">
+            <span className="text-xs font-bold text-neutral-400">BRL</span>
+            <p className="font-sans text-3xl font-bold tracking-tight text-foreground tabular-nums">
               {new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 0 }).format(stockValue)}
             </p>
           </div>
           <p className="mt-2 text-xs text-neutral-500">{parts.length} componentes inventariados</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/[0.03]">
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-muted">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
@@ -303,15 +294,16 @@ function DashboardContent() {
                   tick={{ dx: -10 }}
                 />
                 <Tooltip
-                  cursor={{ fill: "rgba(255,255,255,0.02)" }}
+                  cursor={{ fill: "var(--muted)", opacity: 0.4 }}
                   contentStyle={{ 
-                    backgroundColor: "var(--card)", 
+                    backgroundColor: "#FFFFFF", 
                     border: "1px solid var(--border)", 
                     borderRadius: "6px", 
-                    color: "var(--foreground)", 
+                    color: "var(--text-main)", 
                     fontSize: "11px",
+                    boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
                   }}
-                  itemStyle={{ color: EMBER, fontWeight: "bold" }}
+                  itemStyle={{ color: "var(--institutional-blue)", fontWeight: "bold" }}
                 />
                 <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
@@ -341,14 +333,15 @@ function DashboardContent() {
                       {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: "var(--card)", 
-                        border: "1px solid var(--border)", 
-                        borderRadius: "6px", 
-                        color: "var(--foreground)", 
-                        fontSize: "11px"
-                      }} 
-                    />
+                    contentStyle={{ 
+                      backgroundColor: "#FFFFFF", 
+                      border: "1px solid var(--border)", 
+                      borderRadius: "6px", 
+                      color: "var(--text-main)", 
+                      fontSize: "11px",
+                      boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)"
+                    }} 
+                  />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -359,7 +352,7 @@ function DashboardContent() {
                       <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: d.color }} />
                       {d.name}
                     </span>
-                    <span className="text-white">{d.value}</span>
+                    <span className="text-foreground">{d.value}</span>
                   </div>
                 ))}
               </div>
