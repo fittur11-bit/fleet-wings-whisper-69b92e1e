@@ -299,7 +299,7 @@ function DemandsPage() {
 
                 <div className="pt-2 pb-1 border-t border-white/5">
                   <Label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
-                    <Calendar className="h-3 w-3" /> Agendamento (Opcional)
+                    <CalendarIcon className="h-3 w-3" /> Agendamento (Opcional)
                   </Label>
                   <div className="space-y-3">
                     <div>
