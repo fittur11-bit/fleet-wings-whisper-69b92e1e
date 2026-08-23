@@ -456,7 +456,7 @@ function ShipmentsPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filtered.map((s: any) => (
-            <div key={s.id} className="technical-card technical-card-hover  p-5 border border-white/5 flex flex-col">
+            <div key={s.id} className="technical-card p-5 border border-white/5 flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
