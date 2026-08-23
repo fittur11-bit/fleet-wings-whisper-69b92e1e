@@ -143,7 +143,7 @@ function UsagePage() {
       </div>
 
       {/* Saldo grátis */}
-      <Card className="mt-6 border-white/5 bg-card/60 backdrop-blur">
+      <div className="technical-card mt-6 border-white/5">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <TrendingUp className="h-4 w-4 text-primary" /> Saldo gratuito do mês
@@ -157,7 +157,7 @@ function UsagePage() {
             pct={cloudUsedPct}
           />
         </CardContent>
-      </Card>
+      </div>
 
       {/* Gráficos */}
       <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -221,7 +221,7 @@ const chartTooltip = {
 
 function KpiCard({ icon, label, value, hint, accent }: { icon: React.ReactNode; label: string; value: string; hint?: string; accent?: "primary" }) {
   return (
-    <Card className={`border-white/5 bg-card/60 backdrop-blur ${accent === "primary" ? "ring-1 ring-primary/30" : ""}`}>
+    <div className={`technical-card border-white/5 ${accent === "primary" ? "ring-1 ring-primary/30" : ""}`}>
       <CardContent className="p-4">
         <div className="flex items-center gap-2 text-muted-foreground">
           {icon}
@@ -229,8 +229,8 @@ function KpiCard({ icon, label, value, hint, accent }: { icon: React.ReactNode; 
         </div>
         <p className="mt-2 font-sans text-2xl font-bold">{value}</p>
         {hint && <p className="mt-1 text-[10px] text-muted-foreground">{hint}</p>}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 
@@ -262,13 +262,13 @@ function ProgressBar({ label, used, total, pct }: { label: string; used: number;
 
 function ChartCard({ title, icon, children }: { title: string; icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <Card className="border-white/5 bg-card/60 backdrop-blur">
+    <div className="technical-card border-white/5">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-sm">
           {icon} {title}
         </CardTitle>
       </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
