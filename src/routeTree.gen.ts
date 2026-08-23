@@ -29,6 +29,7 @@ import { Route as ApplicabilityRouteImport } from './routes/applicability'
 import { Route as AircraftRouteImport } from './routes/aircraft'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicProcessNotificationsRouteImport } from './routes/api/public/process-notifications'
 
 const UsageRoute = UsageRouteImport.update({
   id: '/usage',
@@ -130,6 +131,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicProcessNotificationsRoute =
+  ApiPublicProcessNotificationsRouteImport.update({
+    id: '/api/public/process-notifications',
+    path: '/api/public/process-notifications',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
+  '/api/public/process-notifications': typeof ApiPublicProcessNotificationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -174,6 +182,7 @@ export interface FileRoutesByTo {
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
+  '/api/public/process-notifications': typeof ApiPublicProcessNotificationsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -197,6 +206,7 @@ export interface FileRoutesById {
   '/suppliers': typeof SuppliersRoute
   '/timeline': typeof TimelineRoute
   '/usage': typeof UsageRoute
+  '/api/public/process-notifications': typeof ApiPublicProcessNotificationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -221,6 +231,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/timeline'
     | '/usage'
+    | '/api/public/process-notifications'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/timeline'
     | '/usage'
+    | '/api/public/process-notifications'
   id:
     | '__root__'
     | '/'
@@ -265,6 +277,7 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/timeline'
     | '/usage'
+    | '/api/public/process-notifications'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -288,6 +301,7 @@ export interface RootRouteChildren {
   SuppliersRoute: typeof SuppliersRoute
   TimelineRoute: typeof TimelineRoute
   UsageRoute: typeof UsageRoute
+  ApiPublicProcessNotificationsRoute: typeof ApiPublicProcessNotificationsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -432,6 +446,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/process-notifications': {
+      id: '/api/public/process-notifications'
+      path: '/api/public/process-notifications'
+      fullPath: '/api/public/process-notifications'
+      preLoaderRoute: typeof ApiPublicProcessNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -456,6 +477,7 @@ const rootRouteChildren: RootRouteChildren = {
   SuppliersRoute: SuppliersRoute,
   TimelineRoute: TimelineRoute,
   UsageRoute: UsageRoute,
+  ApiPublicProcessNotificationsRoute: ApiPublicProcessNotificationsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
