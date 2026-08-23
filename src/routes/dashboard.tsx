@@ -217,16 +217,16 @@ function DashboardContent() {
                 de <span className="font-mono text-white/90">{aircraft.length}</span> aeronaves operacionais
               </p>
             </div>
-            <div className="hidden h-20 w-20 items-center justify-center rounded-2xl bg-white/[0.03] text-[#e85d3a] ring-1 ring-inset ring-white/10 sm:flex">
-              <Plane className="h-10 w-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
+            <div className="hidden h-16 w-16 items-center justify-center rounded bg-primary/5 text-primary border border-primary/20 sm:flex">
+              <Plane className="h-8 w-8 transition-transform duration-500 group-hover:scale-110" />
             </div>
           </div>
-          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-white/[0.06] pt-8">
+          <div className="mt-10 grid grid-cols-3 gap-6 border-t border-border pt-8">
             <MiniStat label="Manutenção" value={inMaintenance} />
             <MiniStat label="Instaladas" value={installedParts} />
             <MiniStat label="Serviços" value={pendingServices} />
           </div>
-          <div className="mt-8 flex items-center justify-between text-[11px] font-semibold tracking-wider text-[#e85d3a] opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <div className="mt-8 flex items-center justify-between text-[11px] font-bold tracking-wider text-primary opacity-0 transition-all duration-300 group-hover:opacity-100">
             <span>EXPLORAR FROTA COMPLETA</span>
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>
@@ -250,11 +250,11 @@ function DashboardContent() {
             </div>
           </div>
           <div className="mt-8 grid grid-cols-2 gap-4">
-            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+            <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">CVA</p>
               <p className="mt-1 text-lg font-bold text-white">{cvaAlerts.length}</p>
             </div>
-            <div className="rounded-xl bg-white/[0.03] p-3 ring-1 ring-inset ring-white/10">
+            <div className="rounded bg-muted/50 p-3 border border-border">
               <p className="text-[10px] font-bold text-neutral-500 uppercase">Envios</p>
               <p className="mt-1 text-lg font-bold text-white">{lateShipments.length}</p>
             </div>
