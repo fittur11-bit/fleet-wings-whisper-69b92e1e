@@ -188,7 +188,7 @@
     border-spacing: 0;
   }
   .technical-table th {
-    background: #F8FAFC;
+    background: var(--muted);
     color: var(--text-sec);
     font-size: 10px;
     font-weight: 700;
@@ -203,12 +203,12 @@
     border-bottom: 1px solid var(--border);
     font-size: 13px;
     color: var(--text-main);
-    background: #FFFFFF;
+    background: var(--card);
   }
   .technical-table tr:last-child td {
     border-bottom: none;
   }
   .technical-table tr:hover td {
-    background: #F8FAFC;
+    background: var(--accent);
   }
 }
