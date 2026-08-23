@@ -356,8 +356,8 @@ function PartsPage() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-sans font-semibold truncate">{p.name}</h3>
-                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusStyles[p.status]}`}>
+                    <h3 className="font-sans font-bold text-sm tracking-tight truncate">{p.name}</h3>
+                    <span className={`inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold border uppercase tracking-widest ${statusStyles[p.status]}`}>
                       {statusLabel}
                     </span>
                     {p.condition && (
