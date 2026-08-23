@@ -462,9 +462,9 @@ function CalendarView({
   const goToToday = () => onMonthChange(new Date());
 
   return (
-    <div className="technical-card  border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
-      <div className="p-4 flex items-center justify-between border-b border-white/5 bg-white/5">
-        <h3 className="font-sans text-lg font-semibold capitalize">
+    <div className="technical-card border border-border overflow-hidden flex flex-col min-h-[600px]">
+      <div className="p-4 flex items-center justify-between border-b border-border bg-muted/50">
+        <h3 className="font-sans text-sm font-bold uppercase tracking-widest">
           {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
         </h3>
         <div className="flex items-center gap-2">
@@ -480,9 +480,9 @@ function CalendarView({
         </div>
       </div>
       
-      <div className="grid grid-cols-7 bg-white/5 border-b border-white/5">
+      <div className="grid grid-cols-7 bg-muted border-b border-border">
         {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(d => (
-          <div key={d} className="p-2 text-center text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+          <div key={d} className="p-2 text-center text-[10px] uppercase tracking-widest text-muted-foreground font-bold">
             {d}
           </div>
         ))}
