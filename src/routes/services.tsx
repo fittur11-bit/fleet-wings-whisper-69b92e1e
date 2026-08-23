@@ -254,7 +254,7 @@ function ServicesPage() {
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {filtered.map((s: any) => (
-            <div key={s.id} className="technical-card technical-card-hover  p-5">
+            <div key={s.id} className="technical-card p-5">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <p className="font-mono text-sm font-bold text-primary">{s.aircraft?.prefix || s.aircraft_prefix}</p>
@@ -347,7 +347,7 @@ function ServicesPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <div className="technical-card p-4 rounded-md space-y-3">
+                  <div className="technical-card p-4 space-y-3">
                     <h4 className="font-semibold text-sm uppercase tracking-wider text-primary">Informações Gerais</h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
