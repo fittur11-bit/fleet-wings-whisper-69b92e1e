@@ -406,14 +406,6 @@ function DashboardContent() {
                   <UrgencyChip days={m.daysLeft} />
                 </li>
               ))}
-                <li key={m.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
-                  <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-semibold text-white">{m.description || m.item_type}</p>
-                    <p className="font-mono text-[10px] uppercase text-[#e85d3a]">{m.aircraft_prefix || m.aircraft?.prefix || "—"}</p>
-                  </div>
-                  <UrgencyChip days={m.daysLeft} />
-                </li>
-              ))}
             </ul>
           )}
         </BentoCard>
