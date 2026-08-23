@@ -262,7 +262,7 @@ function DashboardContent() {
             </p>
           </div>
           <p className="mt-2 text-[10px] font-bold text-text-sec uppercase tracking-wider">{parts.length} componentes</p>
-          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-accent">
+          <div className="mt-6 h-0.5 w-full overflow-hidden rounded-full bg-accent">
             <div className="h-full bg-primary" style={{ width: "65%" }} />
           </div>
         </BentoCard>
