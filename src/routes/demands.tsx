@@ -571,23 +571,23 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
 
   return (
     <Card className={cn(
-      "border bg-card/60 backdrop-blur transition-all",
-      isAog ? "border-red-500/40 shadow-[0_0_30px_-10px_rgba(239,68,68,0.4)]" :
-      isOverdue ? "border-orange-500/30" :
-      isSoon ? "border-amber-500/20" : "border-white/5",
+      "border bg-card transition-all",
+      isAog ? "border-[#B94A48]/40" :
+      isOverdue ? "border-[#C58A21]/30" :
+      isSoon ? "border-[#C58A21]/20" : "border-border",
       done && "opacity-60"
     )}>
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5 flex-wrap mb-1.5">
-              <Badge variant="outline" className={cn("text-[10px] uppercase tracking-wider border", priorityClasses(d.priority))}>
+              <Badge variant="outline" className={cn("text-[10px] uppercase font-bold tracking-wider border", priorityClasses(d.priority))}>
                 {d.priority === "aog" && <Siren className="h-3 w-3 mr-1" />}
                 {PRIORITY_LABEL[d.priority]}
               </Badge>
-              <Badge variant="secondary" className="text-[10px]">{STATUS_LABEL[d.status]}</Badge>
+              <Badge variant="outline" className="text-[10px] uppercase font-bold tracking-wider bg-muted text-muted-foreground border-border">{STATUS_LABEL[d.status]}</Badge>
               {d.schedule_type && (
-                <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
+                <Badge variant="outline" className="text-[10px] uppercase font-bold tracking-wider bg-primary/5 text-primary border-primary/20">
                   <CalendarIcon className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
                 </Badge>
               )}
