@@ -313,7 +313,7 @@ function DashboardContent() {
                   }}
                   itemStyle={{ color: EMBER, fontWeight: "bold" }}
                 />
-                <Bar dataKey="count" fill={EMBER} radius={[4, 4, 0, 0]} barSize={32} />
+                <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} barSize={24} />
               </BarChart>
             </ResponsiveContainer>
           </div>
