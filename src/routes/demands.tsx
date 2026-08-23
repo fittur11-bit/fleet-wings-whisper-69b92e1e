@@ -1,6 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
-import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren, Calendar } from "lucide-react";
+import { 
+  Plus, 
+  Megaphone, 
+  Trash2, 
+  Pencil, 
+  AlertTriangle, 
+  CheckCircle2, 
+  Clock, 
+  Siren, 
+  Calendar as CalendarIcon, 
+  List, 
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight
+} from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
 import { 
@@ -25,7 +39,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { differenceInHours, format, parseISO } from "date-fns";
+import { 
+  differenceInHours, 
+  format, 
+  parseISO, 
+  startOfMonth, 
+  endOfMonth, 
+  eachDayOfInterval, 
+  isSameDay, 
+  addMonths, 
+  subMonths,
+  startOfWeek,
+  endOfWeek,
+  isSameMonth
+} from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +87,8 @@ function DemandsPage() {
   const [resolveOpen, setResolveOpen] = useState(false);
   const [resolving, setResolving] = useState<Demand | null>(null);
   const [resolutionText, setResolutionText] = useState("");
+  const [view, setView] = useState<"list" | "calendar">("list");
+  const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // Alert about urgent demands once on load
   useEffect(() => {
@@ -201,11 +230,30 @@ function DemandsPage() {
         title="Quadro de Avisos"
         description="Demandas, AOG e prazos para acompanhar."
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" /> Nova demanda</Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2">
+              <Button 
+                variant={view === "list" ? "secondary" : "ghost"} 
+                size="sm" 
+                className="h-8 w-8 p-0" 
+                onClick={() => setView("list")}
+              >
+                <List className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant={view === "calendar" ? "secondary" : "ghost"} 
+                size="sm" 
+                className="h-8 w-8 p-0" 
+                onClick={() => setView("calendar")}
+              >
+                <CalendarDays className="h-4 w-4" />
+              </Button>
+            </div>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" /> Nova demanda</Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>{editing ? "Editar demanda" : "Nova demanda"}</DialogTitle>
               </DialogHeader>
@@ -270,7 +318,7 @@ function DemandsPage() {
 
                 <div className="pt-2 pb-1 border-t border-white/5">
                   <Label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-3">
-                    <Calendar className="h-3 w-3" /> Agendamento (Opcional)
+                    <CalendarIcon className="h-3 w-3" /> Agendamento (Opcional)
                   </Label>
                   <div className="space-y-3">
                     <div>
@@ -314,7 +362,8 @@ function DemandsPage() {
                 </div>
               </form>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
         }
       />
 
@@ -366,18 +415,132 @@ function DemandsPage() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center border border-dashed border-white/10">
-          <Megaphone className="mx-auto h-14 w-14 text-muted-foreground/40" />
-          <h3 className="mt-4 font-display text-lg font-semibold">Nenhuma demanda</h3>
-          <p className="mt-1 text-sm text-muted-foreground">Crie a primeira demanda para começar.</p>
-        </div>
+      {view === "list" ? (
+        filtered.length === 0 ? (
+          <div className="glass-card rounded-2xl p-16 text-center border border-dashed border-white/10">
+            <Megaphone className="mx-auto h-14 w-14 text-muted-foreground/40" />
+            <h3 className="mt-4 font-display text-lg font-semibold">Nenhuma demanda</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Crie a primeira demanda para começar.</p>
+          </div>
+        ) : (
+          <div className="grid gap-3 md:grid-cols-2">
+            {filtered.map((d) => <DemandCard key={d.id} d={d} onEdit={openEdit} onStatus={quickStatus} onDelete={remove} />)}
+          </div>
+        )
       ) : (
-        <div className="grid gap-3 md:grid-cols-2">
-          {filtered.map((d) => <DemandCard key={d.id} d={d} onEdit={openEdit} onStatus={quickStatus} onDelete={remove} />)}
-        </div>
+        <CalendarView 
+          demands={filtered} 
+          currentMonth={currentMonth} 
+          onMonthChange={setCurrentMonth}
+          onEdit={openEdit}
+        />
       )}
     </AppShell>
+  );
+}
+
+function CalendarView({ 
+  demands, 
+  currentMonth, 
+  onMonthChange,
+  onEdit 
+}: { 
+  demands: Demand[]; 
+  currentMonth: Date; 
+  onMonthChange: (d: Date) => void;
+  onEdit: (d: Demand) => void;
+}) {
+  const monthStart = startOfMonth(currentMonth);
+  const monthEnd = endOfMonth(monthStart);
+  const startDate = startOfWeek(monthStart);
+  const endDate = endOfWeek(monthEnd);
+  
+  const days = eachDayOfInterval({ start: startDate, end: endDate });
+
+  const nextMonth = () => onMonthChange(addMonths(currentMonth, 1));
+  const prevMonth = () => onMonthChange(subMonths(currentMonth, 1));
+  const goToToday = () => onMonthChange(new Date());
+
+  return (
+    <div className="glass-card rounded-2xl border border-white/5 overflow-hidden flex flex-col min-h-[600px]">
+      <div className="p-4 flex items-center justify-between border-b border-white/5 bg-white/5">
+        <h3 className="font-display text-lg font-semibold capitalize">
+          {format(currentMonth, "MMMM yyyy", { locale: ptBR })}
+        </h3>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" onClick={goToToday}>Hoje</Button>
+          <div className="flex items-center gap-1">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={prevMonth}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={nextMonth}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-7 bg-white/5 border-b border-white/5">
+        {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(d => (
+          <div key={d} className="p-2 text-center text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
+            {d}
+          </div>
+        ))}
+      </div>
+
+      <div className="flex-1 grid grid-cols-7 auto-rows-fr">
+        {days.map((day, i) => {
+          const isToday = isSameDay(day, new Date());
+          const isCurrentMonth = isSameMonth(day, monthStart);
+          const dayDemands = demands.filter(d => {
+            if (!d.scheduled_start) return false;
+            return isSameDay(parseISO(d.scheduled_start), day);
+          });
+
+          return (
+            <div 
+              key={day.toISOString()} 
+              className={cn(
+                "min-h-[100px] border-r border-b border-white/5 p-2 transition-colors",
+                !isCurrentMonth && "bg-black/20 text-muted-foreground/30",
+                isCurrentMonth && "hover:bg-white/5"
+              )}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <span className={cn(
+                  "text-xs font-medium h-6 w-6 flex items-center justify-center rounded-full",
+                  isToday && "bg-primary text-primary-foreground font-bold"
+                )}>
+                  {format(day, "d")}
+                </span>
+                {dayDemands.length > 0 && (
+                  <span className="text-[10px] text-muted-foreground bg-white/5 px-1.5 py-0.5 rounded-full border border-white/10">
+                    {dayDemands.length}
+                  </span>
+                )}
+              </div>
+              <div className="space-y-1 overflow-y-auto max-h-[80px] scrollbar-hide">
+                {dayDemands.map(d => (
+                  <button
+                    key={d.id}
+                    onClick={() => onEdit(d)}
+                    className={cn(
+                      "w-full text-left text-[9px] p-1 rounded border truncate leading-tight transition-colors",
+                      d.priority === "aog" ? "bg-red-500/10 border-red-500/20 text-red-300" :
+                      d.status === "done" ? "bg-emerald-500/5 border-emerald-500/10 text-emerald-400/60" :
+                      "bg-primary/10 border-primary/20 text-primary-foreground/90"
+                    )}
+                  >
+                    {d.aircraft_prefix && <span className="font-bold mr-1">{d.aircraft_prefix}</span>}
+                    {d.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -425,7 +588,7 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
               <Badge variant="secondary" className="text-[10px]">{STATUS_LABEL[d.status]}</Badge>
               {d.schedule_type && (
                 <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/20">
-                  <Calendar className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
+                  <CalendarIcon className="h-3 w-3 mr-1" /> {scheduleTypeLabel(d.schedule_type)}
                 </Badge>
               )}
               {d.aircraft_prefix && <span className="text-[10px] font-mono font-bold text-primary">{d.aircraft_prefix}</span>}
@@ -456,7 +619,7 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
           )}
           {d.scheduled_start && (
             <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 border bg-primary/5 border-primary/10 text-primary-foreground/80">
-              <Calendar className="h-3 w-3" />
+              <CalendarIcon className="h-3 w-3" />
               {format(parseISO(d.scheduled_start), "dd/MM HH:mm", { locale: ptBR })}
               {d.scheduled_end && ` - ${format(parseISO(d.scheduled_end), "dd/MM HH:mm", { locale: ptBR })}`}
             </span>
