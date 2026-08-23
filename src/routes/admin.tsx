@@ -127,7 +127,7 @@ function AdminPage() {
     <div className="p-4 md:p-8 space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary/10 p-2"><ShieldCheck className="h-6 w-6 text-primary" /></div>
+          <div className="rounded bg-primary/10 p-2"><ShieldCheck className="h-6 w-6 text-primary" /></div>
           <div>
             <h1 className="font-sans text-3xl font-bold tracking-tight">Painel Administrador</h1>
             <p className="text-muted-foreground text-sm mt-1">Acesso restrito aos módulos sensíveis do sistema.</p>
@@ -146,7 +146,7 @@ function AdminPage() {
           const Icon = m.icon;
           return (
             <Link key={m.to} to={m.to}>
-              <Card className="p-5 hover:border-primary/50 transition-colors cursor-pointer h-full">
+              <div className="technical-card p-5 hover:border-primary/50 transition-colors cursor-pointer h-full">
                 <div className="flex items-start gap-3">
                   <div className="rounded-lg bg-primary/10 p-2.5">
                     <Icon className="h-5 w-5 text-primary" />
@@ -156,7 +156,7 @@ function AdminPage() {
                     <p className="text-sm text-muted-foreground mt-1">{m.desc}</p>
                   </div>
                 </div>
-              </Card>
+              </div>
             </Link>
           );
         })}
@@ -168,14 +168,14 @@ function AdminPage() {
 function Gate({ icon, title, subtitle, children }: { icon: React.ReactNode; title: string; subtitle: string; children: React.ReactNode }) {
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-4">
-      <Card className="w-full max-w-md p-8 space-y-6">
+      <div className="technical-card w-full max-w-md p-8 space-y-6">
         <div className="flex flex-col items-center text-center space-y-3">
-          <div className="rounded-2xl bg-primary/10 p-4">{icon}</div>
+          <div className="rounded bg-primary/10 p-4">{icon}</div>
           <h1 className="font-sans text-2xl font-bold">{title}</h1>
           <p className="text-sm text-muted-foreground">{subtitle}</p>
         </div>
         {children}
-      </Card>
+      </div>
     </div>
   );
 }
