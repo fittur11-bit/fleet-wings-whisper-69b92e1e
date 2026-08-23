@@ -418,14 +418,14 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {lateShipments.map((s: any) => (
-                <li key={s.id} className="flex items-center justify-between rounded-xl border border-[#e85d3a]/10 bg-[#e85d3a]/[0.03] p-3 transition-colors hover:bg-[#e85d3a]/[0.05]">
+                <li key={s.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0 pr-2">
-                    <p className="truncate text-sm font-semibold text-white">{s.part_name}</p>
+                    <p className="truncate text-sm font-bold text-foreground">{s.part_name}</p>
                     <p className="truncate font-mono text-[10px] uppercase text-neutral-500">
                       {s.aircraft?.prefix}{s.destination_workshop ? ` · ${s.destination_workshop}` : ""}
                     </p>
                   </div>
-                  <div className="flex h-8 w-12 items-center justify-center rounded-lg bg-[#e85d3a] text-[10px] font-bold text-white shadow-[0_0_15px_-5px_#e85d3a]">
+                  <div className="flex h-7 px-2 items-center justify-center rounded bg-red-600 text-[10px] font-bold text-white">
                     {s.daysLate}d
                   </div>
                 </li>
