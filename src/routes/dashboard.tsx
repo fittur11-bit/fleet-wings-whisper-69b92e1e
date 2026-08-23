@@ -375,7 +375,7 @@ function DashboardContent() {
                 <li key={a.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
                 </li>
@@ -395,7 +395,7 @@ function DashboardContent() {
                 <li key={m.id} className="flex items-center justify-between rounded border border-border bg-accent/30 p-3 transition-colors hover:bg-accent/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
+                    <p className="truncate text-[10px] font-bold uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
@@ -503,7 +503,7 @@ function EmptyState({ icon: Icon, label }: { icon: any; label: string }) {
       <div className="flex h-12 w-12 items-center justify-center rounded bg-green-500/5 text-green-500/50 border border-green-500/10">
         <Icon className="h-6 w-6" />
       </div>
-      <p className="mt-4 text-xs font-medium text-muted-foreground">{label}</p>
+      <p className="mt-4 text-[10px] font-bold uppercase tracking-wider text-text-sec">{label}</p>
     </div>
   );
 }
