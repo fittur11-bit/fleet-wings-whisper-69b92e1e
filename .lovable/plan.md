@@ -1,26 +1,31 @@
 # Redesign Visual do Core Flight — Identidade Aeronáutica Profissional
 
-Esta proposta detalha o redesign visual do sistema para adotar uma estética profissional de aviação e engenharia, abandonando o visual genérico de "IA/SaaS".
+O objetivo é transformar a interface em um sistema de operação aeronáutica sóbrio e técnico, focando em precisão e confiabilidade.
 
-## Mudanças Visuais
+## Mudanças Visuais e de Identidade
 
-- **Nova Paleta de Cores**: Substituição do Azul Elétrico e Dourado por uma paleta institucional sóbria:
-    - Fundo: `#F4F5F6`
-    - Sidebar: `#17212B`
-    - Cards: `#FFFFFF`
-    - Azul Institucional: `#245A7A`
-- **Tipografia**: Ajuste para focar exclusivamente na **Inter**, com pesos variados para hierarquia.
-- **Formas e Bordas**: Redução do `border-radius` para **6px** globalmente, criando uma aparência mais técnica e precisa.
-- **Remoção de Efeitos "IA"**: Eliminação de gradientes, glows, glassmorphism e sombras exageradas.
-- **Redesign do Dashboard**: Foco em indicadores operacionais e densidade de informação, removendo elementos meramente decorativos.
+- **Nova Paleta Técnica**:
+    - **Fundo**: `#F4F5F6` (Claro) / `#17212B` (Escuro)
+    - **Acentuação**: Azul Institucional (`#245A7A`) e Âmbar Técnico (`#C58A21`).
+    - **Status**: Verde (`#37805A`) e Vermelho (`#B94A48`).
+- **Tipografia**: Migração total para a fonte **Inter**. Remoção da Sora e Manrope.
+- **Geometria**: Border-radius padronizado em **6px** globalmente.
+- **Remoção de Efeitos de IA**: Fim de gradientes, glows, efeitos de vidro (glassmorphism) e sombras saturadas.
 
-## Detalhes Técnicos
+## Implementação Técnica
 
-- **CSS Moderno**: Atualização do `src/styles.css` utilizando o tema do Tailwind v4.
-- **Refatoração de Componentes UI**:
-    - **Card**: Remoção de `shadow` e ajuste de `rounded-xl` para `rounded-md` (6px).
-    - **Button**: Ajuste das variantes `default` e `secondary` para as novas cores.
-    - **AppSidebar**: Aplicação da cor `#17212B` e remoção do efeito glassmorphism.
-    - **Table**: Melhoria da densidade e remoção de estilizações excessivas.
-- **Dashboard**: Substituição do estilo "Bento Grid" luminoso por um layout de grid funcional com cores sóbrias.
-- **Limpeza de Ativos**: Remoção de fontes e estilos não utilizados (Sora, JetBrains Mono se não essenciais).
+- **Estilos Globais (`src/styles.css`)**:
+    - Reconfiguração dos tokens de tema para as novas cores.
+    - Remoção das classes `.glass-card`, `.gold-text` e utilitários de gradiente.
+    - Simplificação do scrollbar e bordas.
+- **Tipografia (`src/routes/__root.tsx`)**:
+    - Atualização do link do Google Fonts para focar apenas na **Inter**.
+- **Sidebar (`src/components/AppSidebar.tsx`)**:
+    - Redesign para um visual corporativo escuro (`#17212B`).
+    - Itens de navegação com hover e estado ativo simplificados (sem gradientes).
+- **Dashboard (`src/routes/dashboard.tsx`)**:
+    - Reformulação do layout Bento Grid para um grid técnico e denso.
+    - Substituição de cards decorativos por KPIs operacionais diretos.
+    - Ajuste de cores dos gráficos para a nova paleta.
+- **Componentes UI**:
+    - Padronização de botões, inputs e tabelas para a nova estética industrial.
