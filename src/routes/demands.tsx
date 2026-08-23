@@ -230,10 +230,29 @@ function DemandsPage() {
         title="Quadro de Avisos"
         description="Demandas, AOG e prazos para acompanhar."
         actions={
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" /> Nova demanda</Button>
-            </DialogTrigger>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/10 mr-2">
+              <Button 
+                variant={view === "list" ? "secondary" : "ghost"} 
+                size="sm" 
+                className="h-8 w-8 p-0" 
+                onClick={() => setView("list")}
+              >
+                <List className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant={view === "calendar" ? "secondary" : "ghost"} 
+                size="sm" 
+                className="h-8 w-8 p-0" 
+                onClick={() => setView("calendar")}
+              >
+                <CalendarDays className="h-4 w-4" />
+              </Button>
+            </div>
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" /> Nova demanda</Button>
+              </DialogTrigger>
             <DialogContent className="max-w-lg">
               <DialogHeader>
                 <DialogTitle>{editing ? "Editar demanda" : "Nova demanda"}</DialogTitle>
