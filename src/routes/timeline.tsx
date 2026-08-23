@@ -26,10 +26,10 @@ type Event = {
 
 const typeConfig: Record<Event["type"], { icon: any; color: string; label: string }> = {
   service: { icon: Wrench, color: "text-primary bg-primary/10 border-primary/20", label: "Serviço" },
-  shipment: { icon: Package, color: "text-orange-400 bg-orange-500/10 border-orange-500/20", label: "Envio" },
-  part_install: { icon: Cog, color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", label: "Peça instalada" },
-  part_remove: { icon: Cog, color: "text-amber-400 bg-amber-500/10 border-amber-500/20", label: "Peça removida" },
-  document: { icon: FileText, color: "text-violet-400 bg-violet-500/10 border-violet-500/20", label: "Documento" },
+  shipment: { icon: Package, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Envio" },
+  part_install: { icon: Cog, color: "text-green-600 bg-green-600/10 border-green-600/20", label: "Peça instalada" },
+  part_remove: { icon: Cog, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Peça removida" },
+  document: { icon: FileText, color: "text-primary bg-primary/10 border-primary/20", label: "Documento" },
 };
 
 function TimelinePage() {
