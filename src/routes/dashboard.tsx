@@ -66,24 +66,15 @@ function BentoCard({
     "group relative overflow-hidden rounded-md border transition-all duration-200",
     "bg-card text-card-foreground shadow-sm",
     accent
-      ? "border-primary/30"
+      ? "border-primary/40 ring-1 ring-primary/10"
       : "border-border hover:border-primary/50",
     to && "hover:-translate-y-0.5",
     className,
   );
   const content = (
     <>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.03] transition-opacity group-hover:opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-          backgroundSize: "24px 24px",
-        }}
-      />
       {accent && (
-        <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/10 blur-[80px]" />
+        <div className="absolute left-0 top-0 w-1 h-full bg-primary" />
       )}
       <div className="relative p-6">{children}</div>
     </>
@@ -112,8 +103,8 @@ function SectionLabel({
   const toneClass = {
     default: "text-muted-foreground",
     ember: "text-primary",
-    warn: "text-amber-600",
-    ok: "text-green-600",
+    warn: "text-[#C58A21]",
+    ok: "text-[#37805A]",
   }[tone];
   
   return (
@@ -210,11 +201,11 @@ function DashboardContent() {
           <div className="flex items-end justify-between">
             <div className="relative">
               <div className="absolute -left-4 -top-4 h-24 w-24 rounded-full bg-primary/10 blur-[40px] opacity-0 transition-opacity group-hover:opacity-100" />
-              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums">
+              <p className="font-sans text-7xl font-bold tracking-tighter text-foreground tabular-nums leading-none">
                 {String(activeAircraft).padStart(2, "0")}
               </p>
-              <p className="mt-2 text-sm text-neutral-400">
-                de <span className="font-mono text-white/90">{aircraft.length}</span> aeronaves operacionais
+              <p className="mt-2 text-xs font-medium text-neutral-500 uppercase tracking-wider">
+                Aeronaves operacionais
               </p>
             </div>
             <div className="hidden h-16 w-16 items-center justify-center rounded bg-primary/5 text-primary border border-primary/20 sm:flex">
