@@ -26,9 +26,9 @@ type Event = {
 
 const typeConfig: Record<Event["type"], { icon: any; color: string; label: string }> = {
   service: { icon: Wrench, color: "text-primary bg-primary/10 border-primary/20", label: "Serviço" },
-  shipment: { icon: Package, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Envio" },
-  part_install: { icon: Cog, color: "text-green-600 bg-green-600/10 border-green-600/20", label: "Peça instalada" },
-  part_remove: { icon: Cog, color: "text-amber-600 bg-amber-600/10 border-amber-600/20", label: "Peça removida" },
+  shipment: { icon: Package, color: "text-[#C58A21] bg-[#C58A21]/10 border-[#C58A21]/20", label: "Envio" },
+  part_install: { icon: Cog, color: "text-[#37805A] bg-[#37805A]/10 border-[#37805A]/20", label: "Peça instalada" },
+  part_remove: { icon: Cog, color: "text-[#C58A21] bg-[#C58A21]/10 border-[#C58A21]/20", label: "Peça removida" },
   document: { icon: FileText, color: "text-primary bg-primary/10 border-primary/20", label: "Documento" },
 };
 
@@ -181,7 +181,7 @@ function TimelinePage() {
                 {format(parseISO(month + "-01"), "MMMM 'de' yyyy", { locale: ptBR })}
                 <span className="ml-2 text-xs">({items.length})</span>
               </h3>
-              <div className="relative pl-6 border-l border-white/10 space-y-3">
+              <div className="relative pl-6 border-l border-border space-y-3">
                 {items.map((e) => {
                   const cfg = typeConfig[e.type];
                   const Icon = cfg.icon;
@@ -190,7 +190,7 @@ function TimelinePage() {
                       <div className={`absolute -left-[34px] top-2 flex h-7 w-7 items-center justify-center rounded-full border ${cfg.color}`}>
                         <Icon className="h-3.5 w-3.5" />
                       </div>
-                      <div className="technical-card rounded-md border border-white/5 p-3">
+                      <div className="technical-card rounded-md border border-border p-3">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 mb-1">
