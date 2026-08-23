@@ -402,9 +402,9 @@ function DemandsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <StatCard icon={Megaphone} label="Ativas" value={counts.active} tone="text-foreground" />
-        <StatCard icon={Siren} label="AOG" value={counts.aog} tone="text-red-400" pulse={counts.aog > 0} />
-        <StatCard icon={AlertTriangle} label="Atrasadas" value={counts.overdue} tone="text-orange-400" />
-        <StatCard icon={Clock} label="Vence ≤ 24h" value={counts.soon} tone="text-amber-400" />
+        <StatCard icon={Siren} label="AOG" value={counts.aog} tone="text-[#B94A48]" pulse={counts.aog > 0} />
+        <StatCard icon={AlertTriangle} label="Atrasadas" value={counts.overdue} tone="text-[#C58A21]" />
+        <StatCard icon={Clock} label="Vence ≤ 24h" value={counts.soon} tone="text-[#C58A21]" />
       </div>
 
       <div className="mb-4 flex gap-2">
@@ -417,7 +417,7 @@ function DemandsPage() {
 
       {view === "list" ? (
         filtered.length === 0 ? (
-          <div className="technical-card  p-16 text-center border border-dashed border-white/10">
+          <div className="technical-card p-16 text-center border border-dashed border-border">
             <Megaphone className="mx-auto h-14 w-14 text-muted-foreground/40" />
             <h3 className="mt-4 font-sans text-lg font-semibold">Nenhuma demanda</h3>
             <p className="mt-1 text-sm text-muted-foreground">Crie a primeira demanda para começar.</p>
