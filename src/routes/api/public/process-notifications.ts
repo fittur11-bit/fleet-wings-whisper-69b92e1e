@@ -34,7 +34,7 @@ export const Route = createFileRoute('/api/public/process-notifications')({
 
         const notifications: any[] = [];
 
-        if (startingSoon) {
+        if (Array.isArray(startingSoon)) {
           for (const demand of startingSoon) {
              notifications.push({
                user_id: demand.user_id,
@@ -45,7 +45,7 @@ export const Route = createFileRoute('/api/public/process-notifications')({
           }
         }
 
-        if (endingSoon) {
+        if (Array.isArray(endingSoon)) {
           for (const demand of endingSoon) {
             notifications.push({
               user_id: demand.user_id,
@@ -61,7 +61,7 @@ export const Route = createFileRoute('/api/public/process-notifications')({
           
           for (const n of notifications) {
             const { data: existing } = await supabase
-              .from('notifications')
+              .from('notifications' as any)
               .select('id')
               .eq('user_id', n.user_id)
               .eq('demand_id', n.demand_id)
@@ -69,8 +69,8 @@ export const Route = createFileRoute('/api/public/process-notifications')({
               .gt('created_at', twelveHoursAgo)
               .limit(1);
 
-            if (!existing || existing.length === 0) {
-              await supabase.from('notifications').insert(n);
+            if (!existing || (Array.isArray(existing) && existing.length === 0)) {
+              await supabase.from('notifications' as any).insert(n as any);
             }
           }
         }
