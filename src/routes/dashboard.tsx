@@ -340,14 +340,15 @@ function DashboardContent() {
                     >
                       {conditionData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
                     </Pie>
-                    contentStyle={{ 
-                      backgroundColor: "var(--card)", 
-                      border: "1px solid var(--border)", 
-                      borderRadius: "6px", 
-                      color: "var(--foreground)", 
-                      fontSize: "11px"
-                    }} 
-                  />
+                    <Tooltip 
+                      contentStyle={{ 
+                        backgroundColor: "var(--card)", 
+                        border: "1px solid var(--border)", 
+                        borderRadius: "6px", 
+                        color: "var(--foreground)", 
+                        fontSize: "11px"
+                      }} 
+                    />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
