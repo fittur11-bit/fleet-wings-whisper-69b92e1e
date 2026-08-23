@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex-1 lg:pl-64">
         {/* Mobile header */}
-         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-background px-4 py-3">
+         <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border bg-card px-4 py-3">
            <div className="lg:hidden flex items-center gap-2">
              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(true)} aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}>
                {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
