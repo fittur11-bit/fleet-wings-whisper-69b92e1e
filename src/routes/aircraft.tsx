@@ -148,11 +148,11 @@ function AircraftPage() {
       {isLoading ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="glass-card animate-pulse rounded-2xl h-72" />
+            <div key={i} className="technical-card animate-pulse h-72" />
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center">
+        <div className="technical-card p-16 text-center">
           <Plane className="mx-auto h-14 w-14 text-muted-foreground/40" />
           <h3 className="mt-4 font-display text-lg font-semibold">
             {aircraft.length === 0 ? "Nenhuma aeronave cadastrada" : "Nenhuma aeronave encontrada"}
@@ -177,7 +177,7 @@ function AircraftPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="glass-card glass-card-hover group rounded-2xl overflow-hidden flex flex-col"
+                className="technical-card group overflow-hidden flex flex-col"
               >
                 {/* Photo */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-primary/10 to-transparent">

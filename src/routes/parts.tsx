@@ -280,7 +280,7 @@ function PartsPage() {
           { label: "Instaladas", value: stats.installed, color: "text-emerald-300" },
           { label: "Em Reparo", value: stats.repair, color: "text-orange-300" },
         ].map((s) => (
-          <div key={s.label} className="glass-card rounded-2xl p-4">
+          <div key={s.label} className="technical-card p-4">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.label}</p>
             <p className={`mt-1 font-mono text-2xl font-bold ${s.color}`}>{s.value}</p>
           </div>
@@ -317,10 +317,10 @@ function PartsPage() {
       {/* List */}
       {isLoading ? (
         <div className="space-y-2">
-          {[...Array(5)].map((_, i) => <div key={i} className="glass-card animate-pulse rounded-2xl h-20" />)}
+          {[...Array(5)].map((_, i) => <div key={i} className="technical-card animate-pulse h-20" />)}
         </div>
       ) : filtered.length === 0 ? (
-        <div className="glass-card rounded-2xl p-16 text-center">
+        <div className="technical-card p-16 text-center">
           <Package className="mx-auto h-14 w-14 text-muted-foreground/40" />
           <h3 className="mt-4 font-display text-lg font-semibold">
             {parts.length === 0 ? "Nenhuma peça cadastrada" : "Nenhuma peça encontrada"}
@@ -342,7 +342,7 @@ function PartsPage() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.02 }}
-                className="glass-card glass-card-hover rounded-2xl p-4 flex items-center gap-4"
+                className="technical-card p-4 flex items-center gap-4"
               >
                 {/* Photo */}
                 <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white/5 border border-white/5 flex items-center justify-center">
