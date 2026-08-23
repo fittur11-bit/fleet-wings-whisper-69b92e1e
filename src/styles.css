@@ -145,8 +145,7 @@
   }
 
   body {
-    background: var(--gradient-bg);
-    background-attachment: fixed;
+    background: var(--background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -154,80 +153,27 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
   }
 }
 
 @layer components {
-  /* Glass card effect */
-  .glass-card {
-    background: var(--gradient-card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid oklch(0.96 0.012 90 / 0.08);
-    box-shadow: var(--shadow-card);
+  /* Clean card style */
+  .technical-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
   }
-
-  .glass-card-hover {
-    transition: all 0.3s ease;
-  }
-  .glass-card-hover:hover {
-    border-color: oklch(0.74 0.142 78 / 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px -8px oklch(0.05 0 0 / 0.5), var(--shadow-glow);
-  }
-
-  .gold-text {
-    background: var(--gradient-gold);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  .gold-border {
-    border-color: oklch(0.74 0.142 78 / 0.4);
-  }
-
-  /* Light theme: darken status text colors for proper contrast on light backgrounds */
-  .light .text-emerald-200,
-  .light .text-emerald-300,
-  .light .text-emerald-400 { color: #047857; }
-  .light .text-red-200,
-  .light .text-red-300,
-  .light .text-red-400 { color: #b91c1c; }
-  .light .text-orange-200,
-  .light .text-orange-300,
-  .light .text-orange-400 { color: #c2410c; }
-  .light .text-amber-200,
-  .light .text-amber-300,
-  .light .text-amber-400 { color: #b45309; }
-  .light .text-yellow-200,
-  .light .text-yellow-300,
-  .light .text-yellow-400 { color: #a16207; }
-  .light .text-blue-200,
-  .light .text-blue-300,
-  .light .text-blue-400 { color: #1d4ed8; }
-  .light .text-green-200,
-  .light .text-green-300,
-  .light .text-green-400 { color: #15803d; }
-
-  /* Light theme: tint the white/foreground bg utilities for surfaces */
-  .light .bg-white\/5 { background-color: oklch(0.18 0.045 255 / 0.05); }
-  .light .bg-white\/10 { background-color: oklch(0.18 0.045 255 / 0.08); }
-  .light .border-white\/5 { border-color: oklch(0.18 0.045 255 / 0.08); }
-  .light .border-white\/10 { border-color: oklch(0.18 0.045 255 / 0.12); }
-  .light .hover\:bg-white\/5:hover { background-color: oklch(0.18 0.045 255 / 0.05); }
-  .light .hover\:bg-white\/10:hover { background-color: oklch(0.18 0.045 255 / 0.08); }
 
   /* Custom scrollbar */
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
-    background: oklch(0.32 0.06 252);
-    border-radius: 4px;
+    background: var(--border);
+    border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.74 0.142 78 / 0.6);
+    background: var(--active-blue);
   }
 }
