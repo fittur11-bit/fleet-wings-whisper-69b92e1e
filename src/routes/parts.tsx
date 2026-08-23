@@ -377,7 +377,7 @@ function PartsPage() {
                 {/* Actions */}
                 <div className="flex items-center gap-1 shrink-0">
                   {p.status === "stock" && (
-                    <Button size="sm" variant="ghost" onClick={() => openAction(p, "install")} className="text-emerald-300 hover:text-emerald-200 hover:bg-emerald-500/10">
+                    <Button size="sm" variant="ghost" onClick={() => openAction(p, "install")} className="text-[#37805A] hover:bg-[#37805A]/10">
                       <ArrowDownToLine className="h-4 w-4" />
                     </Button>
                   )}
