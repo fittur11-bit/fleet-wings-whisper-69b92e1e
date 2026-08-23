@@ -35,7 +35,7 @@ export function NotificationBell() {
         >
           <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-sidebar">
+            <span className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-[#B94A48] text-[10px] font-bold text-white ring-2 ring-sidebar">
               {unreadCount}
             </span>
           )}
