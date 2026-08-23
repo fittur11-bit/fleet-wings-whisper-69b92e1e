@@ -317,7 +317,7 @@ function LibraryPage() {
        ) : (
          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
            {filtered.map((d: any) => (
-             <div key={d.id} className="technical-card technical-card-hover  p-5 border border-white/5 flex flex-col">
+             <div key={d.id} className="technical-card p-5 border border-white/5 flex flex-col">
                <div className="flex items-start justify-between mb-4">
                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
                    <FileText className="h-5 w-5" />
@@ -406,8 +406,8 @@ function LibraryPage() {
         <DialogContent
           className={
             fullscreen
-              ? "max-w-none w-screen h-screen p-0 flex flex-col bg-[#0B1221] border-0 rounded-none overflow-hidden"
-              : "max-w-5xl w-[100vw] sm:w-auto h-[100dvh] sm:h-[90vh] p-0 flex flex-col bg-[#0B1221] border-white/10 overflow-hidden rounded-none sm:rounded-lg"
+              ? "max-w-none w-screen h-screen p-0 flex flex-col bg-background border-0 rounded-none overflow-hidden"
+              : "max-w-5xl w-[100vw] sm:w-auto h-[100dvh] sm:h-[90vh] p-0 flex flex-col bg-background border-white/10 overflow-hidden rounded-none sm:rounded-md"
           }
         >
           <div className="flex items-center justify-between gap-2 px-3 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-sidebar/50 shrink-0">
