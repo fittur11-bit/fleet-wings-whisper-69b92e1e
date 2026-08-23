@@ -398,6 +398,14 @@ function DashboardContent() {
           ) : (
             <ul className="space-y-3">
               {upcomingMx.map((m: any) => (
+                <li key={m.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
+                  <div className="min-w-0">
+                    <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{m.aircraft_prefix || "—"}</p>
+                  </div>
+                  <UrgencyChip days={m.daysLeft} />
+                </li>
+              ))}
                 <li key={m.id} className="flex items-center justify-between rounded-xl border border-white/[0.03] bg-white/[0.02] p-3 transition-colors hover:bg-white/[0.05]">
                   <div className="min-w-0 pr-2">
                     <p className="truncate text-sm font-semibold text-white">{m.description || m.item_type}</p>
