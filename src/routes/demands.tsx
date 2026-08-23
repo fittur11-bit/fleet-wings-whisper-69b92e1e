@@ -603,10 +603,10 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           {deadlineDate && (
             <span className={cn(
-              "inline-flex items-center gap-1 rounded-md px-2 py-1 border",
-              isOverdue ? "bg-red-500/10 text-red-300 border-red-500/30" :
-              isSoon ? "bg-amber-500/10 text-amber-300 border-amber-500/30" :
-              "bg-white/5 border-white/10"
+              "inline-flex items-center gap-1 rounded px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider",
+              isOverdue ? "bg-[#B94A48]/10 text-[#B94A48] border-[#B94A48]/20" :
+              isSoon ? "bg-[#C58A21]/10 text-[#C58A21] border-[#C58A21]/20" :
+              "bg-muted text-muted-foreground border-border"
             )}>
               <Clock className="h-3 w-3" />
               {format(deadlineDate, "dd/MM HH:mm", { locale: ptBR })}
@@ -618,7 +618,7 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
             </span>
           )}
           {d.scheduled_start && (
-            <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 border bg-primary/5 border-primary/10 text-primary-foreground/80">
+            <span className="inline-flex items-center gap-1 rounded px-2 py-0.5 border text-[10px] font-bold uppercase tracking-wider bg-primary/5 border-primary/10 text-primary">
               <CalendarIcon className="h-3 w-3" />
               {format(parseISO(d.scheduled_start), "dd/MM HH:mm", { locale: ptBR })}
               {d.scheduled_end && ` - ${format(parseISO(d.scheduled_end), "dd/MM HH:mm", { locale: ptBR })}`}
@@ -629,17 +629,17 @@ function DemandCard({ d, onEdit, onStatus, onDelete }: { d: Demand; onEdit: (d: 
         </div>
 
         {done && d.resolution_notes && (
-          <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2">
-            <p className="text-[10px] uppercase tracking-wider text-emerald-300/80 font-semibold">
+          <div className="rounded border border-[#37805A]/20 bg-[#37805A]/5 p-2">
+            <p className="text-[10px] uppercase tracking-widest text-[#37805A] font-bold">
               Resolução{d.completed_at ? ` · ${format(parseISO(d.completed_at), "dd/MM/yyyy HH:mm", { locale: ptBR })}` : ""}
             </p>
-            <p className="mt-1 text-xs text-emerald-100/90 whitespace-pre-wrap">{d.resolution_notes}</p>
+            <p className="mt-1 text-xs text-foreground/80 whitespace-pre-wrap">{d.resolution_notes}</p>
           </div>
         )}
 
         <div className="flex items-center gap-1 pt-2 border-t border-white/5">
           {d.status !== "done" && (
-            <Button size="sm" variant="ghost" onClick={() => onStatus(d, "done")} className="text-emerald-400 hover:text-emerald-300">
+            <Button size="sm" variant="ghost" onClick={() => onStatus(d, "done")} className="text-[#37805A] hover:text-[#37805A]/80">
               <CheckCircle2 className="h-4 w-4 mr-1" /> Concluir
             </Button>
           )}
