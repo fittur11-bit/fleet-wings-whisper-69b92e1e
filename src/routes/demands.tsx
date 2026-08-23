@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
-import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren } from "lucide-react";
+import { Plus, Megaphone, Trash2, Pencil, AlertTriangle, CheckCircle2, Clock, Siren, Calendar } from "lucide-react";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { AuthGuard } from "@/components/AuthGuard";
-import { useDemands, PRIORITY_LABEL, STATUS_LABEL, priorityClasses, type Demand } from "@/lib/demands";
+import { 
+  useDemands, 
+  PRIORITY_LABEL, 
+  STATUS_LABEL, 
+  priorityClasses, 
+  type Demand,
+  SCHEDULE_TYPES,
+  scheduleTypeLabel
+} from "@/lib/demands";
 import { useAircraft } from "@/lib/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,6 +43,9 @@ const emptyForm = {
   assigned_to: "",
   location: "",
   resolution_notes: "",
+  scheduled_start: "",
+  scheduled_end: "",
+  schedule_type: "" as string,
 };
 
 function DemandsPage() {
