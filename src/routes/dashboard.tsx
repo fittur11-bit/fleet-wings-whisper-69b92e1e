@@ -374,7 +374,7 @@ function DashboardContent() {
                 <li key={a.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{a.prefix}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{a.model || "—"}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{a.model || "—"}</p>
                   </div>
                   <UrgencyChip days={a.daysLeft} />
                 </li>
@@ -394,7 +394,7 @@ function DashboardContent() {
                 <li key={m.id} className="flex items-center justify-between rounded border border-border bg-muted/30 p-3 transition-colors hover:bg-muted/50">
                   <div className="min-w-0">
                     <p className="font-mono text-sm font-bold text-foreground">{m.title}</p>
-                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-neutral-500">{m.aircraft_prefix || "—"}</p>
+                    <p className="truncate text-[10px] font-medium uppercase tracking-tight text-text-sec">{m.aircraft_prefix || "—"}</p>
                   </div>
                   <UrgencyChip days={m.daysLeft} />
                 </li>
