@@ -189,7 +189,7 @@ function AircraftPage() {
                     </div>
                   )}
                   <div className="absolute top-3 left-3 right-3 flex justify-between gap-2">
-                    <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium backdrop-blur-md ${statusStyles[a.status] || statusStyles.inactive}`}>
+                    <span className={`inline-flex items-center rounded border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider backdrop-blur-md ${statusStyles[a.status] || statusStyles.inactive}`}>
                       {statusLabel}
                     </span>
                     {a.cva_expiration && <CVAStatusBadge expiration={a.cva_expiration} className="backdrop-blur-md" />}
