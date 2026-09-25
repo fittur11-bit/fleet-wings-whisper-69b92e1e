@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
  import { BookMarked, Plus, Search, FileText, ExternalLink, Trash2, Calendar, Plane, History, Pencil, Eye, X, Download, Maximize2, Minimize2 } from "lucide-react";
 import { AuthGuard } from "@/components/AuthGuard";
 import { AppShell, PageHeader } from "@/components/AppShell";
@@ -37,20 +37,32 @@ function LibraryPage() {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
+  const [modelFilter, setModelFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
    const [form, setForm] = useState<any>({
      title: "", doc_type: "AMM", model: "", aircraft_id: "",
      version: "", revision_date: "", file_url: "", notes: "",
    });
 
+  const availableModels = useMemo(() => {
+    const models = [...docs, ...aircraft]
+      .map((item: any) => item.model?.trim())
+      .filter(Boolean);
+
+    return Array.from(new Set(models)).sort((a, b) =>
+      a.localeCompare(b, "pt-BR", { sensitivity: "base" }),
+    );
+  }, [docs, aircraft]);
+
   const filtered = docs.filter((d: any) => {
     const matchType = typeFilter === "all" || d.doc_type === typeFilter;
+    const matchModel = modelFilter === "all" || d.model?.trim() === modelFilter;
     const q = search.toLowerCase();
     const matchSearch = !q ||
       d.title?.toLowerCase().includes(q) ||
       d.model?.toLowerCase().includes(q) ||
       d.version?.toLowerCase().includes(q);
-    return matchType && matchSearch;
+    return matchType && matchModel && matchSearch;
   });
 
   const handleFile = async (file: File) => {
@@ -300,6 +312,17 @@ function LibraryPage() {
           <SelectContent>
             <SelectItem value="all">Todos os tipos</SelectItem>
             {DOC_TYPES.map((t) => <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>)}
+          </SelectContent>
+        </Select>
+        <Select value={modelFilter} onValueChange={setModelFilter}>
+          <SelectTrigger className="sm:w-60">
+            <SelectValue placeholder="Modelo da aeronave" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos os modelos</SelectItem>
+            {availableModels.map((model) => (
+              <SelectItem key={model} value={model}>{model}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
